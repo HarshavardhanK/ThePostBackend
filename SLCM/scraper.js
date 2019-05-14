@@ -121,10 +121,10 @@ const scrape_data = (reg, pass, callback) => {
 
           var subjectCode = string.slice(15,23);
           var subjectName = "";
-          var totalInternalMarks = "";
+          var totalInternalMarks = 0;
           var sessionalMarks = {
-            'sessional1':"",
-            'sessional2':""
+            'sessional1':0,
+            'sessional2':0
           };
 
           var sessStatus = true;
@@ -149,7 +149,7 @@ const scrape_data = (reg, pass, callback) => {
 
             if(indexMoving == -1){
               subjectName = string.slice(24,-1);
-              totalInternalMarks = 'null';
+              totalInternalMarks = 0;
             }
             else{
               subjectType = "Lab";
@@ -164,10 +164,10 @@ const scrape_data = (reg, pass, callback) => {
 
           indexMoving = string.indexOf('Total Marks',indexMoving);
 
-          if(totalInternalMarks == 'null' || indexMoving == -1){
-            totalInternalMarks = 'null';
-            sessionalMarks.sessional1 = 'null';
-            sessionalMarks.sessional2 = 'null';
+          if(totalInternalMarks == 0 || indexMoving == -1){
+            totalInternalMarks = 0;
+            sessionalMarks.sessional1 = 0;
+            sessionalMarks.sessional2 = 0;
             sessStatus = false;
           }
           else{
@@ -182,7 +182,7 @@ const scrape_data = (reg, pass, callback) => {
 
             indexMoving = string.indexOf('Internal Sessional 1');
             if(indexMoving == -1){
-              sessionalMarks.sessional1 = 'null';
+              sessionalMarks.sessional1 = 0;
             }
             else{
               sessionalMarks.sessional1 = string.slice(indexMoving + 27,indexMoving + 32);
@@ -190,7 +190,7 @@ const scrape_data = (reg, pass, callback) => {
 
             indexMoving = string.indexOf('Internal Sessional 2',indexMoving);
             if(indexMoving == -1){
-              sessionalMarks.sessional2 = 'null';
+              sessionalMarks.sessional2 = 0;
             }
             else{
               sessionalMarks.sessional2 = string.slice(indexMoving + 27,indexMoving + 32);
@@ -199,17 +199,17 @@ const scrape_data = (reg, pass, callback) => {
 
           indexMoving = string.indexOf('Assignment Maximum Marks',indexMoving);
           if(indexMoving == -1){
-            assignmentMarks.assignment1 = 'null';
-            assignmentMarks.assignment2 = 'null';
-            assignmentMarks.assignment3 = 'null';
-            assignmentMarks.assignment4 = 'null';
+            assignmentMarks.assignment1 = 0;
+            assignmentMarks.assignment2 = 0;
+            assignmentMarks.assignment3 = 0;
+            assignmentMarks.assignment4 = 0;
             assignmentStatus = false;
           }
           if(assignmentStatus){
 
             indexMoving = string.indexOf('Assignment 1',indexMoving);
             if(indexMoving == -1){
-              assignmentMarks.assignment1 = 'null';
+              assignmentMarks.assignment1 = 0;
             }
             else{
               assignmentMarks.assignment1 = string.slice(indexMoving + 18,indexMoving + 22);
@@ -217,7 +217,7 @@ const scrape_data = (reg, pass, callback) => {
 
             indexMoving = string.indexOf('Assignment 2',indexMoving);
             if(indexMoving == -1){
-              assignmentMarks.assignment2 = 'null';
+              assignmentMarks.assignment2 = 0;
             }
             else{
               assignmentMarks.assignment2 = string.slice(indexMoving + 18,indexMoving + 22);
@@ -225,7 +225,7 @@ const scrape_data = (reg, pass, callback) => {
 
             indexMoving = string.indexOf('Assignment 3',indexMoving);
             if(indexMoving == -1){
-              assignmentMarks.assignment3 = 'null';
+              assignmentMarks.assignment3 = 0;
             }
             else{
               assignmentMarks.assignment3 = string.slice(indexMoving + 18,indexMoving + 22);
@@ -233,7 +233,7 @@ const scrape_data = (reg, pass, callback) => {
 
             indexMoving = string.indexOf('Assignment 4',indexMoving);
             if(indexMoving == -1){
-              assignmentMarks.assignment4 = 'null';
+              assignmentMarks.assignment4 = 0;
             }
             else{
               assignmentMarks.assignment4 = string.slice(indexMoving + 18,indexMoving + 22);
@@ -261,7 +261,7 @@ const scrape_data = (reg, pass, callback) => {
             'assignmentMarks':assignmentMarks,
             'totalMarks':totalMarks,
             'outOfMarks':outOfMarks
-          }
+          };
 
           valueReq.marks.push(dataReq);
 

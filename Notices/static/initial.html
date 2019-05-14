@@ -1,0 +1,156 @@
+<html>
+  <head>
+    <title>Notices Portal</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <style>
+
+      .centered{
+        top:10%;
+        left:42%;
+        position:absolute;
+      }
+      input[type="text"]{
+        border-radius:20px;
+        padding:10px;
+        outline:none;
+      }
+      textarea{
+        border-radius:20px;
+        padding:10px;
+        outline:none;
+      }
+      input[type="submit"]{
+        border-radius:20px;
+        padding:10px;
+        outline:none;
+        width:100%;
+        margin:10px 0px 0px 0px;
+      }
+      input[type="date"],input[type="time"]{
+        border-radius:20px;
+        padding:10px;
+        outline:none;
+      }
+
+      .container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+      @media (max-width:730px){
+        .centered{
+          top:0%;
+          left:0%;
+          position:absolute;
+        }
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="centered">
+      <h1 align="center" style='padding:0px 8px 0px 0px'>Notices Portal</h1>
+      <p align="center" style='padding:0px 8px 0px 0px'>
+        Please ensure right notices are entered.
+      </p>
+      <br/>
+      <form method="post" action="/portal/notices/submitted">
+        <table cellspacing="10">
+          <tr>
+            <td>Title: </td>
+            <td><input type="text" name="title" hint="Enter Title" required/></td>
+          </tr>
+          <tr>
+            <td>Content: </td>
+            <td><textarea name="content" rows="8"></textarea></td>
+          </tr>
+          <tr>
+            <td>Image Link: </td>
+            <td><input type="text" name="imageURL" hint="Link for the Image"/></td>
+          </tr>
+          <tr>
+            <label class="container">Two
+            <input type="checkbox">
+            <span class="checkmark"></span>
+            </label>
+          </tr>
+          <tr>
+            <td>Date: </td>
+            <td><input type="date" name="date" hint="Date of Upload"/></td>
+          </tr>
+          <tr>
+            <td>Time: </td>
+            <td><input type="time" name="time" hint="Time of Upload"/></td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <input type="submit" name="submit" value="Add Notice"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </body>
+</html>

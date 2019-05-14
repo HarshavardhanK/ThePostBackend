@@ -1,0 +1,87 @@
+<html>
+  <head>
+    <title>Events Portal</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <style>
+
+      .centered{
+        top:0%;
+        left:42%;
+        position:absolute;
+      }
+      input[type="text"]{
+        border-radius:20px;
+        padding:10px;
+        outline:none;
+      }
+      textarea{
+        border-radius:20px;
+        padding:10px;
+        outline:none;
+      }
+      input[type="submit"]{
+        border-radius:20px;
+        padding:10px;
+        outline:none;
+        width:100%;
+        margin:10px 0px 0px 0px;
+      }
+      input[type="date"],input[type="time"]{
+        border-radius:20px;
+        padding:10px;
+        outline:none;
+      }
+
+      @media (max-width:730px){
+        .centered{
+          top:0%;
+          left:0%;
+          position:absolute;
+        }
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="centered">
+      <h1 align="center" style='padding:0px 8px 0px 0px'>Events Portal</h1>
+      <p align="center" style='padding:0px 8px 0px 0px'>
+        Please ensure the right events are entered.
+      </p>
+      <br/>
+      <form method="post" action="/portal/events/submitted">
+        <table cellspacing="10">
+          <tr>
+            <td>Club Name: </td>
+            <td><input type="text" name="club" hint="Enter Club Name" required/></td>
+          </tr>
+          <tr>
+            <td>Title: </td>
+            <td><input type="text" name="title" hint="Enter Title" required/></td>
+          </tr>
+          <tr>
+            <td>Content: </td>
+            <td><textarea name="content" rows="8"></textarea></td>
+          </tr>
+          <tr>
+            <td>Image Link: </td>
+            <td><input type="text" name="imageURL" hint="Link for the Image"/></td>
+          </tr>
+          <tr>
+            <td>Date: </td>
+            <td><input type="date" name="date" hint="Date of Event" required/></td>
+          </tr>
+          <tr>
+            <td>Time: </td>
+            <td><input type="time" name="time" hint="Time of Event" required/></td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <input type="submit" name="submit" value="Add Event"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </body>
+</html>

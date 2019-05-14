@@ -1,0 +1,28 @@
+{
+  "name": "thepost",
+  "version": "2.0.0",
+  "description": "Backend of MIT Post app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HarshavardhanK/ThePostBackend.git"
+  },
+  "author": "HarshavardhanK",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HarshavardhanK/ThePostBackend/issues"
+  },
+  "homepage": "https://github.com/HarshavardhanK/ThePostBackend#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "crypto-js": "^3.1.9-1",
+    "deasync": "^0.1.15",
+    "express": "^4.16.4",
+    "mongodb": "^3.2.4",
+    "puppeteer": "^1.16.0"
+  }
+}

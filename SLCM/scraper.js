@@ -23,7 +23,7 @@ let scrape = async (reg,pass) => {
     '--no-first-run',
     '--no-sandbox',
     '--no-zygote'
-  ], headless:true});
+  ], headless:false});
   const page = await browser.newPage();
   try{
     await page.goto('http://slcm.manipal.edu/loginform.aspx',{timeout:25000});

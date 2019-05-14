@@ -7,13 +7,13 @@ const database = require('./database.js');
 const API = 'https://themitpost.com/wp-json/wp/v2/posts?per_page=50';
 const AUTHOR_API = 'https://themitpost.com/wp-json/wp/v2/users/';
 
-const get_article = async(API) => {
+const get_article = async(_API) => {
 
   try {
 
     let articles = [];
 
-    let response = await axios.get(API);
+    let response = await axios.get(_API);
 
     let num_articles = response.data.length;
 
@@ -89,9 +89,14 @@ const update = async function(number) {
 
 };
 
+
+
 const arguments = process.argv.slice(2);
 const count = arguments[0];
+const needs_update = arguments[1];
 
-update(count);
+if(needs_update == 'y') {
+  update(count);
+}
 
 module.exports.update = update;

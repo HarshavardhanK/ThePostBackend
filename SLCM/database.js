@@ -14,7 +14,7 @@ const insert_slcm_data = function(value) {
     var database_object = database.db('themitpost');
 
     database_object.collection(COLLECTION).save(value, (error, result) => {
-      console.log("attendance insert succesfull");
+      console.log("SLCM insert insert succesfull");
     });
 
     database.close();

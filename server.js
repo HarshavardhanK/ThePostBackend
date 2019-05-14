@@ -1,4 +1,5 @@
 
+console.log("Runnning server..");
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -8,18 +9,12 @@ const http = require('http');
 const crypto = require('crypto');
 const deasync = require('deasync');
 
-const database = require('./Articles/Articles/database.js');
+const database = require('./Articles/database.js');
 const slcm_database = require('./SLCM/database.js');
 const scraper = require('./SLCM/scraper.js');
-const filter = require('./Articles/Articles/filter.js');
+const filter = require('./Articles/filter.js');
 
 var app = express();
-
-// const options = {
-//     key: fs.readFileSync('/etc/ssl/private/key.pem'),
-//     cert: fs.readFileSync('/etc/ssl/certs/cert.pem')
-// };
-
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -47,30 +42,18 @@ app.get('/', (request, response) => {
 app.get('/posts', (request, response) => {
 
   query = {};
-  //console.log(query);
 
   database.query_skeleton_article_all(query, (data) => {
 
     if(data.length > 0) {
+
       console.log('Query successful');
       console.log(data);
       response.json(data);
 
     } else {
-
-      var done = false;
-      filter.update('50').then((finished) => {
-        done = finished;
-      });
-      //response.json({status: 'BAD' , data: []});
-
-      while(!done) { deasync.sleep(100); }
-
-      //response.send('Articles were updated..');
-      response.redirect('/');
-
+      response.json({"status": "BAD"});
     }
-
 
   });
 
@@ -112,9 +95,9 @@ app.get('/slcm', (req,res) => {
 function encrypt(data, password) {
 
   var key = crypto.createCipher('aes-128-cbc', password);
-  var string = key.update(data, 'utf8', 'hex');
+  var string = key.update(data, 'binary', 'binary');
 
-  string += key.final('hex');
+  string += key.final('binary');
 
   return string;
 
@@ -123,7 +106,7 @@ function encrypt(data, password) {
 function decrypt(data, password) {
 
   var myKey = crypto.createDecipher('aes-128-cbc', password);
-  return myKey.update(data, 'hex', 'utf8') + myKey.final('utf8');
+  return myKey.update(data, 'binary', 'binary') + myKey.final('binary');
 
 }
 
@@ -279,8 +262,20 @@ app.get('/notices', function(request, response) {
 
 });
 
+const arguments = process.argv.slice(2);
+const is_secure = arguments[0];
 
+if(is_secure == 's') {
 
+  const options = {
+      key: fs.readFileSync('/etc/ssl/private/key.pem'),
+      cert: fs.readFileSync('/etc/ssl/certs/cert.pem')
+  };
 
-app.listen(3000);
-//https.createServer(options, app).listen(8000);
+  https.createServer(options, app).listen(8000);
+
+} else {
+
+  app.listen(3000);
+
+}

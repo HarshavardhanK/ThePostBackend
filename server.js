@@ -265,7 +265,11 @@ app.get('/notices', function(request, response) {
 const arguments = process.argv.slice(2);
 const is_secure = arguments[0];
 
-if(is_secure == 's') {
+if(is_secure == 'n') {
+
+  app.listen(3000);
+
+} else {
 
   const options = {
       key: fs.readFileSync('/etc/ssl/private/key.pem'),
@@ -274,8 +278,6 @@ if(is_secure == 's') {
 
   https.createServer(options, app).listen(8000);
 
-} else {
 
-  app.listen(3000);
 
 }

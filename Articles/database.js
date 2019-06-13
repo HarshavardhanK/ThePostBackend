@@ -13,7 +13,7 @@ const insert_article = function(article) {
     if(error) throw error;
 
     var database_object = database.db('themitpost');
-    database_object.collection(COLLECTION).updateOne(article, {ordered: true}, (error, result) => {
+    database_object.collection(COLLECTION).save(article, {ordered: true}, (error, result) => {
       console.log('Article %s insert successful', article.title);
     });
     database.close();
@@ -125,8 +125,19 @@ const sort_articles = function(callback) {
     const database_object = database.db(DB);
 
 
-  })
-}
+  });
+
+  /*
+  db.createUser(
+  ...   {
+  ...     user: "myUserAdmin",
+  ...     pwd: "abc123",
+  ...     roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+  ...   }
+  ... )
+
+  */
+};
 
 module.exports.query_full_article = query_full_article;
 module.exports.query_skeleton_article = query_skeleton_article;

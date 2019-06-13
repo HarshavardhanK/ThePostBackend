@@ -4,6 +4,7 @@ const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb://localhost:27017/themitpost";
 
 const COLLECTION = "articles";
+const DB = 'themitpost';
 
 const insert_article = function(article) {
 
@@ -12,7 +13,7 @@ const insert_article = function(article) {
     if(error) throw error;
 
     var database_object = database.db('themitpost');
-    database_object.collection(COLLECTION).save(article, (error, result) => {
+    database_object.collection(COLLECTION).updateOne(article, {ordered: true}, (error, result) => {
       console.log('Article %s insert successful', article.title);
     });
     database.close();
@@ -110,6 +111,22 @@ const query_full_article = function(query, callback) {
    });
 
 };
+
+//TODO:- SORT ALL THE ARTICLES ACCORDING TO THE TIMESTAMP..
+
+const sort_articles = function(callback) {
+
+  MongoClient.connect(url, (error, database) => {
+
+    if(error) {
+      callback(error);
+    }
+
+    const database_object = database.db(DB);
+
+
+  })
+}
 
 module.exports.query_full_article = query_full_article;
 module.exports.query_skeleton_article = query_skeleton_article;

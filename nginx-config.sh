@@ -2,7 +2,7 @@
 
 #INSTALL NGINGX
 sudo apt update
-sodu apt install nginx
+sudo apt install nginx
 sudo ufw app list
 sudo ufw allow 'Nginx Full'
 sudo ufw status

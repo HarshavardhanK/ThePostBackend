@@ -20,8 +20,3 @@ sudo systemctl start mongodb
 #FIREWALL
 ufw app list
 ufw allow OpenSSH
-
-
-#MAKE DIRECTORY TO CONTAIN YOUR SCRIPTS
-mkdir The-Post
-cd The-Post/

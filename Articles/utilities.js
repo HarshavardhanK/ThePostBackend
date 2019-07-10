@@ -143,10 +143,13 @@ const make_paragraph_array = function(body) {
   for(var i = 0; i < begin_indices.length; i += 1) {
 
     var content = striptags(body.substring(begin_indices[i], end_indices[i]));
+    console.log(content);
 
     paragraph = { content: content,
       begin_index: begin_indices[i],
       end_index: end_indices[i] };
+
+      console.log(paragraph);
 
       paragraph_array.push(paragraph);
 
@@ -196,14 +199,14 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
 
     if(grouped_urls[url_iter][0].index < paragraph_array[para_iter].begin_index) {
       //console.log("URL index is %d", url[0].index);
-      if(url[0].url.indexOf(".jpg") != -1 || url[0].url.indexOf(".jpeg") != -1) {
+      if(url[0].url.indexOf("https://i1.wp.com/themitpost.com/wp-content/uploads") != -1) {
         content = {content: url[0].url, isImage: true, isHyperlink: false};
         final_object.push(content);
         url_iter += 1;
 
       } else {
-        console.log(url[0].url)
-        console.log(url[0].url.indexOf(".jpg"))
+        //console.log(url[0].url);
+        //console.log(url[0].url.indexOf(".jpg"));
         content = {content: url[0].url, isImage: false, isHyperlink: true};
         final_object.push(content);
         url_iter += 1;
@@ -211,18 +214,20 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
 
 
     } else {
-
-      if(paragraph.content != '') {
-        content = {content: paragraph.content, isImage: false, isHyperlink: false};
-        final_object.push(content);
-      }
-
+      paragraph = paragraph_array[para_iter];
+      content = {content: paragraph.content, isImage: false, isHyperlink: false};
+      final_object.push(content);
       para_iter += 1;
+
+      //if(paragraph.content != '') {
+
+      //}
     }
 
   }
 
     while(para_iter < paragraph_array_length) {
+      paragraph = paragraph_array[para_iter];
       content = {content: paragraph.content, isImage: false, isHyperlink: false};
       final_object.push(content);
       para_iter += 1;
@@ -338,6 +343,8 @@ const prepare_article_JSON = function(article) {
                         message: message
 
                       };
+
+    console.log(article_JSON);
 
   return article_JSON;
 

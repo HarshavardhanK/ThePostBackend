@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
 
+#FIREWALL
+ufw app list
+ufw allow OpenSSH
+
 #INSTALL NODEJS
 
 sudo apt-get update
 sudo apt-get install nodejs
 sudo apt-get install npm
+sudo npm install -g pm2
+
+#INSTALL ALL NECESSARY MODULES BY NPM INSTALL.
+#Here I am assuming you are in the directory cloned from GitHub for this project. PLEASE BE IN THAT DIRECTORY FOR THE NEXT COMMAND TO WORK
+npm install
 
 #INSTALL MONGODB
 sudo apt update
@@ -17,11 +26,18 @@ mongo --eval 'db.runCommand({ connectionStatus: 1 })'
 sudo systemctl enable mongodb
 sudo systemctl start mongodb
 
-#FIREWALL
-ufw app list
-ufw allow OpenSSH
+#INSTALL NGINGX
+sudo apt update
+sodu apt install nginx
+sudo ufw app list
+sudo ufw allow 'Nginx Full'
+sudo ufw status
 
+sudo systemctl start nginx
+sudo systemctl enable nginx
 
-#MAKE DIRECTORY TO CONTAIN YOUR SCRIPTS
-mkdir The-Post
-cd The-Post/
+sudo nano /etc/nginx/sites-available/api.themitpost.com
+cp -i /root/ThePostBackend/api.themitpost.com /etc/nginx/sites-available/api.themitpost.com
+sudo ln -s /etc/nginx/sites-available/api.themitpost.com /etc/nginx/sites-enabled/
+cp -i ~/ThePostBackendcert.pem /etc/ssl/certs/cert.pem
+cp -i ~/ThePostBackendkey.pem /etc/ssl/private/key.pem

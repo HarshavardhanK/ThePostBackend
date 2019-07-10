@@ -1,6 +1,4 @@
 
-console.log("Runnning server..");
-
 const express = require('express');
 const bodyParser = require('body-parser');
 var fs = require('fs');
@@ -20,6 +18,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/', (request, response) => {
+
+  console.log('Home page');
 
   const message = {
 
@@ -268,6 +268,7 @@ const is_secure = arguments[0];
 if(is_secure == 'n') {
 
   app.listen(3000);
+  console.log('Running http server');
 
 } else {
 
@@ -277,6 +278,8 @@ if(is_secure == 'n') {
   };
 
   https.createServer(options, app).listen(8000);
+
+  console.log('Running https server');
 
 
 

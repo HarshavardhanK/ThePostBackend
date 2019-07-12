@@ -162,7 +162,7 @@ const make_paragraph_array = function(body) {
 
 // TODO: Align paragraphs and image URLS into a single list of JSON paragraph objects..
 
-const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
+/*const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
 
   var final_object = [];
 
@@ -198,18 +198,16 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
       if(url[0].url.indexOf(".jpg") != -1 || url[0].url.indexOf(".jpeg") != -1) {
         content = {content: url[0].url, isImage: true, isHyperlink: false};
         final_object.push(content);
-        url_iter += 1;
 
       } else {
         
         content = {content: url[0].url, isImage: false, isHyperlink: true};
         final_object.push(content);
-        url_iter += 1;
       }
 
+      url_iter += 1;
 
     } else {
-      
       content = {content: paragraph.content, isImage: false, isHyperlink: false};
       final_object.push(content);
       para_iter += 1;
@@ -219,7 +217,6 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
   }
 
     while(para_iter < paragraph_array_length) {
-
       paragraph = paragraph_array[para_iter];
       content = {content: paragraph.content, isImage: false, isHyperlink: false};
       final_object.push(content);
@@ -229,14 +226,104 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
 
     while(url_iter < grouped_urls_length) {
 
-      if(url[0].url.indexOf("https://i1.wp.com/themitpost.com/wp-content/uploads") != -1) {
-        url =  grouped_urls[url_iter];
+      url =  grouped_urls[url_iter];
+
+      if(url[0].url.indexOf(".jpg") != -1 || url[0].url.indexOf(".jpeg") != -1) {
+        content = {content: url[0].url, isImage: true, isHyperlink: false};
+        final_object.push(content);
+        
+      } else {
+        content = {content: url[0].url, isImage: false, isHyperlink: true};
+        final_object.push(content);
+        
+      }
+
+      url_iter += 1;
+
+    }
+
+    return final_object;
+
+};*/
+
+const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
+
+  var final_object = [];
+
+  var url_iter = 0;
+  var para_iter = 0;
+
+  const paragraph_array_length = paragraph_array.length;
+
+  if(grouped_urls.length == 0) {
+
+    while(para_iter < paragraph_array_length) {
+      content = {content: paragraph.content, isImage: false, isHyperlink: false};
+      final_object.push(content);
+      para_iter += 1;
+
+    }
+
+    return final_object;
+
+  }
+
+  const grouped_urls_length = grouped_urls.length;
+
+
+  var url =  grouped_urls[url_iter];
+  var paragraph = paragraph_array[para_iter];
+
+  while(url_iter < grouped_urls_length && para_iter < paragraph_array_length) {
+
+    url =  grouped_urls[url_iter];
+    paragraph = paragraph_array[para_iter];
+
+    //console.log("URL is %s", url[0].url);
+
+    if(grouped_urls[url_iter][0].index < paragraph_array[para_iter].begin_index) {
+      //console.log("URL index is %d", url[0].index);
+      if(url[0].url.indexOf(".jpg") != -1 || url[0].url.indexOf(".jpeg") != -1) {
         content = {content: url[0].url, isImage: true, isHyperlink: false};
         final_object.push(content);
         url_iter += 1;
 
       } else {
-        url =  grouped_urls[url_iter];
+        console.log(url[0].url)
+        console.log(url[0].url.indexOf(".jpg"))
+        content = {content: url[0].url, isImage: false, isHyperlink: true};
+        final_object.push(content);
+        url_iter += 1;
+      }
+
+
+    } else {
+
+      if(paragraph.content != '') {
+        content = {content: paragraph.content, isImage: false, isHyperlink: false};
+        final_object.push(content);
+      }
+
+      para_iter += 1;
+    }
+
+  }
+
+    while(para_iter < paragraph_array_length) {
+      content = {content: paragraph.content, isImage: false, isHyperlink: false};
+      final_object.push(content);
+      para_iter += 1;
+
+    }
+
+    while(url_iter < grouped_urls_length) {
+
+      if(url[0].url.indexOf("https://i1.wp.com/themitpost.com/wp-content/uploads") != -1) {
+        content = {content: url[0].url, isImage: true, isHyperlink: false};
+        final_object.push(content);
+        url_iter += 1;
+
+      } else {
         content = {content: url[0].url, isImage: false, isHyperlink: true};
         final_object.push(content);
         url_iter += 1;

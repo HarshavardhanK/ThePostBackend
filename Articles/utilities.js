@@ -190,7 +190,7 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
 
       paragraph = paragraph_array[para_iter];
 
-      if(paragraph.content != '') {
+      if((paragraph) && (paragraph.content != '')) {
 
         content = {content: paragraph.content, isImage: false, isHyperlink: false};
         final_object.push(content);
@@ -226,7 +226,7 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
 
     } else {
 
-      if(paragraph.content != '') {
+      if((paragraph) && (paragraph.content != '')) {
 
         content = {content: paragraph.content, isImage: false, isHyperlink: false};
         final_object.push(content);
@@ -239,10 +239,10 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
 
   }
 
-    while(para_iter <= paragraph_array_length) {
+    while(para_iter < paragraph_array_length) {
       paragraph = paragraph_array[para_iter];
 
-      if(paragraph.content != '') {
+      if((paragraph) && (paragraph.content != '')) {
         
         content = {content: paragraph.content, isImage: false, isHyperlink: false};
         final_object.push(content);

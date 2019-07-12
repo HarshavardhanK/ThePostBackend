@@ -88,8 +88,17 @@ const group_urls = function(urls) {
   var rank = 0;
 
   let jpg_index = urls[0].url.indexOf('.jpg');
-  let parent_url = urls[0].url.substr(0, jpg_index + 4);
+  let jpeg_index = urls[0].url.indexOf('.jpeg');
 
+  var parent_url;
+
+  if(jpg_index == -1){
+    parent_url = urls[0].url.substr(0, jpeg_index + 5);
+
+  } else {
+    parent_url = urls[0].url.substr(0, jpg_index + 4)
+  }
+  
   grouped_urls[0] = [];
 
   for(var i = 0; i < urls.length; i += 1) {
@@ -178,12 +187,20 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
   if(grouped_urls.length == 0 && paragraph_array_length > 0) {
 
     while(para_iter < paragraph_array_length) {
+
       paragraph = paragraph_array[para_iter];
-      content = {content: paragraph.content, isImage: false, isHyperlink: false};
-      final_object.push(content);
+
+      if(paragraph.content != '') {
+
+        content = {content: paragraph.content, isImage: false, isHyperlink: false};
+        final_object.push(content);
+        
+      }
+
       para_iter += 1;
 
     }
+
     return final_object;
 
   }
@@ -208,23 +225,35 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
       url_iter += 1;
 
     } else {
-      content = {content: paragraph.content, isImage: false, isHyperlink: false};
-      final_object.push(content);
-      para_iter += 1;
 
+      if(paragraph.content != '') {
+
+        content = {content: paragraph.content, isImage: false, isHyperlink: false};
+        final_object.push(content);
+
+      }
+
+      para_iter += 1;
+      
     }
 
   }
 
-    while(para_iter < paragraph_array_length) {
+    while(para_iter <= paragraph_array_length) {
       paragraph = paragraph_array[para_iter];
-      content = {content: paragraph.content, isImage: false, isHyperlink: false};
-      final_object.push(content);
+
+      if(paragraph.content != '') {
+        
+        content = {content: paragraph.content, isImage: false, isHyperlink: false};
+        final_object.push(content);
+      
+      }
+
       para_iter += 1;
 
     }
 
-    while(url_iter < grouped_urls_length) {
+    while(url_iter <= grouped_urls_length) {
 
       url =  grouped_urls[url_iter];
 

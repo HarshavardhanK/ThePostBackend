@@ -253,7 +253,7 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
 
     }
 
-    while(url_iter <= grouped_urls_length) {
+    while(url_iter < grouped_urls_length) {
 
       url =  grouped_urls[url_iter];
 

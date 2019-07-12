@@ -72,10 +72,7 @@ const update = async function(number) {
   await get_article(API2).then((response) => {
 
     for(var i = 0; i < response.length; i += 1) {
-
-      //console.log(response[i]);
       let article = utilities.prepare_article_JSON(response[i]);
-      //console.log(article.title);
       database.insert_article(article);
 
     }

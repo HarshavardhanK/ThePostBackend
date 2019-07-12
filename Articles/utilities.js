@@ -237,11 +237,13 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
     while(url_iter < grouped_urls_length) {
 
       if(url[0].url.indexOf("https://i1.wp.com/themitpost.com/wp-content/uploads") != -1) {
+        url =  grouped_urls[url_iter];
         content = {content: url[0].url, isImage: true, isHyperlink: false};
         final_object.push(content);
         url_iter += 1;
 
       } else {
+        url =  grouped_urls[url_iter];
         content = {content: url[0].url, isImage: false, isHyperlink: true};
         final_object.push(content);
         url_iter += 1;
@@ -269,6 +271,7 @@ sample entry of a paragraph in the list of JSON object
 isURL: false,
 isBold: false,
 isEmpahsied: false,
+isCaption: false,
 index: 800}
 
 The index is taken off the filtered string, stripped off all HTML entities

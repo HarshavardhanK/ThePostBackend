@@ -175,7 +175,7 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
   var url =  grouped_urls[url_iter];
   var paragraph = paragraph_array[para_iter];
 
-  if(grouped_urls.length == 0) {
+  if(grouped_urls.length == 0 && paragraph_array_length > 0) {
 
     while(para_iter < paragraph_array_length) {
       paragraph = paragraph_array[para_iter];
@@ -193,7 +193,7 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
     url =  grouped_urls[url_iter];
     paragraph = paragraph_array[para_iter];
 
-    if(grouped_urls[url_iter][0].index < paragraph_array[para_iter].begin_index) {
+    if(url[0].index < paragraph_array[para_iter].begin_index) {
       
       if(url[0].url.indexOf(".jpg") != -1 || url[0].url.indexOf(".jpeg") != -1) {
         content = {content: url[0].url, isImage: true, isHyperlink: false};

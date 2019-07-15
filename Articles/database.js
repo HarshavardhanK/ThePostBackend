@@ -6,14 +6,14 @@ const url = "mongodb://localhost:27017/themitpost";
 const COLLECTION = "articles";
 const DB = 'themitpost';
 
-const insert_article = function(article) {
+const insert_article = function(article, collection = COLLECTION) {
 
   MongoClient.connect(url, (error, database) => {
 
     if(error) throw error;
 
     var database_object = database.db('themitpost');
-    database_object.collection(COLLECTION).save(article, {ordered: true}, (error, result) => {
+    database_object.collection(collection).save(article, {ordered: true}, (error, result) => {
       console.log('Article %s insert successful', article.title);
     });
     database.close();
@@ -91,7 +91,7 @@ const query_skeleton_article_all = function(query, callback) {
 
 };
 
-const query_full_article = function(query, callback) {
+const query_full_article = function(query, collection, callback) {
 
   MongoClient.connect(url, (error, database) => {
 
@@ -99,7 +99,7 @@ const query_full_article = function(query, callback) {
 
     var database_object = database.db('themitpost');
 
-    database_object.collection(COLLECTION).findOne(query, (error, result) => {
+    database_object.collection(collection).findOne(query, (error, result) => {
 
       if(error) reject(error);
 
@@ -114,19 +114,6 @@ const query_full_article = function(query, callback) {
 
 //TODO:- SORT ALL THE ARTICLES ACCORDING TO THE TIMESTAMP..
 
-const sort_articles = function(callback) {
-
-  MongoClient.connect(url, (error, database) => {
-
-    if(error) {
-      callback(error);
-    }
-
-    const database_object = database.db(DB);
-
-
-  });
-
   /*
   db.createUser(
   ...   {
@@ -137,7 +124,6 @@ const sort_articles = function(callback) {
   ... )
 
   */
-};
 
 module.exports.query_full_article = query_full_article;
 module.exports.query_skeleton_article = query_skeleton_article;

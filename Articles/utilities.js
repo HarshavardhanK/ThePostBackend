@@ -59,8 +59,9 @@ const scan_extract_image_urls = function(indices, body) {
 
     urls.push(url_object);
 
-
   }
+
+  console.log(urls.length);
 
   return urls;
 
@@ -76,8 +77,6 @@ the image below is a lesser quality version URL.
 
 const group_urls = function(urls) {
 
-  console.log(urls.length);
-
   if(urls.length <= 0) {
 
     return [];
@@ -91,40 +90,70 @@ const group_urls = function(urls) {
   let jpeg_index = urls[0].url.indexOf('.jpeg');
 
   var parent_url;
+  var previous_parent_url;
 
-  if(jpg_index == -1){
-    parent_url = urls[0].url.substr(0, jpeg_index + 5);
+  if(jpeg_index == -1 && jpg_index == -1) {
+    console.log(urls[0].url + " not an image.");
+    parent_url = urls[0].url;
 
   } else {
-    parent_url = urls[0].url.substr(0, jpg_index + 4)
-  }
+
+    if(jpg_index == -1){
+      parent_url = urls[0].url.substr(0, jpeg_index + 5);
   
-  grouped_urls[0] = [];
-
-  for(var i = 0; i < urls.length; i += 1) {
-
-    if(urls[i].url.indexOf(parent_url) != -1) {
-
-      url_ordering = {url: urls[i].url, index: urls[i].index, rank: rank};
-      grouped_urls[rank].push(url_ordering);
-
-    } else {
-
-      rank += 1;
-
-      grouped_urls[rank] = [];
-
-      jpg_index = urls[i].url.indexOf('.jpg');
-      parent_url = urls[i].url.substr(0, jpg_index + 4);
-
-      i -= 1;
-      parent_group = [];
-
+    } 
+    
+    if(jpeg_index == -1) {
+      parent_url = urls[0].url.substr(0, jpg_index + 4)
     }
 
   }
 
-  //console.log("%d parent images encountered", grouped_urls.length);
+  previous_parent_url = parent_url;
+
+    for(var i = 0; i < urls.length; i += 1) {
+
+      let jpg_index = urls[i].url.indexOf('.jpg');
+      let jpeg_index = urls[i].url.indexOf('.jpeg');
+
+      if(jpeg_index == -1 && jpg_index == -1) {
+        console.log(urls[i].url + " not an image.");
+        parent_url = urls[0].url;
+
+        url_ordering = {url: urls[i].url, index: urls[i].index, rank: rank};
+        grouped_urls.push(url_ordering);
+    
+      } else {
+    
+        if(jpg_index == -1){
+          parent_url = urls[i].url.substr(0, jpeg_index + 5);
+      
+        } 
+        
+        if(jpeg_index == -1) {
+          parent_url = urls[i].url.substr(0, jpg_index + 4)
+        }
+    
+      }
+
+      if(previous_parent_url !== parent_url) {
+
+        console.log(previous_parent_url);
+        console.log(parent_url);
+
+        url_ordering = {url: urls[i].url, index: urls[i].index, rank: rank};
+        grouped_urls.push(url_ordering);
+
+        let jpg_index = urls[i].url.indexOf('.jpg');
+        let jpeg_index = urls[i].url.indexOf('.jpeg');
+
+        previous_parent_url = parent_url;
+
+      } else {
+        rank += 1
+      }
+
+    }
 
   return grouped_urls;
 
@@ -152,18 +181,14 @@ const make_paragraph_array = function(body) {
   for(var i = 0; i < begin_indices.length; i += 1) {
 
     var content = striptags(body.substring(begin_indices[i], end_indices[i]));
-    //console.log(content);
-
+    
     paragraph = { content: content,
       begin_index: begin_indices[i],
       end_index: end_indices[i] };
 
-      //console.log(paragraph);
-
       paragraph_array.push(paragraph);
 
   }
-  //console.log(parsed);
 
   return paragraph_array;
 
@@ -183,6 +208,9 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
 
   var url =  grouped_urls[url_iter];
   var paragraph = paragraph_array[para_iter];
+
+  console.log(grouped_urls.length);
+  console.log(grouped_urls);
 
   if(grouped_urls.length == 0 && paragraph_array_length > 0) {
 
@@ -210,15 +238,16 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
     url =  grouped_urls[url_iter];
     paragraph = paragraph_array[para_iter];
 
-    if(url[0].index < paragraph_array[para_iter].begin_index) {
+    if(url.index < paragraph_array[para_iter].begin_index) {
       
-      if(url[0].url.indexOf(".jpg") != -1 || url[0].url.indexOf(".jpeg") != -1) {
-        content = {content: url[0].url, isImage: true, isHyperlink: false};
+      if(url.url.indexOf(".jpg") != -1 || url.url.indexOf(".jpeg") != -1) {
+        content = {content: url.url, isImage: true, isHyperlink: false};
+        console.log(content);
         final_object.push(content);
 
       } else {
         
-        content = {content: url[0].url, isImage: false, isHyperlink: true};
+        content = {content: url.url, isImage: false, isHyperlink: true};
         final_object.push(content);
       }
 
@@ -229,6 +258,7 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
       if((paragraph) && (paragraph.content != '')) {
 
         content = {content: paragraph.content, isImage: false, isHyperlink: false};
+        //console.log(content);
         final_object.push(content);
 
       }
@@ -257,12 +287,13 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
 
       url =  grouped_urls[url_iter];
 
-      if(url[0].url.indexOf(".jpg") != -1 || url[0].url.indexOf(".jpeg") != -1) {
-        content = {content: url[0].url, isImage: true, isHyperlink: false};
+      if(url.url.indexOf(".jpg") != -1 || url.url.indexOf(".jpeg") != -1) {
+        content = {content: url.url, isImage: true, isHyperlink: false};
         final_object.push(content);
+        console.log(content);
         
       } else {
-        content = {content: url[0].url, isImage: false, isHyperlink: true};
+        content = {content: url.url, isImage: false, isHyperlink: true};
         final_object.push(content);
         
       }
@@ -341,7 +372,7 @@ const prepare_article_JSON = function(article) {
   let body = article.content;
   let date = get_date(article.date);
   let title = article.title;
-  let id = article.id;
+  let id = article._id;
   let link = article.link;
   let featured_media = article.featured_media;
   let message = article.message;
@@ -367,7 +398,7 @@ const prepare_article_JSON = function(article) {
 
                       };
 
-    console.log(article_JSON);
+    //console.log(article_JSON);
 
   return article_JSON;
 

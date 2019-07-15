@@ -25,7 +25,9 @@
     "express": "^4.16.4",
     "get-urls": "^9.1.0",
     "mongodb": "^3.2.4",
+    "nodemon": "^1.19.1",
     "puppeteer": "^1.16.0",
-    "striptags": "^3.1.1"
+    "striptags": "^3.1.1",
+    "yargs": "^13.2.4"
   }
 }

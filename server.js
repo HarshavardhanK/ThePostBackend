@@ -14,6 +14,8 @@ const filter = require('./Articles/filter.js');
 
 var app = express();
 
+const ARTICLES_COLLECTION = 'articles';
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -65,7 +67,7 @@ app.get('/posts/:tagId', (request, response) => {
   query = {_id: parseInt(request.params.tagId)};
   //console.log(query);
 
-  database.query_full_article(query, (data) => {
+  database.query_full_article(query, ARTICLES_COLLECTION, (data) => {
 
     if(data) {
       console.log('Query successful');

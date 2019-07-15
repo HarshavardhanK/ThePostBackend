@@ -1,8 +1,12 @@
 
 const axios = require('axios');
+const yargs = require('yargs');
 
 const utilities = require('./utilities.js');
 const database = require('./database.js');
+
+//TEST ARTICLE API
+//const tests = require('./tests.js');
 
 const API = 'https://themitpost.com/wp-json/wp/v2/posts?per_page=50';
 const AUTHOR_API = 'https://themitpost.com/wp-json/wp/v2/users/';
@@ -34,7 +38,7 @@ const get_article = async(_API) => {
 
       article = {
 
-      'id': response.data[i].id,
+      '_id': response.data[i].id,
       'date': response.data[i].date,
       'title': response.data[i].title.rendered,
       'content': response.data[i].content.rendered,
@@ -63,7 +67,7 @@ const get_article = async(_API) => {
 
 };
 
-const update = async function(number) {
+const update = async function(number, command) {
 
   const API2='https://themitpost.com/wp-json/wp/v2/posts?per_page=' + number;
 
@@ -73,8 +77,15 @@ const update = async function(number) {
 
     for(var i = 0; i < response.length; i += 1) {
       let article = utilities.prepare_article_JSON(response[i]);
-      database.insert_article(article);
 
+      if(command.main === 'update') {
+        database.insert_article(article);
+      }
+
+      if(command.save_raw === 'y' || command.save_raw === 'Y') {
+        database.insert_article(response[i], collection='tests');
+      }
+      
     }
 
   }).catch((error) => {
@@ -86,14 +97,23 @@ const update = async function(number) {
 
 };
 
+const main = function() {
 
+  let params = yargs.argv;
+  let command_ = params._[0];
 
-const arguments = process.argv.slice(2);
-const count = arguments[0];
-const needs_update = arguments[1];
+  let count = params.articles;
+  let save_raw = params.save_raw;
 
-if(needs_update == 'y') {
-  update(count);
-}
+  const command = {main: command_, save_raw: save_raw};
+
+  update(count, command);
+
+};
+
+main();
+
+let params = yargs.argv;
+console.log(params);
 
 module.exports.update = update;

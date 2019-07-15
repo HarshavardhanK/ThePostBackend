@@ -6,11 +6,12 @@ const https = require('https');
 const http = require('http');
 const crypto = require('crypto');
 const deasync = require('deasync');
+const yargs = require('yargs');
 
 const database = require('./Articles/database.js');
 const slcm_database = require('./SLCM/database.js');
 const scraper = require('./SLCM/scraper.js');
-const filter = require('./Articles/filter.js');
+//const filter = require('./Articles/filter.js');
 
 var app = express();
 
@@ -264,25 +265,28 @@ app.get('/notices', function(request, response) {
 
 });
 
-const arguments = process.argv.slice(2);
-const is_secure = arguments[0];
+const main = () => {
 
-if(is_secure == 'n') {
+  const command = yargs.argv;
 
-  app.listen(3000);
-  console.log('Running http server');
+  if(command.https == 'y' || command.https == 'Y') {
 
-} else {
-
-  const options = {
+    const options = {
       key: fs.readFileSync('/etc/ssl/private/key.pem'),
       cert: fs.readFileSync('/etc/ssl/certs/cert.pem')
   };
 
-  https.createServer(options, app).listen(8000);
+    https.createServer(options, app).listen(8000);
 
-  console.log('Running https server');
+    console.log('Running https server on port 8000');
 
+  } else {
 
+    app.listen(3000);
+    console.log('Running http server');
 
-}
+  }
+
+};
+
+main();

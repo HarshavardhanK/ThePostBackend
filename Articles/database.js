@@ -112,19 +112,6 @@ const query_full_article = function(query, collection, callback) {
 
 };
 
-//TODO:- SORT ALL THE ARTICLES ACCORDING TO THE TIMESTAMP..
-
-  /*
-  db.createUser(
-  ...   {
-  ...     user: "myUserAdmin",
-  ...     pwd: "abc123",
-  ...     roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
-  ...   }
-  ... )
-
-  */
-
 module.exports.query_full_article = query_full_article;
 module.exports.query_skeleton_article = query_skeleton_article;
 module.exports.insert_article = insert_article;

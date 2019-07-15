@@ -269,23 +269,40 @@ const main = () => {
 
   const command = yargs.argv;
 
-  if(command.https == 'y' || command.https == 'Y') {
+  if(command.https) {
+
+    if(command.https == 'y' || command.https == 'Y') {
+
+      const options = {
+        key: fs.readFileSync('/etc/ssl/private/key.pem'),
+        cert: fs.readFileSync('/etc/ssl/certs/cert.pem')
+      };
+  
+      https.createServer(options, app).listen(8000);
+  
+      console.log('Running https server on port 8000');
+  
+    } else {
+  
+      app.listen(3000);
+      console.log('Running http server');
+  
+    }
+
+  } else {
 
     const options = {
       key: fs.readFileSync('/etc/ssl/private/key.pem'),
       cert: fs.readFileSync('/etc/ssl/certs/cert.pem')
-  };
+    };
 
     https.createServer(options, app).listen(8000);
 
     console.log('Running https server on port 8000');
 
-  } else {
-
-    app.listen(3000);
-    console.log('Running http server');
-
   }
+
+  
 
 };
 

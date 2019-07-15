@@ -1,6 +1,6 @@
 
 const Mongo = require('mongodb');
-const url = "mongodb://mongo:27017/themitpost";
+const url = "mongodb://localhost:27017/themitpost";
 
 const COLLECTION = 'events';
 

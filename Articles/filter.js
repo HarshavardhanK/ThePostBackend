@@ -5,9 +5,6 @@ const yargs = require('yargs');
 const utilities = require('./utilities.js');
 const database = require('./database.js');
 
-//TEST ARTICLE API
-//const tests = require('./tests.js');
-
 const API = 'https://themitpost.com/wp-json/wp/v2/posts?per_page=50';
 const AUTHOR_API = 'https://themitpost.com/wp-json/wp/v2/users/';
 
@@ -112,8 +109,5 @@ const main = function() {
 };
 
 main();
-
-let params = yargs.argv;
-console.log(params);
 
 module.exports.update = update;

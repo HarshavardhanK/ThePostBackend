@@ -88,23 +88,28 @@ const group_urls = function(urls) {
 
   let jpg_index = urls[0].url.indexOf('.jpg');
   let jpeg_index = urls[0].url.indexOf('.jpeg');
+  let png_index = urls[0].url.indexOf('.png');
 
   var parent_url;
   var previous_parent_url;
 
-  if(jpeg_index == -1 && jpg_index == -1) {
+  if(jpeg_index == -1 && jpg_index == -1 && png_index == -1) {
     console.log(urls[0].url + " not an image.");
     parent_url = urls[0].url;
 
   } else {
 
-    if(jpg_index == -1){
-      parent_url = urls[0].url.substr(0, jpeg_index + 5);
+    if(jpg_index != -1){
+      parent_url = urls[0].url.substr(0, jpg_index + 5);
   
     } 
     
-    if(jpeg_index == -1) {
-      parent_url = urls[0].url.substr(0, jpg_index + 4)
+    if(jpeg_index != -1) {
+      parent_url = urls[0].url.substr(0, jpeg_index + 4)
+    }
+
+    if(png_index != -1) {
+      parent_url = urls[0].url.substr(0, png_index + 4);
     }
 
   }
@@ -113,10 +118,11 @@ const group_urls = function(urls) {
 
     for(var i = 0; i < urls.length; i += 1) {
 
-      let jpg_index = urls[i].url.indexOf('.jpg');
-      let jpeg_index = urls[i].url.indexOf('.jpeg');
+      jpg_index = urls[i].url.indexOf('.jpg');
+      jpeg_index = urls[i].url.indexOf('.jpeg');
+      ng_index = urls[0].url.indexOf('.png');
 
-      if(jpeg_index == -1 && jpg_index == -1) {
+      if(jpeg_index == -1 && jpg_index == -1 && png_index == -1) {
         console.log(urls[i].url + " not an image.");
         parent_url = urls[0].url;
 
@@ -124,14 +130,18 @@ const group_urls = function(urls) {
         grouped_urls.push(url_ordering);
     
       } else {
-    
-        if(jpg_index == -1){
-          parent_url = urls[i].url.substr(0, jpeg_index + 5);
       
-        } 
+        if(jpg_index != -1){
+          parent_url = urls[0].url.substr(0, jpg_index + 5);
         
-        if(jpeg_index == -1) {
-          parent_url = urls[i].url.substr(0, jpg_index + 4)
+        } 
+          
+        if(jpeg_index != -1) {
+          parent_url = urls[0].url.substr(0, jpeg_index + 4)
+        }
+      
+        if(png_index != -1) {
+          parent_url = urls[0].url.substr(0, png_index + 4);
         }
     
       }
@@ -240,7 +250,7 @@ const merge_images_paragraphs = function(grouped_urls, paragraph_array) {
 
     if(url.index < paragraph_array[para_iter].begin_index) {
       
-      if(url.url.indexOf(".jpg") != -1 || url.url.indexOf(".jpeg") != -1) {
+      if(url.url.indexOf(".jpg") != -1 || url.url.indexOf(".jpeg") != -1 || url.url.indexOf('.png') != -1) {
         content = {content: url.url, isImage: true, isHyperlink: false};
         console.log(content);
         final_object.push(content);

@@ -55,7 +55,7 @@ server {
 	#
 	# include snippets/snakeoil.conf;
 
-	root /home/ubuntu/public_html;;
+	root /home/ubuntu/public_html;
 
 	# Add index.php to the list if you are using PHP
 	index index.html index.htm index.nginx-debian.html;

@@ -23,6 +23,8 @@ server {
 	listen 80;
 	listen [::]:80;
 
+	root /home/ubuntu/public_html;
+
         server_name api.themitpost.com;
         
         location / {
@@ -53,7 +55,7 @@ server {
 	#
 	# include snippets/snakeoil.conf;
 
-	root /var/www/html;
+	root /home/ubuntu/public_html;;
 
 	# Add index.php to the list if you are using PHP
 	index index.html index.htm index.nginx-debian.html;
@@ -63,32 +65,6 @@ server {
         location / {
           proxy_pass https://localhost:8000;
         }
-#	location / {
- #       proxy_pass http://localhost:8000;
-  #      proxy_http_version 1.1;
-   #     proxy_set_header Upgrade $http_upgrade;
-    #    proxy_set_header Connection 'upgrade';
-     #   proxy_set_header Host $host;
-      #  proxy_cache_bypass $http_upgrade;
-   # }
-
-	# pass PHP scripts to FastCGI server
-	#
-	#location ~ \.php$ {
-	#	include snippets/fastcgi-php.conf;
-	#
-	#	# With php-fpm (or other unix sockets):
-	#	fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
-	#	# With php-cgi (or other tcp sockets):
-	#	fastcgi_pass 127.0.0.1:9000;
-	#}
-
-	# deny access to .htaccess files, if Apache's document root
-	# concurs with nginx's one
-	#
-	#location ~ /\.ht {
-	#	deny all;
-	#}
 }
 
 

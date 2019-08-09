@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
 #FIREWALL
-ufw app list
-ufw allow OpenSSH
+sudo ufw app list
+sudo ufw allow OpenSSH
+sudo ufw allow ssh
+sudo ufw enable
 
 #INSTALL NODEJS
 

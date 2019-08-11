@@ -31,10 +31,12 @@ app.get('/', (request, response) => {
     SLCM_POST_ADDRESS: 'https://api.themitpost.com/values',
     ARTICLES_API: 'https://api.themitpost.com/posts',
     ARTICLE_TAG_API: 'https://api.themitpost.com/posts/TAG',
+    ARTICLE_RAW_TAG_API: 'https://api.themitpost.com/posts/raw/TAG',
     EVENT_PORTAL: 'https://api.themitpost.com/portal/events',
     EVENT_PORTAL_API: 'https://api.themitpost.com/events',
     NOTICES_PORTAL: 'https://api.themitpost.com/portal/notice',
     NOTICES_PORTAL_API: 'https://api.themitpost.com/notices',
+
 
 };
 
@@ -99,7 +101,7 @@ app.get('/posts/raw/:tagId', (request, response) => {
     }
 
   });
-  
+
 });
 
 

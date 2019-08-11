@@ -84,6 +84,24 @@ app.get('/posts/:tagId', (request, response) => {
 
 });
 
+app.get('/posts/raw/:tagId', (request, response) => {
+
+  let query = {_id: parseInt(request.params.tagId)};
+
+  database.query_full_article(query, 'unfiltered', (data) => {
+
+    if(data) {
+      console.log("Querying raw article successful");
+      response.json(data);
+
+    } else {
+      console.log("QUerying raw articles threw error");
+    }
+
+  });
+  
+});
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

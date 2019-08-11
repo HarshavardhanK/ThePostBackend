@@ -3,10 +3,11 @@
 const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb://localhost:27017/themitpost";
 
-const COLLECTION = "articles";
 const DB = 'themitpost';
 
-const insert_article = function(article, collection = COLLECTION) {
+const insert_article = function(article, collection) {
+
+  console.log("Saving in %s collection", collection);
 
   MongoClient.connect(url, (error, database) => {
 

@@ -76,11 +76,11 @@ const update = async function(number, command) {
       let article = utilities.prepare_article_JSON(response[i]);
 
       if(command.main === 'update') {
-        database.insert_article(article);
+        database.insert_article(article, 'articles');
       }
 
       if(command.save_raw === 'y' || command.save_raw === 'Y') {
-        database.insert_article(raw_response[i], collection='unfiltered'); //saving raw articles for webpage purposes
+        database.insert_article(response[i], 'unfiltered'); //saving raw articles for webpage purposes
       }
       
     }

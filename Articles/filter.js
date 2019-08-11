@@ -80,7 +80,7 @@ const update = async function(number, command) {
       }
 
       if(command.save_raw === 'y' || command.save_raw === 'Y') {
-        database.insert_article(response[i], collection='tests');
+        database.insert_article(raw_response[i], collection='unfiltered'); //saving raw articles for webpage purposes
       }
       
     }

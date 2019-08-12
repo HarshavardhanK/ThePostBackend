@@ -126,17 +126,7 @@ const sort_articles = function(callback) {
 
 
   });
-
-  /*
-  db.createUser(
-  ...   {
-  ...     user: "myUserAdmin",
-  ...     pwd: "abc123",
-  ...     roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
-  ...   }
-  ... )
-
-  */
+  
 };
 
 module.exports.query_full_article = query_full_article;

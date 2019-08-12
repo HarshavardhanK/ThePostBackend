@@ -90,7 +90,12 @@ app.get('/posts/raw/:tagId', (request, response) => {
 
 });
 
+//Calling artile web view get request
+
 articleWebView.getWebContent(app);
+
+
+//SLCM
 
 
 app.use(bodyParser.urlencoded({ extended: false }));

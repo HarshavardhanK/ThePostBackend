@@ -51,7 +51,6 @@ module.exports.getWebContent = getWebConent = function(express_app) {
 
       var _id = parseInt(req.params.tagId);
       var url = 'https://api.themitpost.com/posts/raw/' + _id;
-
       //It works for me only as a promise
 
       getJSON(url).then((response) => {

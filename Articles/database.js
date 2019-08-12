@@ -113,6 +113,26 @@ const query_full_article = function(query, collection, callback) {
 
 };
 
+<<<<<<< HEAD
+=======
+//TODO:- SORT ALL THE ARTICLES ACCORDING TO THE TIMESTAMP..
+
+const sort_articles = function(callback) {
+
+  MongoClient.connect(url, (error, database) => {
+
+    if(error) {
+      callback(error);
+    }
+
+    const database_object = database.db(DB);
+
+
+  });
+  
+};
+
+>>>>>>> sidefire2
 module.exports.query_full_article = query_full_article;
 module.exports.query_skeleton_article = query_skeleton_article;
 module.exports.insert_article = insert_article;

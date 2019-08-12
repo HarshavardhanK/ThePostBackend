@@ -3,6 +3,7 @@ const axios = require('axios');
 const yargs = require('yargs');
 
 const utilities = require('./utilities.js');
+const webView = require('.ArticleWebView/index.js');
 const database = require('./database.js');
 
 const API = 'https://themitpost.com/wp-json/wp/v2/posts?per_page=50';

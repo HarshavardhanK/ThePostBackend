@@ -13,7 +13,6 @@ const database = require('./Articles/database.js');
 const slcm_database = require('./SLCM/database.js');
 const scraper = require('./SLCM/scraper.js');
 const articleWebView = require('./Articles/ArticleWebview/index');
-//const filter = require('./Articles/filter.js');
 
 var app = express();
 

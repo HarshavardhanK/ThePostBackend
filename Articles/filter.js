@@ -77,22 +77,6 @@ const update = async function(number, command) {
     for(var i = 0; i < response.length; i += 1) {
       /*let article = utilities.prepare_article_JSON(response[i]); */
 
-      if(command.main === 'update') {
-        //database.insert_article(article, 'articles');
-
-        webView.getWebArticle(RAW_API + response[i]._id, response[i]._id).then((response) => {
-
-          console.log(response);
-          database.insert_article(response, 'webView');
-
-        }).catch((error) => {
-          console.log(error);
-        });
-        
-        //database.insert_article(articleWebView, 'webView');
-
-      } 
-
       if(command.save_raw === 'y' || command.save_raw === 'Y') {
         database.insert_article(response[i], 'unfiltered'); //saving raw articles for webpage purposes
       }

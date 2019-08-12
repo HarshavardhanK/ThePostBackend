@@ -2,7 +2,7 @@ const pug = require('pug');
 const path = require('path');
 const getJSON = require('get-json');
 const express = require('express');
-const app = express();
+/*const app = express();
 
 const port = process.env.PORT || 3000;
 
@@ -13,11 +13,9 @@ const port = process.env.PORT || 3000;
 
 **/
 
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, 'public')));
-app.set('view engine', 'pug');
 
-app.get('/posts/render', (req, res) => {
+
+/*app.get('/posts/render', (req, res) => {
 
     if(Object.keys(req.query).length === 0){
 
@@ -40,22 +38,31 @@ app.get('/posts/render', (req, res) => {
           response);
       });
     }
+}); */
+
+
+module.exports.getWebContent = getWebConent = function(express_app) {
+
+  express_app.set('views', path.join(__dirname, 'views'));
+  express_app.use(express.static(path.join(__dirname, 'public')));
+  express_app.set('view engine', 'pug');
+
+  express_app.get('/posts/render/:tagId', (req, res) => {
+
+      var _id = parseInt(req.params.tagId);
+      var url = 'https://api.themitpost.com/posts/raw/' + _id;
+
+      //It works for me only as a promise
+
+      getJSON(url).then((response) => {
+        res.render('article', response);
+
+      }).catch((error) => {
+        console.log(error);
+      });
+
 });
 
-module.exports.getWebArticle = getWebArticle = function(article) {
-
-  return getJSON(url, function(error, response) {
-
-    if(error) {
-
-      console.log(error);
-    } else {
-
-      console.log("Success");
-      return response;
-    }
-    
-  });
 }
 
-app.listen(port);
+//app.listen(port);

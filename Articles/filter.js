@@ -3,7 +3,7 @@ const axios = require('axios');
 const yargs = require('yargs');
 
 const utilities = require('./utilities.js');
-const webView = require('.ArticleWebView/index.js');
+const webView = require('./ArticleWebview/index.js');
 const database = require('./database.js');
 
 const API = 'https://themitpost.com/wp-json/wp/v2/posts?per_page=50';
@@ -68,32 +68,48 @@ const get_article = async(_API) => {
 const update = async function(number, command) {
 
   const API2='https://themitpost.com/wp-json/wp/v2/posts?per_page=' + number;
+  const RAW_API = 'https://api.themitpost.com/posts/raw/';
 
   console.log('Please wait while the articles are being fetched and processed..');
 
   await get_article(API2).then((response) => {
 
     for(var i = 0; i < response.length; i += 1) {
-      let article = utilities.prepare_article_JSON(response[i]);
+      /*let article = utilities.prepare_article_JSON(response[i]); */
 
       if(command.main === 'update') {
-        database.insert_article(article, 'articles');
-      }
+        //database.insert_article(article, 'articles');
+
+        webView.getWebArticle(RAW_API + response[i]._id, response[i]._id).then((response) => {
+
+          console.log(response);
+          database.insert_article(response, 'webView');
+
+        }).catch((error) => {
+          console.log(error);
+        });
+        
+        //database.insert_article(articleWebView, 'webView');
+
+      } 
 
       if(command.save_raw === 'y' || command.save_raw === 'Y') {
         database.insert_article(response[i], 'unfiltered'); //saving raw articles for webpage purposes
       }
-      
+
+  
     }
 
   }).catch((error) => {
     console.log(error);
     return false;
+
   });
 
   return true;
 
 };
+
 
 const main = function() {
 

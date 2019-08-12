@@ -1,5 +1,6 @@
 
 const express = require('express');
+const path_ = require('path');
 const bodyParser = require('body-parser');
 var fs = require('fs');
 const https = require('https');
@@ -11,6 +12,7 @@ const yargs = require('yargs');
 const database = require('./Articles/database.js');
 const slcm_database = require('./SLCM/database.js');
 const scraper = require('./SLCM/scraper.js');
+const articleWebView = require('./Articles/ArticleWebview/index');
 //const filter = require('./Articles/filter.js');
 
 var app = express();
@@ -65,44 +67,30 @@ app.get('/posts', (request, response) => {
 
 });
 
-app.get('/posts/:tagId', (request, response) => {
-
-  query = {_id: parseInt(request.params.tagId)};
-  //console.log(query);
-
-  database.query_full_article(query, ARTICLES_COLLECTION, (data) => {
-
-    if(data) {
-      console.log('Query successful');
-      response.json(data);
-
-    } else {
-      response.json({status: 'BAD' , data: []});
-    }
-
-
-  });
-
-
-});
 
 app.get('/posts/raw/:tagId', (request, response) => {
 
-  let query = {_id: parseInt(request.params.tagId)};
+   var id = parseInt(request.params.tagId);
 
-  database.query_full_article(query, 'unfiltered', (data) => {
+   console.log('lolo');
+
+  database.query_full_article({_id: id}, 'unfiltered', (data) => {
 
     if(data) {
       console.log("Querying raw article successful");
       response.json(data);
 
     } else {
-      console.log("QUerying raw articles threw error");
+      console.log("Querying raw articles threw error");
+
     }
 
   });
 
+
 });
+
+articleWebView.getWebContent(app);
 
 
 app.use(bodyParser.urlencoded({ extended: false }));

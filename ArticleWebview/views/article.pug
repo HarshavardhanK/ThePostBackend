@@ -1,0 +1,27 @@
+doctype html
+html
+    head
+        meta(charset='UTF-8')
+        title Article #{_id}
+        link(rel='stylesheet', href='/css/styles.css')
+        link(href='https://fonts.googleapis.com/css?family=Bree+Serif|Lobster&display=swap',rel='stylesheet')
+
+    body
+
+        -function prettyDate(dateString){
+
+          -var date = new Date(dateString);
+          -var d = date.getDate();
+          -var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+          -var m = monthNames[date.getMonth()];
+          -var y = date.getFullYear();
+          -return d+' '+m+', '+y;
+        -}
+
+        div.title !{title}
+
+        img(src=featured_media).featured
+        span.author #{author.name}
+        span.date #{prettyDate(date)}
+
+        span.content !{content}

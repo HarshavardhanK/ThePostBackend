@@ -22,7 +22,7 @@ module.exports.renderArticle = (_id) => {
 
 }
 
-module.exports.getWebContent = getWebConent = function(express_app) {
+module.exports.getWebContent = (express_app) => {
 
   express_app.set('views', path.join(__dirname, 'views'));
   express_app.use(express.static(path.join(__dirname, 'public')));
@@ -32,7 +32,6 @@ module.exports.getWebContent = getWebConent = function(express_app) {
 
       var _id = parseInt(request.params.tagId);
       
-      //It works for me only as a promise
       database.query_full_article({_id: _id}, 'rendered', (data) => {
 
         if(data) {
@@ -48,4 +47,3 @@ module.exports.getWebContent = getWebConent = function(express_app) {
 
 }
 
-//app.listen(port);

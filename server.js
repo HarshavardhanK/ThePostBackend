@@ -89,6 +89,10 @@ app.get('/posts/raw/:tagId', (request, response) => {
 
 });
 
+app.post('/save/raw', (request, response) => {
+  console.log(request.body);
+})
+
 //Calling artile web view get request
 
 articleWebView.getWebContent(app);

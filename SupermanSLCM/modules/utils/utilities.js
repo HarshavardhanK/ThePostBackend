@@ -117,7 +117,7 @@ module.exports.modifyAttendance = function(rawAttendanceArray){
     return compiledArray;
 }
 
-module.exports.modifyGradeSheet = function(gradeArray, semester, gpa, credits){
+module.exports.modifyGradeSheet = function(gradeHeaders, gradeArray, semester, gpa, credits){
 
   var compiledGrades = {
     'semester' : semester,
@@ -127,6 +127,7 @@ module.exports.modifyGradeSheet = function(gradeArray, semester, gpa, credits){
   }
 
   var i =0;
+  var inner_i = 0;
   var subjectCode, subjectName, credits, grade;
 
   if(gradeArray.length < 8){
@@ -134,23 +135,55 @@ module.exports.modifyGradeSheet = function(gradeArray, semester, gpa, credits){
     return compiledGrades;
   }
 
+  var subjectCodeIndex = -1;
+  var subjectNameIndex = -1;
+  var creditsIndex = -1;
+  var gradeIndex = -1;
+  var length = gradeHeaders.length;
+
+  gradeHeaders.forEach(function(item) {
+    if(item.toLowerCase() == "subject code"){
+      subjectCodeIndex = inner_i;
+      inner_i++;
+      return;
+    }
+    else if(item.toLowerCase() == "subject name"){
+      subjectNameIndex = inner_i;
+      inner_i++;
+      return;
+    }
+    else if(item.toLowerCase() == "grade"){
+      gradeIndex = inner_i;
+      inner_i++;
+      return;
+    }
+    else if(item.toLowerCase() == "credit"){
+      creditsIndex = inner_i;
+      inner_i++;
+      return;
+    }
+    else{
+      inner_i++;
+    }
+  })
+
   gradeArray.forEach(function(item) {
-    if(i%8 == 1){
+    if(i%length == subjectCodeIndex){
       subjectCode = item;
       i++;
       return;
     }
-    else if(i%8 == 2){
+    else if(i%length == subjectNameIndex){
       subjectName = item;
       i++;
       return;
     }
-    else if(i%8 == 3){
+    else if(i%length == gradeIndex){
       grade = item;
       i++;
       return;
     }
-    else if(i%8 == 4){
+    else if(i%length == creditsIndex){
       credits = item;
 
       var gradeJson = {

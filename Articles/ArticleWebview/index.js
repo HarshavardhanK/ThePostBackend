@@ -34,7 +34,8 @@ module.exports.getWebContent = (express_app) => {
       database.query_full_article({_id: _id}, 'unfiltered', (data) => {
 
         if(data) {
-          response.render('article', data.response);
+          console.log(response);
+          response.render('article', data);
 
         } else {
           response.json({status: "BAD", data: []});

@@ -415,3 +415,4 @@ const prepare_article_JSON = function(article) {
 };
 
 module.exports.prepare_article_JSON = prepare_article_JSON;
+module.exports.get_date = get_date;

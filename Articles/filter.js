@@ -75,13 +75,18 @@ const update = async function(number, command) {
   await get_article(API2).then((response) => {
 
     for(var i = 0; i < response.length; i += 1) {
-      /*let article = utilities.prepare_article_JSON(response[i]); */
 
       if(command.save_raw === 'y' || command.save_raw === 'Y') {
-        database.insert_article(response[i], 'unfiltered'); //saving raw articles for webpage purposes
+        database.insert_article(response[i], 'unfiltered'); 
       }
 
-  
+      webView.renderArticle(response[i]._id).then((response) => {
+        database.insert_article(response, 'rendered');
+
+      }).catch((error) => {
+        console.log(error);
+      });
+
     }
 
   }).catch((error) => {

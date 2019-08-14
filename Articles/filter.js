@@ -37,7 +37,7 @@ const get_article = async(_API) => {
       article = {
 
       '_id': response.data[i].id,
-      'date': response.data[i].date,
+      'date': utilities.get_date(response.data[i].date),
       'title': response.data[i].title.rendered,
       'content': response.data[i].content.rendered,
       'featured_media': response.data[i].jetpack_featured_media_url,

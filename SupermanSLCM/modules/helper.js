@@ -73,6 +73,14 @@ class Helper{
       console.log("Logged in at " + date);
 
       try{
+        await page.goto('http://slcm.manipal.edu/gradesheet.aspx',{timeout:25000});
+      }
+      catch(error){
+        utilities.displayError("Website Timed Out",this.response);
+        return;
+      }
+
+      try{
         await page.waitForSelector('#ContentPlaceHolder1_lblCGPA',{timeout:25000});
       }
       catch(error){
@@ -301,17 +309,21 @@ class Helper{
       }
     }
 
-      const semester = semToFetch;
+    const semester = semToFetch;
 
-      var gradeSheet = await page.$$eval('#ContentPlaceHolder1_grvGradeSheet tbody tr td', bs => bs.map((b) => {
-        return b.innerText.trim();
-      }));
+    var gradeSheetHeaders = await page.$$eval('#ContentPlaceHolder1_grvGradeSheet tbody tr th', bs => bs.map((b) => {
+      return b.innerText.trim();
+    }));
 
-      const gpa = await page.$eval('#ContentPlaceHolder1_lblGPA', bs => bs.innerText);
-      const credits = await page.$eval('#ContentPlaceHolder1_LabelTotalcredit', bs => bs.innerText);
+    var gradeSheet = await page.$$eval('#ContentPlaceHolder1_grvGradeSheet tbody tr td', bs => bs.map((b) => {
+      return b.innerText.trim();
+    }));
 
-        gradeSheet = utilities.modifyGradeSheet(gradeSheet, semester, gpa, credits);
-        grades.push(gradeSheet);
+    const gpa = await page.$eval('#ContentPlaceHolder1_lblGPA', bs => bs.innerText);
+    const credits = await page.$eval('#ContentPlaceHolder1_LabelTotalcredit', bs => bs.innerText);
+
+    gradeSheet = utilities.modifyGradeSheet(gradeSheetHeaders, gradeSheet, semester, gpa, credits);
+    grades.push(gradeSheet);
 
 
     finalGradeJson.semesterGrades = grades;

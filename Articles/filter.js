@@ -80,9 +80,12 @@ const update = async function(number, command) {
         database.insert_article(response[i], 'unfiltered'); 
       }
 
-  return true;
+    }
 
-};
+    return true;
+  });
+
+}
 
 
 const main = function() {

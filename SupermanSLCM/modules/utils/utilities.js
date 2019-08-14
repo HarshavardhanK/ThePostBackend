@@ -139,6 +139,7 @@ module.exports.modifyGradeSheet = function(gradeHeaders, gradeArray, semester, g
   var subjectNameIndex = -1;
   var creditsIndex = -1;
   var gradeIndex = -1;
+  var length = gradeHeaders.length;
 
   gradeHeaders.forEach(function(item) {
     if(item.toLowerCase() == "subject code"){
@@ -161,25 +162,28 @@ module.exports.modifyGradeSheet = function(gradeHeaders, gradeArray, semester, g
       inner_i++;
       return;
     }
+    else{
+      inner_i++;
+    }
   })
 
   gradeArray.forEach(function(item) {
-    if(i%8 == subjectCodeIndex){
+    if(i%length == subjectCodeIndex){
       subjectCode = item;
       i++;
       return;
     }
-    else if(i%8 == subjectNameIndex){
+    else if(i%length == subjectNameIndex){
       subjectName = item;
       i++;
       return;
     }
-    else if(i%8 == gradeIndex){
+    else if(i%length == gradeIndex){
       grade = item;
       i++;
       return;
     }
-    else if(i%8 == creditsIndex){
+    else if(i%length == creditsIndex){
       credits = item;
 
       var gradeJson = {

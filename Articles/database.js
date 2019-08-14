@@ -61,7 +61,7 @@ const query_skeleton_article_all = function(query, callback) {
 
     var database_object = database.db('themitpost');
 
-    database_object.collection("articles").find(query).toArray((error, result) => {
+    database_object.collection("unfiltered").find(query).toArray((error, result) => {
 
       if(error) return callback(new Error(error));
 

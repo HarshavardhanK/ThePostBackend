@@ -72,6 +72,7 @@ const query_skeleton_article_all = function(query, callback) {
         let _article = {
                           _id: result[i]._id,
                           title: result[i].title,
+                          link: result[i].link,
                           featured_media: result[i].featured_media,
                           author: result[i].author,
                           date: result[i].date,

@@ -1,6 +1,5 @@
 const pug = require('pug');
 const path = require('path');
-const getJSON = require('get-json');
 const express = require('express');
 
 var database = require('../database');
@@ -32,7 +31,7 @@ module.exports.getWebContent = (express_app) => {
 
       var _id = parseInt(request.params.tagId);
       
-      database.query_full_article({_id: _id}, 'rendered', (data) => {
+      database.query_full_article({_id: _id}, 'unfiltered', (data) => {
 
         if(data) {
           response.render('article', data.response);

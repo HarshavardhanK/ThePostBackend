@@ -80,21 +80,6 @@ const update = async function(number, command) {
         database.insert_article(response[i], 'unfiltered'); 
       }
 
-      webView.renderArticle(response[i]._id).then((response) => {
-        database.insert_article(response, 'rendered');
-
-      }).catch((error) => {
-        console.log(error);
-      });
-
-    }
-
-  }).catch((error) => {
-    console.log(error);
-    return false;
-
-  });
-
   return true;
 
 };

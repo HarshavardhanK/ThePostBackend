@@ -94,7 +94,7 @@ app.post('/save/raw', (request, response) => {
   console.log(response);
   console.log(response.body);
 
-  database.insert_article(response.bodyß, 'unfiltered');
+  database.insert_article(response.body, 'unfiltered');
 
 });
 

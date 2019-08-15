@@ -92,9 +92,9 @@ app.get('/posts/raw/:tagId', (request, response) => {
 app.post('/save/raw', (request, response) => {
 
   console.log(response);
-  console.log(response.body);
+  console.log(response.data);
 
-  database.insert_article(response.body, 'unfiltered');
+  database.insert_article(response.data, 'unfiltered');
 
 });
 

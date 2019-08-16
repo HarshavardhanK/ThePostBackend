@@ -116,21 +116,27 @@ module.exports.postValues = (app) => {
 
     database.get_slcm_ios_data(reg).then(response => {
 
+      if(response == null) {
+
+        scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, '').then((value) => {
+
+          console.log("success");
+          console.log(value);
+  
+          database.insert_slcm_data(reg, value);
+      
+        }).catch((error) => {
+          console.log(error);
+        });
+
+      }
+
       res.send(response);
 
     }).catch(error => {
 
-      scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, '').then((value) => {
-
-        console.log("success");
-        console.log(value);
-
-        database.insert_slcm_data(reg, value);
-    
-      }).catch((error) => {
-        console.log(error);
-      });
-
+      console.log(error);
+      res.send({status: 'BAD'});
     })
 
   });

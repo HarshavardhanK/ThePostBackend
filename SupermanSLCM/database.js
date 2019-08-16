@@ -116,13 +116,10 @@ module.exports.get_slcm_ios_data = async (registration, password) => {
 
     console.log(query);
 
-    let result = await collection.findOne(query);
-
-    console.log(result);
-
-    return result;
+    return await collection.findOne(query);
 
   } catch(error) {
+
     console.log(error);
     return undefined;
 

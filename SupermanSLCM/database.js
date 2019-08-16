@@ -19,9 +19,9 @@ module.exports.insert_slcm_data = async (registration, value) => {
     const database = client.db('themitpost');
     let collection = database.collection('slcm');
 
-    let query = {_id: registration, response: value};
+    let query = {_id: registration};
 
-    let result = await collection.updateOne(query, {upsert: true});
+    let result = await collection.updateOne(query, value, {upsert: true});
 
   } catch(error) {
     console.log(error);
@@ -46,9 +46,9 @@ module.exports.insert_response = async (registration, value) => {
     const database = client.db('themitpost');
     let collection = database.collection(RESPONSE_COLLECTION);
 
-    let query = {_id: registration, response: value};
+    let query = {_id: registration};
 
-    let result = await collection.updateOne(query, {upsert: true});
+    let result = await collection.updateOne(query, value, {upsert: true});
 
   } catch(error) {
     console.log(error);

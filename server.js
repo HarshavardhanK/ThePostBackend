@@ -9,10 +9,13 @@ const crypto = require('crypto');
 const deasync = require('deasync');
 const yargs = require('yargs');
 
+
+
 const database = require('./Articles/database.js');
 const slcm_database = require('./SLCM/database.js');
 const scraper = require('./SLCM/scraper.js');
 const articleWebView = require('./Articles/ArticleWebview/index');
+const newSlcm = require('./SupermanSLCM/index');
 
 var app = express();
 
@@ -109,80 +112,8 @@ articleWebView.getWebContent(app);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-var port = process.env.PORT;
-
-app.get('/slcm', (req,res) => {
-  var html = "<h3>SLCM Scraper User UI</h3><br><form method='post' action='values'><table cellspacing='10'><tr><td>Enter Registration Number:</td><td><input type='text' name='regNumber' hint='Enter Registration Number'/></td></tr><tr><td>Enter Password:</td><td><input type='password' name='pass' hint='Enter Password'/></td></tr><tr><td colspan='2'><input type='submit' name='loginButton' value='Access SLCM API' style='padding:5px;width:100%;text-align:center;border-radius:7px;border:0px'/></td></tr></table></form><p><h6>&copy; The MIT Post 2019. This product does not store any details on any hardware or cloud database. <br>SLCM Scraper v3.5.0-beta</h6></p>"
-  res.send(html);
-});
-
-function encrypt(data, password) {
-
-  var key = crypto.createCipher('aes-128-cbc', password);
-  var string = key.update(data, 'binary', 'binary');
-
-  string += key.final('binary');
-
-  return string;
-
-}
-
-function decrypt(data, password) {
-
-  var myKey = crypto.createDecipher('aes-128-cbc', password);
-  return myKey.update(data, 'binary', 'binary') + myKey.final('binary');
-
-}
-
-app.post('/values', (request, response) => {
-
-
-  const reg = request.body.regNumber;
-  const pass = request.body.pass;
-
-  const password = encrypt(pass, reg);
-
-  const query = {_id: reg, password: password};
-
-  slcm_database.get_slcm_data(query, (result) => {
-
-    console.log(query);
-
-    if(result) {
-
-      var data = decrypt(result.data, password);
-
-      data = JSON.parse(data.toString());
-      response.send(data);
-
-    } else {
-
-      scraper.scrape_data(reg, pass, (error, value) => {
-        console.log("Hello ji");
-
-        if(error) {
-          response.json(error);
-        }
-
-        var data = Buffer.from(JSON.stringify(value));
-
-        var password = encrypt(pass, reg);
-
-        data = encrypt(data, password);
-
-        const result = {_id: reg, password: password,  data: data};
-        console.log(result);
-
-        slcm_database.insert_slcm_data(result);
-        response.send(value);
-
-      });
-
-    }
-
-  });
-
-});
+newSlcm.getSLCMValues(app);
+newSlcm.postValues(app);
 
 //////////////////////////////////// EVENTS PORTAL ////////////////////////////////////////
 

@@ -444,7 +444,7 @@ class Helper{
       'teacherGuardianDetails': Helper.finalDet.teacherGuardianDetails,
       'academicDetails': finalDet
     }
-    this.response.send(finallyDet);
+    //this.response.send(finallyDet);
 
     return finallyDet;
   }

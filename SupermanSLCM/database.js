@@ -6,81 +6,128 @@ const url = "mongodb://localhost:27017/themitpost";
 const COLLECTION = 'slcm';
 const RESPONSE_COLLECTION = 'response';
 
-module.exports.insert_slcm_data = (value) => {
+module.exports.insert_slcm_data = async (registration, value) => {
 
-  return MongoClient.connect(url, (error, database) => {
+  let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
 
-    if(error) throw error;
+  if(!client) {
+    return undefined;
+  }
 
-    var database_object = database.db('themitpost');
+  try {
 
-    database_object.collection(COLLECTION).save(value, (error, result) => {
-      console.log("SLCM insert insert succesfull");
-    });
+    const database = client.db('themitpost');
+    let collection = database.collection('slcm');
 
-    database.close();
+    let query = {_id: registration, response: value};
 
-    return true;
+    let result = await collection.updateOne(query, {upsert: true});
 
-  });
+  } catch(error) {
+    console.log(error);
+    return undefined;
+
+  } finally {
+    client.close();
+  }
 
 };
 
-module.exports.insert_response = (registration, value) => {
+module.exports.insert_response = async (registration, value) => {
 
-  let query = {_id: registration, response: value};
-  console.log(query);
+  let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
 
-  MongoClient.connect(url, (error, database) => {
+  if(!client) {
+    return undefined;
+  }
 
-    if(error) {
-      console.log(error);
-      throw error;
-    }
+  try {
 
-    var database_object = database.db('themitpost');
+    const database = client.db('themitpost');
+    let collection = database.collection(RESPONSE_COLLECTION);
 
-    database_object.collection(RESPONSE_COLLECTION).updateOne(query, (error, result) => {
-      console.log('response updated');
-    })
+    let query = {_id: registration, response: value};
 
-    database.close();
+    let result = await collection.updateOne(query, {upsert: true});
 
-  })
+  } catch(error) {
+    console.log(error);
+    return undefined;
+
+  } finally {
+    client.close();
+  }
 }
 
-module.exports.get_slcm_data = (query) => {
+module.exports.get_response = async (registraion) => {
 
-  return MongoClient.connect(url, (error, database) => {
-
-    var database_object = database.db('themitpost');
-
-    return database_object.collection(COLLECTION).findOne(query, (error, result) => {
-
-      if(error) throw error;
-
-      console.log(query);
-
-      if(query != undefined) {
-
-        console.log('Query for SLCM data successfull');
-
-        database.close();
-
-        return result;
-
-      } else {
-
-        console.log("Query for SLCM data unsuccessful..");
-
-        database.close();
-
-        return undefined;
-
-      }
-    });
-
+  const client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {
+    console.log(error);
   });
 
-};
+  if(!client) {
+    return undefined;
+  }
+
+  try {
+
+    const database = client.db('themitpost');
+    let collection = database.collection(RESPONSE_COLLECTION);
+
+    let query = {_id: registraion};
+
+    console.log('queried response');
+
+    let result = await collection.findOne(query);
+
+    console.log(result);
+
+    return result;
+
+  } catch(error) {
+
+    console.error(error);
+    return undefined;
+
+  } finally {
+
+    client.close();
+  }
+    
+}
+
+module.exports.get_slcm_ios_data = async (registration, password) => {
+  //encrypt and store the password
+
+  const client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
+
+  if(!client) {
+    return undefined;
+  }
+
+  try {
+
+    console.log('querying slcm data');
+
+    const database = client.db('themitpost');
+    let collection = database.collection('slcm');
+
+    let query = {_id: registration};
+
+    console.log(query);
+
+    let result = await collection.findOne(query);
+
+    console.log(result);
+
+    return result;
+
+  } catch(error) {
+    console.log(error);
+    return undefined;
+
+  } finally {
+    client.close();
+  }
+}
 

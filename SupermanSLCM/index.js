@@ -4,6 +4,8 @@ const puppeteer = require('puppeteer');
 
 var Helper = require('./modules/helper');
 var deasync = require('deasync');
+var encrypt = require('./encryption');
+var database = require('./database');
 
 
 //reg and pass are necessary for login.
@@ -28,7 +30,9 @@ module.exports.scrape = scrape = async (reg,pass,res, SHOULD_GET_MARKS, GET_GRAD
 
   const helper = new Helper(browser, SHOULD_GET_MARKS, res, GET_GRADES, SHOULD_GET_ATT, semToFetch);
   try{
-    helper.executeLogin(reg, pass);
+
+    return helper.executeLogin(reg, pass);
+
   }
   catch(error){
 
@@ -109,15 +113,27 @@ module.exports.postValues = (app) => {
     const SHOULD_GET_MARKS = false;
     const SHOULD_GET_ATT = false;
     const GET_GRADES = false;
-  
-    scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, '').then((value) => {
-      console.log("success");
-  
-    }).catch((error) => {
-      console.log(error);
-    });
-  })
-  
+
+    database.get_slcm_ios_data(reg).then(response => {
+
+      res.send(response);
+
+    }).catch(error => {
+
+      scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, '').then((value) => {
+
+        console.log("success");
+        console.log(value);
+
+        database.insert_slcm_data(reg, value);
+    
+      }).catch((error) => {
+        console.log(error);
+      });
+
+    })
+
+  });
 
 }
 

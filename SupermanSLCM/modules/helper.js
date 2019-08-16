@@ -102,8 +102,8 @@ class Helper{
       else if(this.GET_GRADES){
         this.getGradeSheet(this.semToFetch);
       }
-      else{
-        this.getData();
+      else { 
+        return this.getData();
       }
     }
   }
@@ -339,7 +339,7 @@ class Helper{
     this.response.send(finalGradeJson);
   }
 
-  async getData(){
+  async getData() {
 
     while(!Helper.done) {deasync.sleep(1000);}
 
@@ -434,6 +434,7 @@ class Helper{
     var finallyDet = {
       'message':'OK',
       'status' : true,
+      'updatedAt': this.startTime,
       'cgpa': Helper.cgpa,
       'semester': Helper.finalDet.semester,
       'section': Helper.finalDet.section,
@@ -444,6 +445,8 @@ class Helper{
       'academicDetails': finalDet
     }
     this.response.send(finallyDet);
+
+    return finallyDet;
   }
 
   browserClose(){

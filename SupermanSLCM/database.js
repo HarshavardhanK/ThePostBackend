@@ -1,6 +1,6 @@
 
 const MongoClient = require('mongodb').MongoClient;
-
+const ObjectId = require('mongodb').ObjectId;
 const url = "mongodb://localhost:27017/themitpost";
 
 const COLLECTION = 'slcm';
@@ -21,7 +21,7 @@ module.exports.insert_slcm_data = async (registration, value) => {
 
     let query = {_id: registration};
 
-    let result = await collection.updateOne(query, value, {upsert: true});
+    let result = await collection.replaceOne(query, value, {"upsert": true});
 
   } catch(error) {
     console.log(error);

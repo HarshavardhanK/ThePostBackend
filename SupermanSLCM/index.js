@@ -109,6 +109,8 @@ module.exports.postValues = (app) => {
 
     const reg = req.body.regNumber;
     const pass = req.body.pass;
+
+    console.log(response.body);
   
     const SHOULD_GET_MARKS = false;
     const SHOULD_GET_ATT = false;

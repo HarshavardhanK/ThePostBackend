@@ -33,6 +33,33 @@ module.exports.insert_slcm_data = async (registration, value) => {
 
 };
 
+module.exports.insert_credentials = async (registraion, password) => {
+
+  let client = await MongoClient.connect(url ,{useNewUrlParser: true}).catch(error => {console.log(error)});
+
+  if(!client) {
+    return;
+  }
+
+  try {
+
+    const database = client.db('themitpost');
+    let collection = database.collection('slcm');
+
+    value = {_id: registration, password: password};
+
+    let result = await collection.insertOne(value);
+
+  } catch(error) {
+    console.log(error);
+    return undefined;
+
+  } finally {
+    client.close();
+
+  }
+}
+
 module.exports.insert_response = async (registration, value) => {
 
   let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});

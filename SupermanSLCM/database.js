@@ -3,7 +3,7 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;
 const url = "mongodb://localhost:27017/themitpost";
 
-module.exports.insert_ios_slcm_data = async (registration, value) => {
+module.exports.insert_ios_slcm_data = async (registration, value, COLLECTION) => {
 
   let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
 
@@ -14,7 +14,7 @@ module.exports.insert_ios_slcm_data = async (registration, value) => {
   try {
 
     const database = client.db('themitpost');
-    let collection = database.collection(COLLECTIONS.IOS_COLLECTION);
+    let collection = database.collection(COLLECTION);
 
     let query = {_id: registration};
 
@@ -30,7 +30,7 @@ module.exports.insert_ios_slcm_data = async (registration, value) => {
 
 };
 
-module.exports.insert_credentials = async (registraion, password) => {
+/*module.exports.insert_credentials = async (registraion, password) => {
 
   let client = await MongoClient.connect(url ,{useNewUrlParser: true}).catch(error => {console.log(error)});
 
@@ -55,9 +55,9 @@ module.exports.insert_credentials = async (registraion, password) => {
     client.close();
 
   }
-}
+}*/
 
-module.exports.insert_response = async (registration, value) => {
+/*module.exports.insert_response = async (registration, value) => {
 
   let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
 
@@ -150,28 +150,28 @@ module.exports.get_slcm_ios_data = async (registration, password) => {
   } finally {
     client.close();
   }
-}
+}*/
 
-module.exports.insert_slcm_data = async (registration, password, COLLECTION) => {
+module.exports.insert_slcm_data = async (registration, value, COLLECTION='gen') => {
 
-  const client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => console.log(error));
+  let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
 
   if(!client) {
-    return;
+    return undefined;
   }
 
   try {
 
-    console.log('inserting marks for %s', registraion);
-
-    let collection = client.db('themitpost').collection(COLLECTION);
+    const database = client.db('themitpost');
+    let collection = database.collection(COLLECTION);
 
     let query = {_id: registration};
 
-    return await collection.findOne(query);
+    let result = await collection.replaceOne(query, value, {"upsert": true});
 
   } catch(error) {
-    throw error;
+    console.log(error);
+    return undefined;
 
   } finally {
     client.close();
@@ -179,7 +179,7 @@ module.exports.insert_slcm_data = async (registration, password, COLLECTION) => 
 
 }
 
-module.exports.get_slcm_data = async (registraion, password, COLLECTION) => {
+module.exports.get_slcm_data = async (registration, COLLECTION) => {
 
   const client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
 

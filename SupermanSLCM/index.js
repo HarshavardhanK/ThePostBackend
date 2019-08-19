@@ -19,13 +19,14 @@ var database = require('./database');
 
 //Define the collections for MongoDb
 
-const COLLECTIONS = {
-    IOS_COLLECTION: 'ios-slcm',
-    MARKS_COLLECTION: 'marks-slcm',
-    ATTENDANCE_COLLECTION: 'attn-slcm',
-    RESPONSE_COLLECTION: 'response-slcm',
-    CREDS_COLLECTION: 'creds-slcm'
-  }
+let COLLECTIONS = {
+    IOS_COLLECTION: 'ios',
+    MARKS_COLLECTION: 'marks',
+    ATTENDANCE_COLLECTION: 'attn',
+    RESPONSE_COLLECTION: 'response',
+    CREDS_COLLECTION: 'creds',
+    GRADES_COLLECTION: 'grades'
+  };
 
 
 module.exports.scrape = scrape = async (reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, semToFetch) => {
@@ -127,24 +128,29 @@ module.exports.postValues = (app) => {
     const SHOULD_GET_ATT = false;
     const GET_GRADES = false;
 
-    database.get_slcm_data(reg, 'pass', COLLECTIONS.IOS_COLLECTION).then(response => {
+    console.log(COLLECTIONS.IOS_COLLECTION);
 
-      if(response == null) {
+    database.get_slcm_data(reg, COLLECTIONS.IOS_COLLECTION).then(response => {
+
+      if(!response) {
 
         scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, '').then((value) => {
 
           console.log("success");
           console.log(value);
+
+          res.send(value);
   
-          database.insert_slcm_data(reg, value);
+          database.insert_slcm_data(reg, value, COLLECTIONS.IOS_COLLECTION);
       
         }).catch((error) => {
           console.log(error);
         });
 
-      }
+      } else {
+        res.send(response);
 
-      res.send(response);
+      }
 
     }).catch(error => {
 
@@ -167,13 +173,29 @@ module.exports.postMarks = (app) => {
     const SHOULD_GET_MARKS = true;
     const SHOULD_GET_ATT = false;
     const GET_GRADES = false;
-  
-    scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, get_sem).then((value) => {
-      console.log("success");
-  
-    }).catch((error) => {
-      console.log(error);
+
+    database.get_slcm_data(reg, COLLECTIONS.MARKS_COLLECTION).then(response => {
+
+      if(!response) {
+
+        scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, get_sem).then((value) => {
+          console.log("success");
+
+          res.send(value);
+
+          database.insert_slcm_data(reg, value, COLLECTIONS.MARKS_COLLECTION);
+      
+        }).catch((error) => {
+          console.log(error);
+        });
+
+      } else {
+
+        res.send(response);
+      }
+
     });
+  
   })
 
 }
@@ -189,14 +211,30 @@ module.exports.postAttendance = (app) => {
     const SHOULD_GET_MARKS = false;
     const SHOULD_GET_ATT = true;
     const GET_GRADES = false;
-  
-    scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, get_sem).then((value) => {
-      console.log("success");
-  
-    }).catch((error) => {
-      console.log(error);
+
+    database.get_slcm_data(reg, COLLECTIONS.ATTENDANCE_COLLECTION).then(response => {
+
+      if(!response) {
+
+        scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, get_sem).then((value) => {
+          console.log("success");
+
+          database.insert_slcm_data(reg, value, COLLECTIONS.ATTENDANCE_COLLECTION);
+
+          res.send(value);
+      
+        }).catch((error) => {
+          console.log(error);
+        });
+
+      } else {
+        res.send(response);
+
+      }
     });
-  })
+  
+    
+  });
 
 }
 
@@ -211,13 +249,28 @@ module.exports.postGrades = (app) => {
     const SHOULD_GET_MARKS = false;
     const SHOULD_GET_ATT = false;
     const GET_GRADES = true;
-  
-    scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, get_sem).then((value) => {
-      console.log("success");
-  
-    }).catch((error) => {
-      console.log(error);
+
+    database.get_slcm_data(reg, COLLECTIONS.GRADES_COLLECTION).then(response => {
+
+      if(!response) {
+
+        scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, get_sem).then((value) => {
+          console.log("success");
+
+          res.send(value);
+
+          database.insert_slcm_data(reg, COLLECTIONS.GRADES_COLLECTION);
+      
+        }).catch((error) => {
+          console.log(error);
+        });
+
+      } else {
+        res.send(response);
+      }
+
     });
+  
   });
 
 };

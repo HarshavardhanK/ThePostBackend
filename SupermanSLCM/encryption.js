@@ -22,5 +22,5 @@ module.exports.decrypt = (data, password) => {
   
   }
 
-  database.insert_slcm_data('170905027', {'some':'data'});
+  database.insert_slcm_data('170905027', {'some':'data'}, 'ios');
 

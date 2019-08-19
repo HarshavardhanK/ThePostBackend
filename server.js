@@ -115,6 +115,9 @@ app.use(bodyParser.json());
 newSlcm.getSLCMValues(app);
 newSlcm.postValues(app);
 
+newSlcm.getSLCMMarks(app);
+newSlcm.postMarks(app);
+
 //////////////////////////////////// EVENTS PORTAL ////////////////////////////////////////
 
 const path = require('path');

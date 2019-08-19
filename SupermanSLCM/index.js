@@ -17,6 +17,17 @@ var database = require('./database');
 //NOTE: getting all sems is slower than getting current sem.
 //NOTE: please use the variable names as mentioned above.
 
+//Define the collections for MongoDb
+
+const COLLECTIONS = {
+    IOS_COLLECTION: 'ios-slcm',
+    MARKS_COLLECTION: 'marks-slcm',
+    ATTENDANCE_COLLECTION: 'attn-slcm',
+    RESPONSE_COLLECTION: 'response-slcm',
+    CREDS_COLLECTION: 'creds-slcm'
+  }
+
+
 module.exports.scrape = scrape = async (reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, semToFetch) => {
 
   const browser = await puppeteer.launch({args: [
@@ -116,7 +127,7 @@ module.exports.postValues = (app) => {
     const SHOULD_GET_ATT = false;
     const GET_GRADES = false;
 
-    database.get_slcm_ios_data(reg).then(response => {
+    database.get_slcm_data(reg, 'pass', COLLECTIONS.IOS_COLLECTION).then(response => {
 
       if(response == null) {
 

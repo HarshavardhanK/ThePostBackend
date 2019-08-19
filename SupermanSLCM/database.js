@@ -3,10 +3,7 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;
 const url = "mongodb://localhost:27017/themitpost";
 
-const COLLECTION = 'slcm';
-const RESPONSE_COLLECTION = 'response';
-
-module.exports.insert_slcm_data = async (registration, value) => {
+module.exports.insert_ios_slcm_data = async (registration, value) => {
 
   let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
 
@@ -17,7 +14,7 @@ module.exports.insert_slcm_data = async (registration, value) => {
   try {
 
     const database = client.db('themitpost');
-    let collection = database.collection('slcm');
+    let collection = database.collection(COLLECTIONS.IOS_COLLECTION);
 
     let query = {_id: registration};
 
@@ -44,7 +41,7 @@ module.exports.insert_credentials = async (registraion, password) => {
   try {
 
     const database = client.db('themitpost');
-    let collection = database.collection('slcm');
+    let collection = database.collection(COLLECTIONS.CREDS_COLLECTION);
 
     value = {_id: registration, password: password};
 
@@ -71,7 +68,7 @@ module.exports.insert_response = async (registration, value) => {
   try {
 
     const database = client.db('themitpost');
-    let collection = database.collection(RESPONSE_COLLECTION);
+    let collection = database.collection(COLLECTIONS.RESPONSE_COLLECTION);
 
     let query = {_id: registration};
 
@@ -99,7 +96,7 @@ module.exports.get_response = async (registraion) => {
   try {
 
     const database = client.db('themitpost');
-    let collection = database.collection(RESPONSE_COLLECTION);
+    let collection = database.collection(COLLECTIONS.RESPONSE_COLLECTION);
 
     let query = {_id: registraion};
 
@@ -137,7 +134,7 @@ module.exports.get_slcm_ios_data = async (registration, password) => {
     console.log('querying slcm data');
 
     const database = client.db('themitpost');
-    let collection = database.collection('slcm');
+    let collection = database.collection(COLLECTIONS.IOS_COLLECTION);
 
     let query = {_id: registration};
 
@@ -153,5 +150,64 @@ module.exports.get_slcm_ios_data = async (registration, password) => {
   } finally {
     client.close();
   }
+}
+
+module.exports.insert_slcm_data = async (registration, password, COLLECTION) => {
+
+  const client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => console.log(error));
+
+  if(!client) {
+    return;
+  }
+
+  try {
+
+    console.log('inserting marks for %s', registraion);
+
+    let collection = client.db('themitpost').collection(COLLECTION);
+
+    let query = {_id: registration};
+
+    return await collection.findOne(query);
+
+  } catch(error) {
+    throw error;
+
+  } finally {
+    client.close();
+  }
+
+}
+
+module.exports.get_slcm_data = async (registraion, password, COLLECTION) => {
+
+  const client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
+
+  if(!client) {
+    return undefined;
+  }
+
+  try {
+
+    console.log('querying slcm data');
+
+    const database = client.db('themitpost');
+    let collection = database.collection(COLLECTION);
+
+    let query = {_id: registration};
+
+    console.log(query);
+
+    return await collection.findOne(query);
+
+  } catch(error) {
+
+    console.log(error);
+    return undefined;
+
+  } finally {
+    client.close();
+  }
+
 }
 

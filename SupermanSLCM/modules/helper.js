@@ -94,15 +94,15 @@ class Helper{
       Helper.done = true;
 
       if(this.SHOULD_GET_MARKS){
-        this.getDataMarks(this.semToFetch);
-      }
-      else if(this.SHOULD_GET_ATT){
-        this.getDataAttendance(this.semToFetch);
-      }
-      else if(this.GET_GRADES){
-        this.getGradeSheet(this.semToFetch);
-      }
-      else { 
+        return this.getDataMarks(this.semToFetch);
+
+      } else if(this.SHOULD_GET_ATT){
+        return this.getDataAttendance(this.semToFetch);
+
+      } else if(this.GET_GRADES){
+        return this.getGradeSheet(this.semToFetch);
+
+      } else { 
         return this.getData();
       }
     }
@@ -176,7 +176,8 @@ class Helper{
 
     console.log("TIME TAKEN: " + (new Date().getTime() - this.startTime)/1000);
 
-    this.response.send(reqJson);
+    //this.response.send(reqJson);
+    return reqJson;
   }
 
   async getDataAttendance(semToFetch){
@@ -248,7 +249,8 @@ class Helper{
     this.browserClose();
     console.log("TIME TAKEN: " + (new Date().getTime() - this.startTime)/1000);
 
-    this.response.send(reqJson);
+    //this.response.send(reqJson);
+    return reqJson;
   }
 
   async getGradeSheet(semToFetch){
@@ -336,7 +338,8 @@ class Helper{
 
     console.log("TIME TAKEN: " + (new Date().getTime() - this.startTime)/1000)
 
-    this.response.send(finalGradeJson);
+    //this.response.send(finalGradeJson);
+    return finalGradeJson;
   }
 
   async getData() {

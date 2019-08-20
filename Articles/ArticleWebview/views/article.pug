@@ -9,13 +9,11 @@ html
 
     body
 
-        -function prettyDate(dateString){
+        -function prettyDate(date){
 
-          -var date = new Date(dateString);
-          -var d = date.getDate();
-          -var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
-          -var m = monthNames[date.getMonth()];
-          -var y = date.getFullYear();
+          -var d = date.day;
+          -var m = date.month;
+          -var y = date.year;
           -return d+' '+m+', '+y;
         -}
 

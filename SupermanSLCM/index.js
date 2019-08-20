@@ -36,7 +36,9 @@ let scrape = async (reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, 
     helper.executeLogin(reg, pass);
   }
   catch(error){
-      utilities.displayError("Unknown Error Encountered. Please Try Again.",res);
+
+    utilities.displayError("Unknown Error Encountered. Please Try Again.",res);
+      
   }
 
 };
@@ -154,4 +156,4 @@ app.post('/grades', function(req, res) {
   });
 })
 
-app.listen(port);
+app.listen(3001);

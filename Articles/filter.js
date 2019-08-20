@@ -72,17 +72,26 @@ const update = async function(number, command) {
 
   console.log('Please wait while the articles are being fetched and processed..');
 
-  await get_article(API2).then((response) => {
+  return await get_article(API2).then((response) => {
 
-    for(var i = 0; i < response.length; i += 1) {
+    if(response != undefined) {
 
-      if(command.save_raw === 'y' || command.save_raw === 'Y') {
-        database.insert_article(response[i], 'unfiltered'); 
+      for(var i = 0; i < response.length; i += 1) {
+
+        if(command.save_raw === 'y' || command.save_raw === 'Y') {
+          database.insert_article(response[i], 'unfiltered'); 
+        }
+  
       }
 
+      return true;
+
+    } else {
+
+      return false;
     }
 
-    return true;
+    
   });
 
 }
@@ -98,7 +107,15 @@ const main = function() {
 
   const command = {main: command_, save_raw: save_raw};
 
-  update(count, command);
+  update(count, command).then((response) => {
+
+    if(response) {
+      console.log('updated %d articles', count);
+    } else {
+      console.log('failed to update');
+    }
+
+  });
 
 };
 

@@ -90,8 +90,13 @@ app.get('/posts/raw/:tagId', (request, response) => {
 });
 
 app.post('/save/raw', (request, response) => {
-  console.log(request.body);
-})
+
+  console.log(response);
+  console.log(response.data);
+
+  database.insert_article(response.data, 'unfiltered');
+
+});
 
 //Calling artile web view get request
 

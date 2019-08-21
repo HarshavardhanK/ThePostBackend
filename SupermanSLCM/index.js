@@ -1,5 +1,4 @@
 
-
 const puppeteer = require('puppeteer');
 
 var Helper = require('./modules/helper');
@@ -49,7 +48,7 @@ module.exports.scrape = scrape = async (reg,pass,res, SHOULD_GET_MARKS, GET_GRAD
   catch(error){
 
     utilities.displayError("Unknown Error Encountered. Please Try Again.",res);
-      
+
   }
 
 };
@@ -65,7 +64,7 @@ module.exports.getSLCMHome = (app) => {
       'NOTE' : 'Due to SLCM bug, only overall internal marks is visible.',
       'FOOTER' : 'Copyright 2019 The MIT Post'
     };
-  
+
     res.send(jsonData);
   });
 
@@ -76,7 +75,7 @@ module.exports.getSLCMValues = (app) => {
   app.get('/slcmValues', function(req, res) {
 
     var toBeSent = "<html><head><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>SLCM by The MIT Post</title></head><body><h3>SLCM Scraper User UI</h3><br><form method='post' action='values'><table cellspacing='10'><tr><td>Enter Registration Number:</td><td><input type='text' name='regNumber' hint='Enter Registration Number'/></td></tr><tr><td>Enter Password:</td><td><input type='password' name='pass' hint='Enter Password'/></td></tr><tr><td colspan='2'><input type='submit' name='loginButton' value='Access SLCM API' style='padding:5px;width:100%;text-align:center;border-radius:7px;border:0px'/></td></tr></table></form><p><h6>&copy; The MIT Post 2019. This product does not store any details on any hardware or cloud database. <br><br>SLCM Scraper v4.6.1-beta</h6></p></body></html>"
-  
+
     res.send(toBeSent);
   });
 
@@ -87,7 +86,7 @@ module.exports.getSLCMGrades = (app) => {
   app.get('/slcmGrades', function(req, res) {
 
     var toBeSent = "<html><head><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>SLCM by The MIT Post</title></head><body><h3>SLCM Scraper User UI</h3><br><form method='post' action='grades'><table cellspacing='10'><tr><td>Enter Registration Number:</td><td><input type='text' name='regNumber' hint='Enter Registration Number'/></td></tr><tr><td>Enter Password:</td><td><input type='password' name='pass' hint='Enter Password'/></td></tr><tr><td>Semester to fetch: </td><td><select name='sem'><option value='I'>I</option><option value='II'>II</option><option value='III'>III</option><option value='IV'>IV</option><option value='V'>V</option><option value='VI'>VI</option><option value='VII'>VII</option><option value='VIII'>VIII</option></td></tr><tr><td colspan='2'><input type='submit' name='loginButton' value='Access SLCM API' style='padding:5px;width:100%;text-align:center;border-radius:7px;border:0px'/></td></tr></table></form><p><h6>&copy; The MIT Post 2019. This product does not store any details on any hardware or cloud database. <br><br>SLCM Scraper v4.6.1-beta</h6></p></body></html>"
-  
+
     res.send(toBeSent);
   });
 
@@ -98,7 +97,7 @@ module.exports.getSLCMMarks = (app) => {
   app.get('/slcmMarks', function(req, res) {
 
     var toBeSent = "<html><head><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>SLCM by The MIT Post</title></head><body><h3>SLCM Scraper User UI</h3><br><form method='post' action='marks'><table cellspacing='10'><tr><td>Enter Registration Number:</td><td><input type='text' name='regNumber' hint='Enter Registration Number'/></td></tr><tr><td>Enter Password:</td><td><input type='password' name='pass' hint='Enter Password'/></td></tr><tr><td>Semester to fetch: </td><td><select name='sem'><option value='I'>I</option><option value='II'>II</option><option value='III'>III</option><option value='IV'>IV</option><option value='V'>V</option><option value='VI'>VI</option><option value='VII'>VII</option><option value='VIII'>VIII</option></td></tr><tr><td colspan='2'><input type='submit' name='loginButton' value='Access SLCM API' style='padding:5px;width:100%;text-align:center;border-radius:7px;border:0px'/></td></tr></table></form><p><h6>&copy; The MIT Post 2019. This product does not store any details on any hardware or cloud database. <br><br>SLCM Scraper v4.6.1-beta</h6></p></body></html>"
-  
+
     res.send(toBeSent);
   });
 
@@ -109,11 +108,11 @@ module.exports.getSLCMAttendance = (app) => {
   app.get('/slcmAttendance', function(req, res) {
 
     var toBeSent = "<html><head><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>SLCM by The MIT Post</title></head><body><h3>SLCM Scraper User UI</h3><br><form method='post' action='attendance'><table cellspacing='10'><tr><td>Enter Registration Number:</td><td><input type='text' name='regNumber' hint='Enter Registration Number'/></td></tr><tr><td>Enter Password:</td><td><input type='password' name='pass' hint='Enter Password'/></td><tr><td>Semester to fetch: </td><td><select name='sem'><option value='I'>I</option><option value='II'>II</option><option value='III'>III</option><option value='IV'>IV</option><option value='V'>V</option><option value='VI'>VI</option><option value='VII'>VII</option><option value='VIII'>VIII</option></td></tr></tr><tr><td colspan='2'><input type='submit' name='loginButton' value='Access SLCM API' style='padding:5px;width:100%;text-align:center;border-radius:7px;border:0px'/></td></tr></table></form><p><h6>&copy; The MIT Post 2019. This product does not store any details on any hardware or cloud database. <br><br>SLCM Scraper v4.6.1-beta</h6></p></body></html>"
-  
+
     res.send(toBeSent);
   });
 
-}
+};
 
 module.exports.postValues = (app) => {
 
@@ -123,14 +122,17 @@ module.exports.postValues = (app) => {
     const pass = req.body.pass;
 
     console.log(req.body);
-  
+
     const SHOULD_GET_MARKS = false;
     const SHOULD_GET_ATT = false;
     const GET_GRADES = false;
 
     console.log(COLLECTIONS.IOS_COLLECTION);
 
-    database.get_slcm_data(reg, COLLECTIONS.IOS_COLLECTION).then(response => {
+    let password = encrypt.encrypt(pass, reg);
+    let query = {_id: reg, password: password};
+
+    database.get_slcm_data(query, COLLECTIONS.IOS_COLLECTION).then(response => {
 
       if(!response) {
 
@@ -140,9 +142,13 @@ module.exports.postValues = (app) => {
           console.log(value);
 
           res.send(value);
-  
-          database.insert_slcm_data(reg, value, COLLECTIONS.IOS_COLLECTION);
-      
+          var data = Buffer.from(JSON.stringify(value));
+          let encrypted_value = encrypt.encrypt(data, query.password);
+
+          let object = {_id: registration, password: query.password, value: encrypted_value};
+
+          database.insert_slcm_data(query, encrypted_value, COLLECTIONS.IOS_COLLECTION);
+
         }).catch((error) => {
           console.log(error);
         });
@@ -156,11 +162,11 @@ module.exports.postValues = (app) => {
 
       console.log(error);
       res.send({status: 'BAD'});
-    })
+    });
 
   });
 
-}
+};
 
 module.exports.postMarks = (app) => {
 
@@ -169,12 +175,15 @@ module.exports.postMarks = (app) => {
     const reg = req.body.regNumber;
     const pass = req.body.pass;
     const get_sem = req.body.sem;
-  
+
     const SHOULD_GET_MARKS = true;
     const SHOULD_GET_ATT = false;
     const GET_GRADES = false;
 
-    database.get_slcm_data(reg, COLLECTIONS.MARKS_COLLECTION).then(response => {
+    let password = encrypt(pass, reg);
+    let query = {_id: reg, password: password};
+
+    database.get_slcm_data(query, COLLECTIONS.MARKS_COLLECTION).then(response => {
 
       if(!response) {
 
@@ -183,22 +192,21 @@ module.exports.postMarks = (app) => {
 
           res.send(value);
 
-          database.insert_slcm_data(reg, value, COLLECTIONS.MARKS_COLLECTION);
-      
+          database.insert_slcm_data(query, value, COLLECTIONS.MARKS_COLLECTION);
+
         }).catch((error) => {
           console.log(error);
         });
 
       } else {
-
         res.send(response);
       }
 
     });
-  
-  })
 
-}
+  });
+
+};
 
 module.exports.postAttendance = (app) => {
 
@@ -207,22 +215,25 @@ module.exports.postAttendance = (app) => {
     const reg = req.body.regNumber;
     const pass = req.body.pass;
     const get_sem = req.body.sem;
-  
+
     const SHOULD_GET_MARKS = false;
     const SHOULD_GET_ATT = true;
     const GET_GRADES = false;
 
-    database.get_slcm_data(reg, COLLECTIONS.ATTENDANCE_COLLECTION).then(response => {
+    let password = encrypt(pass, reg);
+    let query = {_id: reg, password: password};
+
+    database.get_slcm_data(query, COLLECTIONS.ATTENDANCE_COLLECTION).then(response => {
 
       if(!response) {
 
         scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, get_sem).then((value) => {
           console.log("success");
 
-          database.insert_slcm_data(reg, value, COLLECTIONS.ATTENDANCE_COLLECTION);
+          database.insert_slcm_data(query, value, COLLECTIONS.ATTENDANCE_COLLECTION);
 
           res.send(value);
-      
+
         }).catch((error) => {
           console.log(error);
         });
@@ -232,8 +243,8 @@ module.exports.postAttendance = (app) => {
 
       }
     });
-  
-    
+
+
   });
 
 }
@@ -245,12 +256,15 @@ module.exports.postGrades = (app) => {
     const reg = req.body.regNumber;
     const pass = req.body.pass;
     const get_sem = req.body.sem;
-  
+
     const SHOULD_GET_MARKS = false;
     const SHOULD_GET_ATT = false;
     const GET_GRADES = true;
 
-    database.get_slcm_data(reg, COLLECTIONS.GRADES_COLLECTION).then(response => {
+    let password = encrypt(pass, reg);
+    let query = {_id: reg, password: password};
+
+    database.get_slcm_data(query, COLLECTIONS.GRADES_COLLECTION).then(response => {
 
       if(!response) {
 
@@ -259,8 +273,8 @@ module.exports.postGrades = (app) => {
 
           res.send(value);
 
-          database.insert_slcm_data(reg, COLLECTIONS.GRADES_COLLECTION);
-      
+          database.insert_slcm_data(query, COLLECTIONS.GRADES_COLLECTION);
+
         }).catch((error) => {
           console.log(error);
         });
@@ -270,10 +284,7 @@ module.exports.postGrades = (app) => {
       }
 
     });
-  
+
   });
 
 };
-
-
-

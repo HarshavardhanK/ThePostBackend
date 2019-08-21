@@ -1,5 +1,7 @@
 const crypto = require('crypto');
 
+const database = require("./database");
+
 
 
 module.exports.encrypt = (data, password) => {
@@ -19,3 +21,6 @@ module.exports.decrypt = (data, password) => {
     return myKey.update(data, 'binary', 'binary') + myKey.final('binary');
   
   }
+
+  database.insert_slcm_data('170905027', {'some':'data'}, 'ios');
+

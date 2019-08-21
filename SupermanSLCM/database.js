@@ -1,86 +1,213 @@
 
 const MongoClient = require('mongodb').MongoClient;
-
+const ObjectId = require('mongodb').ObjectId;
 const url = "mongodb://localhost:27017/themitpost";
 
-const COLLECTION = 'slcm';
-const RESPONSE_COLLECTION = 'response';
+module.exports.insert_ios_slcm_data = async (registration, value, COLLECTION) => {
 
-module.exports.insert_slcm_data = (value) => {
+  let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
 
-  return MongoClient.connect(url, (error, database) => {
+  if(!client) {
+    return undefined;
+  }
 
-    if(error) throw error;
+  try {
 
-    var database_object = database.db('themitpost');
+    const database = client.db('themitpost');
+    let collection = database.collection(COLLECTION);
 
-    database_object.collection(COLLECTION).save(value, (error, result) => {
-      console.log("SLCM insert insert succesfull");
-    });
+    let query = {_id: registration};
 
-    database.close();
+    let result = await collection.replaceOne(query, value, {"upsert": true});
 
-    return true;
+  } catch(error) {
+    console.log(error);
+    return undefined;
 
-  });
+  } finally {
+    client.close();
+  }
 
 };
 
-module.exports.insert_response = (registration, value) => {
+/*module.exports.insert_credentials = async (registraion, password) => {
 
-  let query = {_id: registration, response: value};
-  console.log(query);
+  let client = await MongoClient.connect(url ,{useNewUrlParser: true}).catch(error => {console.log(error)});
 
-  MongoClient.connect(url, (error, database) => {
+  if(!client) {
+    return;
+  }
 
-    if(error) {
-      console.log(error);
-      throw error;
-    }
+  try {
 
-    var database_object = database.db('themitpost');
+    const database = client.db('themitpost');
+    let collection = database.collection(COLLECTIONS.CREDS_COLLECTION);
 
-    database_object.collection(RESPONSE_COLLECTION).updateOne(query, (error, result) => {
-      console.log('response updated');
-    })
+    value = {_id: registration, password: password};
 
-    database.close();
+    let result = await collection.insertOne(value);
 
-  })
+  } catch(error) {
+    console.log(error);
+    return undefined;
+
+  } finally {
+    client.close();
+
+  }
+}*/
+
+/*module.exports.insert_response = async (registration, value) => {
+
+  let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
+
+  if(!client) {
+    return undefined;
+  }
+
+  try {
+
+    const database = client.db('themitpost');
+    let collection = database.collection(COLLECTIONS.RESPONSE_COLLECTION);
+
+    let query = {_id: registration};
+
+    let result = await collection.updateOne(query, value, {upsert: true});
+
+  } catch(error) {
+    console.log(error);
+    return undefined;
+
+  } finally {
+    client.close();
+  }
 }
 
-module.exports.get_slcm_data = (query) => {
+module.exports.get_response = async (registraion) => {
 
-  return MongoClient.connect(url, (error, database) => {
-
-    var database_object = database.db('themitpost');
-
-    return database_object.collection(COLLECTION).findOne(query, (error, result) => {
-
-      if(error) throw error;
-
-      console.log(query);
-
-      if(query != undefined) {
-
-        console.log('Query for SLCM data successfull');
-
-        database.close();
-
-        return result;
-
-      } else {
-
-        console.log("Query for SLCM data unsuccessful..");
-
-        database.close();
-
-        return undefined;
-
-      }
-    });
-
+  const client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {
+    console.log(error);
   });
 
-};
+  if(!client) {
+    return undefined;
+  }
+
+  try {
+
+    const database = client.db('themitpost');
+    let collection = database.collection(COLLECTIONS.RESPONSE_COLLECTION);
+
+    let query = {_id: registraion};
+
+    console.log('queried response');
+
+    let result = await collection.findOne(query);
+
+    console.log(result);
+
+    return result;
+
+  } catch(error) {
+
+    console.error(error);
+    return undefined;
+
+  } finally {
+
+    client.close();
+  }
+    
+}
+
+module.exports.get_slcm_ios_data = async (registration, password) => {
+  //encrypt and store the password
+
+  const client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
+
+  if(!client) {
+    return undefined;
+  }
+
+  try {
+
+    console.log('querying slcm data');
+
+    const database = client.db('themitpost');
+    let collection = database.collection(COLLECTIONS.IOS_COLLECTION);
+
+    let query = {_id: registration};
+
+    console.log(query);
+
+    return await collection.findOne(query);
+
+  } catch(error) {
+
+    console.log(error);
+    return undefined;
+
+  } finally {
+    client.close();
+  }
+}*/
+
+module.exports.insert_slcm_data = async (registration, value, COLLECTION='gen') => {
+
+  let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
+
+  if(!client) {
+    return undefined;
+  }
+
+  try {
+
+    const database = client.db('themitpost');
+    let collection = database.collection(COLLECTION);
+
+    let query = {_id: registration};
+
+    let result = await collection.replaceOne(query, value, {"upsert": true});
+
+  } catch(error) {
+    console.log(error);
+    return undefined;
+
+  } finally {
+    client.close();
+  }
+
+}
+
+module.exports.get_slcm_data = async (registration, COLLECTION) => {
+
+  const client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
+
+  if(!client) {
+    return undefined;
+  }
+
+  try {
+
+    console.log('querying slcm data');
+
+    const database = client.db('themitpost');
+    let collection = database.collection(COLLECTION);
+
+    let query = {_id: registration};
+
+    console.log(query);
+
+    return await collection.findOne(query);
+
+  } catch(error) {
+
+    console.log(error);
+    return undefined;
+
+  } finally {
+    client.close();
+  }
+
+}
 

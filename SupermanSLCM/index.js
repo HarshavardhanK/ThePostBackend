@@ -1,15 +1,12 @@
+
+
 const puppeteer = require('puppeteer');
-const express = require('express');
-const app = express();
 
 var Helper = require('./modules/helper');
 var deasync = require('deasync');
+var encrypt = require('./encryption');
+var database = require('./database');
 
-const bodyParser = require('body-parser');
-var port = process.env.PORT;
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 
 //reg and pass are necessary for login.
 
@@ -20,7 +17,19 @@ app.use(bodyParser.json());
 //NOTE: getting all sems is slower than getting current sem.
 //NOTE: please use the variable names as mentioned above.
 
-let scrape = async (reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, semToFetch) => {
+//Define the collections for MongoDb
+
+let COLLECTIONS = {
+    IOS_COLLECTION: 'ios',
+    MARKS_COLLECTION: 'marks',
+    ATTENDANCE_COLLECTION: 'attn',
+    RESPONSE_COLLECTION: 'response',
+    CREDS_COLLECTION: 'creds',
+    GRADES_COLLECTION: 'grades'
+  };
+
+
+module.exports.scrape = scrape = async (reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, semToFetch) => {
 
   const browser = await puppeteer.launch({args: [
     '--disable-gpu',
@@ -33,7 +42,9 @@ let scrape = async (reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, 
 
   const helper = new Helper(browser, SHOULD_GET_MARKS, res, GET_GRADES, SHOULD_GET_ATT, semToFetch);
   try{
-    helper.executeLogin(reg, pass);
+
+    return helper.executeLogin(reg, pass);
+
   }
   catch(error){
 
@@ -43,117 +54,226 @@ let scrape = async (reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, 
 
 };
 
-app.get('/', function(req, res) {
-  var jsonData = {
-    'Current sem marks and attendance' : 'http://slcmapi.herokuapp.com/slcmValues',
-    'All sem grade sheet' : 'http://slcmapi.herokuapp.com/slcmGrades',
-    'All sem marks' : 'http://slcmapi.herokuapp.com/slcmMarks',
-    'All sem attendance' : 'http://slcmapi.herokuapp.com/slcmAttendance',
-    'NOTE' : 'Due to SLCM bug, only overall internal marks is visible.',
-    'FOOTER' : 'Copyright 2019 The MIT Post'
-  };
+module.exports.getSLCMHome = (app) => {
 
-  res.send(jsonData);
-});
-
-app.get('/slcmValues', function(req, res) {
-
-  var toBeSent = "<html><head><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>SLCM by The MIT Post</title></head><body><h3>SLCM Scraper User UI</h3><br><form method='post' action='values'><table cellspacing='10'><tr><td>Enter Registration Number:</td><td><input type='text' name='regNumber' hint='Enter Registration Number'/></td></tr><tr><td>Enter Password:</td><td><input type='password' name='pass' hint='Enter Password'/></td></tr><tr><td colspan='2'><input type='submit' name='loginButton' value='Access SLCM API' style='padding:5px;width:100%;text-align:center;border-radius:7px;border:0px'/></td></tr></table></form><p><h6>&copy; The MIT Post 2019. This product does not store any details on any hardware or cloud database. <br><br>SLCM Scraper v4.6.1-beta</h6></p></body></html>"
-
-  res.send(toBeSent);
-});
-
-
-app.get('/slcmGrades', function(req, res) {
-
-  var toBeSent = "<html><head><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>SLCM by The MIT Post</title></head><body><h3>SLCM Scraper User UI</h3><br><form method='post' action='grades'><table cellspacing='10'><tr><td>Enter Registration Number:</td><td><input type='text' name='regNumber' hint='Enter Registration Number'/></td></tr><tr><td>Enter Password:</td><td><input type='password' name='pass' hint='Enter Password'/></td></tr><tr><td>Semester to fetch: </td><td><select name='sem'><option value='I'>I</option><option value='II'>II</option><option value='III'>III</option><option value='IV'>IV</option><option value='V'>V</option><option value='VI'>VI</option><option value='VII'>VII</option><option value='VIII'>VIII</option></td></tr><tr><td colspan='2'><input type='submit' name='loginButton' value='Access SLCM API' style='padding:5px;width:100%;text-align:center;border-radius:7px;border:0px'/></td></tr></table></form><p><h6>&copy; The MIT Post 2019. This product does not store any details on any hardware or cloud database. <br><br>SLCM Scraper v4.6.1-beta</h6></p></body></html>"
-
-  res.send(toBeSent);
-});
-
-app.get('/slcmMarks', function(req, res) {
-
-  var toBeSent = "<html><head><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>SLCM by The MIT Post</title></head><body><h3>SLCM Scraper User UI</h3><br><form method='post' action='marks'><table cellspacing='10'><tr><td>Enter Registration Number:</td><td><input type='text' name='regNumber' hint='Enter Registration Number'/></td></tr><tr><td>Enter Password:</td><td><input type='password' name='pass' hint='Enter Password'/></td></tr><tr><td>Semester to fetch: </td><td><select name='sem'><option value='I'>I</option><option value='II'>II</option><option value='III'>III</option><option value='IV'>IV</option><option value='V'>V</option><option value='VI'>VI</option><option value='VII'>VII</option><option value='VIII'>VIII</option></td></tr><tr><td colspan='2'><input type='submit' name='loginButton' value='Access SLCM API' style='padding:5px;width:100%;text-align:center;border-radius:7px;border:0px'/></td></tr></table></form><p><h6>&copy; The MIT Post 2019. This product does not store any details on any hardware or cloud database. <br><br>SLCM Scraper v4.6.1-beta</h6></p></body></html>"
-
-  res.send(toBeSent);
-});
-
-app.get('/slcmAttendance', function(req, res) {
-
-  var toBeSent = "<html><head><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>SLCM by The MIT Post</title></head><body><h3>SLCM Scraper User UI</h3><br><form method='post' action='attendance'><table cellspacing='10'><tr><td>Enter Registration Number:</td><td><input type='text' name='regNumber' hint='Enter Registration Number'/></td></tr><tr><td>Enter Password:</td><td><input type='password' name='pass' hint='Enter Password'/></td><tr><td>Semester to fetch: </td><td><select name='sem'><option value='I'>I</option><option value='II'>II</option><option value='III'>III</option><option value='IV'>IV</option><option value='V'>V</option><option value='VI'>VI</option><option value='VII'>VII</option><option value='VIII'>VIII</option></td></tr></tr><tr><td colspan='2'><input type='submit' name='loginButton' value='Access SLCM API' style='padding:5px;width:100%;text-align:center;border-radius:7px;border:0px'/></td></tr></table></form><p><h6>&copy; The MIT Post 2019. This product does not store any details on any hardware or cloud database. <br><br>SLCM Scraper v4.6.1-beta</h6></p></body></html>"
-
-  res.send(toBeSent);
-});
-
-app.post('/values', function(req, res) {
-
-  const reg = req.body.regNumber;
-  const pass = req.body.pass;
-
-  const SHOULD_GET_MARKS = false;
-  const SHOULD_GET_ATT = false;
-  const GET_GRADES = false;
-
-  scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, '').then((value) => {
-    console.log("success");
-
-  }).catch((error) => {
-    console.log(error);
+  app.get('/', function(req, res) {
+    var jsonData = {
+      'Current sem marks and attendance' : 'http://slcmapi.herokuapp.com/slcmValues',
+      'All sem grade sheet' : 'http://slcmapi.herokuapp.com/slcmGrades',
+      'All sem marks' : 'http://slcmapi.herokuapp.com/slcmMarks',
+      'All sem attendance' : 'http://slcmapi.herokuapp.com/slcmAttendance',
+      'NOTE' : 'Due to SLCM bug, only overall internal marks is visible.',
+      'FOOTER' : 'Copyright 2019 The MIT Post'
+    };
+  
+    res.send(jsonData);
   });
-})
 
-app.post('/marks', function(req, res) {
+}
 
-  const reg = req.body.regNumber;
-  const pass = req.body.pass;
-  const get_sem = req.body.sem;
+module.exports.getSLCMValues = (app) => {
 
-  const SHOULD_GET_MARKS = true;
-  const SHOULD_GET_ATT = false;
-  const GET_GRADES = false;
+  app.get('/slcmValues', function(req, res) {
 
-  scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, get_sem).then((value) => {
-    console.log("success");
-
-  }).catch((error) => {
-    console.log(error);
+    var toBeSent = "<html><head><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>SLCM by The MIT Post</title></head><body><h3>SLCM Scraper User UI</h3><br><form method='post' action='values'><table cellspacing='10'><tr><td>Enter Registration Number:</td><td><input type='text' name='regNumber' hint='Enter Registration Number'/></td></tr><tr><td>Enter Password:</td><td><input type='password' name='pass' hint='Enter Password'/></td></tr><tr><td colspan='2'><input type='submit' name='loginButton' value='Access SLCM API' style='padding:5px;width:100%;text-align:center;border-radius:7px;border:0px'/></td></tr></table></form><p><h6>&copy; The MIT Post 2019. This product does not store any details on any hardware or cloud database. <br><br>SLCM Scraper v4.6.1-beta</h6></p></body></html>"
+  
+    res.send(toBeSent);
   });
-})
 
-app.post('/attendance', function(req, res) {
+}
 
-  const reg = req.body.regNumber;
-  const pass = req.body.pass;
-  const get_sem = req.body.sem;
+module.exports.getSLCMGrades = (app) => {
 
-  const SHOULD_GET_MARKS = false;
-  const SHOULD_GET_ATT = true;
-  const GET_GRADES = false;
+  app.get('/slcmGrades', function(req, res) {
 
-  scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, get_sem).then((value) => {
-    console.log("success");
-
-  }).catch((error) => {
-    console.log(error);
+    var toBeSent = "<html><head><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>SLCM by The MIT Post</title></head><body><h3>SLCM Scraper User UI</h3><br><form method='post' action='grades'><table cellspacing='10'><tr><td>Enter Registration Number:</td><td><input type='text' name='regNumber' hint='Enter Registration Number'/></td></tr><tr><td>Enter Password:</td><td><input type='password' name='pass' hint='Enter Password'/></td></tr><tr><td>Semester to fetch: </td><td><select name='sem'><option value='I'>I</option><option value='II'>II</option><option value='III'>III</option><option value='IV'>IV</option><option value='V'>V</option><option value='VI'>VI</option><option value='VII'>VII</option><option value='VIII'>VIII</option></td></tr><tr><td colspan='2'><input type='submit' name='loginButton' value='Access SLCM API' style='padding:5px;width:100%;text-align:center;border-radius:7px;border:0px'/></td></tr></table></form><p><h6>&copy; The MIT Post 2019. This product does not store any details on any hardware or cloud database. <br><br>SLCM Scraper v4.6.1-beta</h6></p></body></html>"
+  
+    res.send(toBeSent);
   });
-})
 
-app.post('/grades', function(req, res) {
+}
 
-  const reg = req.body.regNumber;
-  const pass = req.body.pass;
-  const get_sem = req.body.sem;
+module.exports.getSLCMMarks = (app) => {
 
-  const SHOULD_GET_MARKS = false;
-  const SHOULD_GET_ATT = false;
-  const GET_GRADES = true;
+  app.get('/slcmMarks', function(req, res) {
 
-  scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, get_sem).then((value) => {
-    console.log("success");
-
-  }).catch((error) => {
-    console.log(error);
+    var toBeSent = "<html><head><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>SLCM by The MIT Post</title></head><body><h3>SLCM Scraper User UI</h3><br><form method='post' action='marks'><table cellspacing='10'><tr><td>Enter Registration Number:</td><td><input type='text' name='regNumber' hint='Enter Registration Number'/></td></tr><tr><td>Enter Password:</td><td><input type='password' name='pass' hint='Enter Password'/></td></tr><tr><td>Semester to fetch: </td><td><select name='sem'><option value='I'>I</option><option value='II'>II</option><option value='III'>III</option><option value='IV'>IV</option><option value='V'>V</option><option value='VI'>VI</option><option value='VII'>VII</option><option value='VIII'>VIII</option></td></tr><tr><td colspan='2'><input type='submit' name='loginButton' value='Access SLCM API' style='padding:5px;width:100%;text-align:center;border-radius:7px;border:0px'/></td></tr></table></form><p><h6>&copy; The MIT Post 2019. This product does not store any details on any hardware or cloud database. <br><br>SLCM Scraper v4.6.1-beta</h6></p></body></html>"
+  
+    res.send(toBeSent);
   });
-})
 
-app.listen(3001);
+}
+
+module.exports.getSLCMAttendance = (app) => {
+
+  app.get('/slcmAttendance', function(req, res) {
+
+    var toBeSent = "<html><head><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>SLCM by The MIT Post</title></head><body><h3>SLCM Scraper User UI</h3><br><form method='post' action='attendance'><table cellspacing='10'><tr><td>Enter Registration Number:</td><td><input type='text' name='regNumber' hint='Enter Registration Number'/></td></tr><tr><td>Enter Password:</td><td><input type='password' name='pass' hint='Enter Password'/></td><tr><td>Semester to fetch: </td><td><select name='sem'><option value='I'>I</option><option value='II'>II</option><option value='III'>III</option><option value='IV'>IV</option><option value='V'>V</option><option value='VI'>VI</option><option value='VII'>VII</option><option value='VIII'>VIII</option></td></tr></tr><tr><td colspan='2'><input type='submit' name='loginButton' value='Access SLCM API' style='padding:5px;width:100%;text-align:center;border-radius:7px;border:0px'/></td></tr></table></form><p><h6>&copy; The MIT Post 2019. This product does not store any details on any hardware or cloud database. <br><br>SLCM Scraper v4.6.1-beta</h6></p></body></html>"
+  
+    res.send(toBeSent);
+  });
+
+}
+
+module.exports.postValues = (app) => {
+
+  app.post('/values', function(req, res) {
+
+    const reg = req.body.regNumber;
+    const pass = req.body.pass;
+
+    console.log(req.body);
+  
+    const SHOULD_GET_MARKS = false;
+    const SHOULD_GET_ATT = false;
+    const GET_GRADES = false;
+
+    console.log(COLLECTIONS.IOS_COLLECTION);
+
+    database.get_slcm_data(reg, COLLECTIONS.IOS_COLLECTION).then(response => {
+
+      if(!response) {
+
+        scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, '').then((value) => {
+
+          console.log("success");
+          console.log(value);
+
+          res.send(value);
+  
+          database.insert_slcm_data(reg, value, COLLECTIONS.IOS_COLLECTION);
+      
+        }).catch((error) => {
+          console.log(error);
+        });
+
+      } else {
+        res.send(response);
+
+      }
+
+    }).catch(error => {
+
+      console.log(error);
+      res.send({status: 'BAD'});
+    })
+
+  });
+
+}
+
+module.exports.postMarks = (app) => {
+
+  app.post('/marks', function(req, res) {
+
+    const reg = req.body.regNumber;
+    const pass = req.body.pass;
+    const get_sem = req.body.sem;
+  
+    const SHOULD_GET_MARKS = true;
+    const SHOULD_GET_ATT = false;
+    const GET_GRADES = false;
+
+    database.get_slcm_data(reg, COLLECTIONS.MARKS_COLLECTION).then(response => {
+
+      if(!response) {
+
+        scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, get_sem).then((value) => {
+          console.log("success");
+
+          res.send(value);
+
+          database.insert_slcm_data(reg, value, COLLECTIONS.MARKS_COLLECTION);
+      
+        }).catch((error) => {
+          console.log(error);
+        });
+
+      } else {
+
+        res.send(response);
+      }
+
+    });
+  
+  })
+
+}
+
+module.exports.postAttendance = (app) => {
+
+  app.post('/attendance', function(req, res) {
+
+    const reg = req.body.regNumber;
+    const pass = req.body.pass;
+    const get_sem = req.body.sem;
+  
+    const SHOULD_GET_MARKS = false;
+    const SHOULD_GET_ATT = true;
+    const GET_GRADES = false;
+
+    database.get_slcm_data(reg, COLLECTIONS.ATTENDANCE_COLLECTION).then(response => {
+
+      if(!response) {
+
+        scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, get_sem).then((value) => {
+          console.log("success");
+
+          database.insert_slcm_data(reg, value, COLLECTIONS.ATTENDANCE_COLLECTION);
+
+          res.send(value);
+      
+        }).catch((error) => {
+          console.log(error);
+        });
+
+      } else {
+        res.send(response);
+
+      }
+    });
+  
+    
+  });
+
+}
+
+module.exports.postGrades = (app) => {
+
+  app.post('/grades', function(req, res) {
+
+    const reg = req.body.regNumber;
+    const pass = req.body.pass;
+    const get_sem = req.body.sem;
+  
+    const SHOULD_GET_MARKS = false;
+    const SHOULD_GET_ATT = false;
+    const GET_GRADES = true;
+
+    database.get_slcm_data(reg, COLLECTIONS.GRADES_COLLECTION).then(response => {
+
+      if(!response) {
+
+        scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, get_sem).then((value) => {
+          console.log("success");
+
+          res.send(value);
+
+          database.insert_slcm_data(reg, COLLECTIONS.GRADES_COLLECTION);
+      
+        }).catch((error) => {
+          console.log(error);
+        });
+
+      } else {
+        res.send(response);
+      }
+
+    });
+  
+  });
+
+};
+
+
+

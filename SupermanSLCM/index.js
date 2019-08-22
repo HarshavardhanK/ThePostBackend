@@ -57,10 +57,10 @@ module.exports.getSLCMHome = (app) => {
 
   app.get('/slcm', function(req, res) {
     var jsonData = {
-      'Current sem marks and attendance' : 'http://slcmapi.herokuapp.com/slcmValues',
-      'All sem grade sheet' : 'http://slcmapi.herokuapp.com/slcmGrades',
-      'All sem marks' : 'http://slcmapi.herokuapp.com/slcmMarks',
-      'All sem attendance' : 'http://slcmapi.herokuapp.com/slcmAttendance',
+      'Current sem marks and attendance' : 'https://api.themitpost.com/slcmValues',
+      'All sem grade sheet' : 'https://api.themitpost.com/slcmGrades',
+      'All sem marks' : 'https://api.themitpost.com/slcmMarks',
+      'All sem attendance' : 'https://api.themitpost.com/slcmAttendance',
       'NOTE' : 'Due to SLCM bug, only overall internal marks is visible.',
       'FOOTER' : 'Copyright 2019 The MIT Post'
     };

@@ -24,7 +24,7 @@ let COLLECTIONS = {
     ATTENDANCE_COLLECTION: 'attn',
     RESPONSE_COLLECTION: 'response',
     CREDS_COLLECTION: 'creds',
-    GRADES_COLLECTION: 'grades'
+    GRADES_COLLECTION: 'grades',
   };
 
 
@@ -129,10 +129,7 @@ module.exports.postValues = (app) => {
 
     console.log(COLLECTIONS.IOS_COLLECTION);
 
-    let password = encrypt.encrypt(pass, reg);
-    let query = {_id: reg, password: password};
-
-    database.get_slcm_data(query, COLLECTIONS.IOS_COLLECTION).then(response => {
+    database.get_slcm_data({_id: reg, password: pass}, COLLECTIONS.IOS_COLLECTION).then(response => {
 
       if(!response) {
 
@@ -142,12 +139,8 @@ module.exports.postValues = (app) => {
           console.log(value);
 
           res.send(value);
-          var data = Buffer.from(JSON.stringify(value));
-          let encrypted_value = encrypt.encrypt(data, query.password);
 
-          let object = {_id: registration, password: query.password, value: encrypted_value};
-
-          database.insert_slcm_data(query, encrypted_value, COLLECTIONS.IOS_COLLECTION);
+          database.insert_slcm_data({_id: reg, password: pass}, value, COLLECTIONS.IOS_COLLECTION);
 
         }).catch((error) => {
           console.log(error);
@@ -180,10 +173,18 @@ module.exports.postMarks = (app) => {
     const SHOULD_GET_ATT = false;
     const GET_GRADES = false;
 
-    let password = encrypt(pass, reg);
-    let query = {_id: reg, password: password};
+    scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, get_sem).then((value) => {
+      console.log("success");
 
-    database.get_slcm_data(query, COLLECTIONS.MARKS_COLLECTION).then(response => {
+      res.send(value);
+
+      //database.insert_slcm_data({_id: reg, password: pass, semester: get_sem}, value, COLLECTIONS.MARKS_COLLECTION);
+
+    }).catch((error) => {
+      console.log(error);
+    });
+
+    /*database.get_slcm_data({_id: reg, password: pass, semester: get_sem}, COLLECTIONS.MARKS_COLLECTION).then(response => {
 
       if(!response) {
 
@@ -192,7 +193,7 @@ module.exports.postMarks = (app) => {
 
           res.send(value);
 
-          database.insert_slcm_data(query, value, COLLECTIONS.MARKS_COLLECTION);
+          database.insert_slcm_data({_id: reg, password: pass, semester: get_sem}, value, COLLECTIONS.MARKS_COLLECTION);
 
         }).catch((error) => {
           console.log(error);
@@ -202,7 +203,7 @@ module.exports.postMarks = (app) => {
         res.send(response);
       }
 
-    });
+    });*/
 
   });
 
@@ -220,10 +221,20 @@ module.exports.postAttendance = (app) => {
     const SHOULD_GET_ATT = true;
     const GET_GRADES = false;
 
-    let password = encrypt(pass, reg);
-    let query = {_id: reg, password: password};
+    //let query = {_id: reg, password: pass, semester: get_sem};
 
-    database.get_slcm_data(query, COLLECTIONS.ATTENDANCE_COLLECTION).then(response => {
+    scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, get_sem).then((value) => {
+      console.log("success");
+
+      database.insert_slcm_data(query, value, COLLECTIONS.ATTENDANCE_COLLECTION);
+
+      res.send(value);
+
+    }).catch((error) => {
+      console.log(error);
+    });
+
+    /*database.get_slcm_data(query, COLLECTIONS.ATTENDANCE_COLLECTION).then(response => {
 
       if(!response) {
 
@@ -242,7 +253,7 @@ module.exports.postAttendance = (app) => {
         res.send(response);
 
       }
-    });
+    });*/
 
 
   });
@@ -261,10 +272,18 @@ module.exports.postGrades = (app) => {
     const SHOULD_GET_ATT = false;
     const GET_GRADES = true;
 
-    let password = encrypt(pass, reg);
-    let query = {_id: reg, password: password};
+    scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, get_sem).then((value) => {
+      console.log("success");
 
-    database.get_slcm_data(query, COLLECTIONS.GRADES_COLLECTION).then(response => {
+      res.send(value);
+
+      //database.insert_slcm_data({_id: reg, password: pass, semester: get_sem}, value, COLLECTIONS.GRADES_COLLECTION);
+
+    }).catch((error) => {
+      console.log(error);
+    });
+
+    /*database.get_slcm_data({_id: reg, password: pass, semester: get_sem}, COLLECTIONS.GRADES_COLLECTION).then(response => {
 
       if(!response) {
 
@@ -273,7 +292,7 @@ module.exports.postGrades = (app) => {
 
           res.send(value);
 
-          database.insert_slcm_data(query, COLLECTIONS.GRADES_COLLECTION);
+          database.insert_slcm_data({_id: reg, password: pass, semester: get_sem}, value, COLLECTIONS.GRADES_COLLECTION);
 
         }).catch((error) => {
           console.log(error);
@@ -283,7 +302,7 @@ module.exports.postGrades = (app) => {
         res.send(response);
       }
 
-    });
+    });*/
 
   });
 

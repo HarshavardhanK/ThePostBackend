@@ -21,3 +21,12 @@ module.exports.decrypt = (data, password) => {
     return myKey.update(data, 'binary', 'binary') + myKey.final('binary');
 
   }
+
+  const test = () => {
+
+    database.insert_slcm_data({_id: '17094955', password: 'hello'}, {"hein?": 'what?'}, 'test');
+    database.get_slcm_data({_id: '17094955', password: 'hello'}, 'test');
+
+  }
+
+  

@@ -118,6 +118,12 @@ newSlcm.postValues(app);
 newSlcm.getSLCMMarks(app);
 newSlcm.postMarks(app);
 
+newSlcm.getSLCMGrades(app);
+newSlcm.postGrades(app);
+
+newSlcm.getSLCMAttendance(app);
+newSlcm.postAttendance(app);
+
 //////////////////////////////////// EVENTS PORTAL ////////////////////////////////////////
 
 const path = require('path');

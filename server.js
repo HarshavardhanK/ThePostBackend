@@ -112,6 +112,8 @@ articleWebView.getWebContent(app);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+newSlcm.getSLCMHome();
+
 newSlcm.getSLCMValues(app);
 newSlcm.postValues(app);
 

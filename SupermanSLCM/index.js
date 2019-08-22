@@ -55,7 +55,7 @@ module.exports.scrape = scrape = async (reg,pass,res, SHOULD_GET_MARKS, GET_GRAD
 
 module.exports.getSLCMHome = (app) => {
 
-  app.get('/', function(req, res) {
+  app.get('/slcm', function(req, res) {
     var jsonData = {
       'Current sem marks and attendance' : 'http://slcmapi.herokuapp.com/slcmValues',
       'All sem grade sheet' : 'http://slcmapi.herokuapp.com/slcmGrades',

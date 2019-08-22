@@ -20,13 +20,13 @@ module.exports.insert_slcm_data = async (filter, value, COLLECTION='gen') => {
 
     console.log(filter);
 
-    let password = encrypt.encrypt(filter.password, filter._id);
+    let password = encrypt.encrypt(filter.password, filter.registration);
     filter.password = password;
 
     let data = JSON.stringify(value);
     data = encrypt.encrypt(data, password);
 
-    let encrypted_value = {_id: filter._id, password: filter.password, semester: filter.semester, data: data};
+    let encrypted_value = {registration: filter.registration, password: filter.password, semester: filter.semester, data: data};
 
     console.log(encrypted_value);
 
@@ -37,7 +37,7 @@ module.exports.insert_slcm_data = async (filter, value, COLLECTION='gen') => {
 
     console.log(filter);
 
-    let result = await collection.replaceOne(filter, encrypted_value, {"upsert": true});
+    let result = await collection.insertOne(encrypted_value);
 
   } catch(error) {
     console.log(error);
@@ -61,7 +61,7 @@ module.exports.get_slcm_data = async (filter, COLLECTION) => {
 
     console.log(filter);
 
-    let password = encrypt.encrypt(filter.password, filter._id);
+    let password = encrypt.encrypt(filter.password, filter.registration);
     filter.password = password;
 
     console.log('querying slcm data in %s collection', COLLECTION);

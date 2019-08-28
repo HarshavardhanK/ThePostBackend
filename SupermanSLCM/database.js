@@ -1,86 +1,97 @@
 
 const MongoClient = require('mongodb').MongoClient;
-
+const ObjectId = require('mongodb').ObjectId;
 const url = "mongodb://localhost:27017/themitpost";
 
-const COLLECTION = 'slcm';
-const RESPONSE_COLLECTION = 'response';
+const encrypt = require('./encryption');
 
-module.exports.insert_slcm_data = (value) => {
 
-  return MongoClient.connect(url, (error, database) => {
+module.exports.insert_slcm_data = async (filter, value, COLLECTION='gen') => {
 
-    if(error) throw error;
+  let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
 
-    var database_object = database.db('themitpost');
+  if(!client) {
+    return undefined;
+  }
 
-    database_object.collection(COLLECTION).save(value, (error, result) => {
-      console.log("SLCM insert insert succesfull");
-    });
+  try {
 
-    database.close();
+    console.log('cred before rncrypt insert');
 
-    return true;
+    console.log(filter);
 
-  });
+    let password = encrypt.encrypt(filter.password, filter.registration);
+    filter.password = password;
 
-};
+    let data = JSON.stringify(value);
+    data = encrypt.encrypt(data, password);
 
-module.exports.insert_response = (registration, value) => {
+    let encrypted_value = {registration: filter.registration, password: filter.password, semester: filter.semester, data: data};
 
-  let query = {_id: registration, response: value};
-  console.log(query);
+    console.log(encrypted_value);
 
-  MongoClient.connect(url, (error, database) => {
+    const database = client.db('themitpost');
+    let collection = database.collection(COLLECTION);
 
-    if(error) {
-      console.log(error);
-      throw error;
-    }
+    console.log("inserting data in %s collection", COLLECTION);
 
-    var database_object = database.db('themitpost');
+    console.log(filter);
 
-    database_object.collection(RESPONSE_COLLECTION).updateOne(query, (error, result) => {
-      console.log('response updated');
-    })
+    let result = await collection.insertOne(encrypted_value);
 
-    database.close();
+  } catch(error) {
+    console.log(error);
+    return undefined;
 
-  })
+  } finally {
+    client.close();
+  }
+
 }
 
-module.exports.get_slcm_data = (query) => {
+module.exports.get_slcm_data = async (filter, COLLECTION) => {
 
-  return MongoClient.connect(url, (error, database) => {
+  const client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
 
-    var database_object = database.db('themitpost');
+  if(!client) {
+    return undefined;
+  }
 
-    return database_object.collection(COLLECTION).findOne(query, (error, result) => {
+  try {
 
-      if(error) throw error;
+    console.log(filter);
 
-      console.log(query);
+    let password = encrypt.encrypt(filter.password, filter.registration);
+    filter.password = password;
 
-      if(query != undefined) {
+    console.log('querying slcm data in %s collection', COLLECTION);
 
-        console.log('Query for SLCM data successfull');
+    const database = client.db('themitpost');
+    let collection = database.collection(COLLECTION);
 
-        database.close();
+    console.log(filter);
+    let result = await collection.findOne(filter);
 
-        return result;
+    if(result) {
 
-      } else {
+      console.log('found!');
+      result = encrypt.decrypt(result.data, filter.password);
 
-        console.log("Query for SLCM data unsuccessful..");
+      return JSON.parse(result.toString());
 
-        database.close();
+    } else {
+      console.log('No SLCM data retrieved');
+      return null;
 
-        return undefined;
+    }
 
-      }
-    });
+  } catch(error) {
 
-  });
+    console.log(error);
+    return undefined;
 
-};
+  } finally {
+    client.close();
+  }
 
+}

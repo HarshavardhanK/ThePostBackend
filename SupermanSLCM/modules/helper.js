@@ -67,7 +67,7 @@ class Helper{
       if(error.message == "Invalid Credentials."){
 
           utilities.displayError("Invalid Credentials",this.response);
-          return;
+          return 'invalid credentials';
       }
       var date = new Date();
       console.log("Logged in at " + date);
@@ -94,16 +94,16 @@ class Helper{
       Helper.done = true;
 
       if(this.SHOULD_GET_MARKS){
-        this.getDataMarks(this.semToFetch);
-      }
-      else if(this.SHOULD_GET_ATT){
-        this.getDataAttendance(this.semToFetch);
-      }
-      else if(this.GET_GRADES){
-        this.getGradeSheet(this.semToFetch);
-      }
-      else{
-        this.getData();
+        return this.getDataMarks(this.semToFetch);
+
+      } else if(this.SHOULD_GET_ATT){
+        return this.getDataAttendance(this.semToFetch);
+
+      } else if(this.GET_GRADES){
+        return this.getGradeSheet(this.semToFetch);
+
+      } else { 
+        return this.getData();
       }
     }
   }
@@ -176,7 +176,8 @@ class Helper{
 
     console.log("TIME TAKEN: " + (new Date().getTime() - this.startTime)/1000);
 
-    this.response.send(reqJson);
+    //this.response.send(reqJson);
+    return reqJson;
   }
 
   async getDataAttendance(semToFetch){
@@ -248,7 +249,8 @@ class Helper{
     this.browserClose();
     console.log("TIME TAKEN: " + (new Date().getTime() - this.startTime)/1000);
 
-    this.response.send(reqJson);
+    //this.response.send(reqJson);
+    return reqJson;
   }
 
   async getGradeSheet(semToFetch){
@@ -336,10 +338,11 @@ class Helper{
 
     console.log("TIME TAKEN: " + (new Date().getTime() - this.startTime)/1000)
 
-    this.response.send(finalGradeJson);
+    //this.response.send(finalGradeJson);
+    return finalGradeJson;
   }
 
-  async getData(){
+  async getData() {
 
     while(!Helper.done) {deasync.sleep(1000);}
 
@@ -434,6 +437,7 @@ class Helper{
     var finallyDet = {
       'message':'OK',
       'status' : true,
+      'updatedAt': this.startTime,
       'cgpa': Helper.cgpa,
       'semester': Helper.finalDet.semester,
       'section': Helper.finalDet.section,
@@ -443,7 +447,9 @@ class Helper{
       'teacherGuardianDetails': Helper.finalDet.teacherGuardianDetails,
       'academicDetails': finalDet
     }
-    this.response.send(finallyDet);
+    //this.response.send(finallyDet);
+
+    return finallyDet;
   }
 
   browserClose(){

@@ -52,5 +52,23 @@ module.exports.change_attendance = (complete_object, which=null) => {
 
     return new_complete_object;
 
-
 }
+
+//TIME UTITLITIES
+
+module.exports.seconds = function(seconds) {
+    return seconds * 1000;
+  };
+  
+module.exports.minutes = function(minutes) {
+    return 1000 * 60 * minutes;
+  };
+  
+module.exports.hours = function(hours) {
+    return 1000 * 60 * 60 * hours;
+  };
+  
+module.exports.days = function(days) {
+    return 1000 * 60 * 60 * 24 * days;
+  };
+  

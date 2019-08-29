@@ -12,8 +12,6 @@ const yargs = require('yargs');
 
 
 const database = require('./Articles/database.js');
-const slcm_database = require('./SLCM/database.js');
-const scraper = require('./SLCM/scraper.js');
 const articleWebView = require('./Articles/ArticleWebview/index');
 const newSlcm = require('./SupermanSLCM/index');
 

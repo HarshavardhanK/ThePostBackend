@@ -1,5 +1,6 @@
+const fs = require('fs');
 
-
+//CODE FOR GENERATING NEW SLCM DATA
 module.exports.get_attendance_for = (complete_object, index=null) => {
 
     if(complete_object) {
@@ -27,14 +28,15 @@ module.exports.get_attendance_for = (complete_object, index=null) => {
 
 module.exports.get_random_attendance = (subjectName) => {
 
-    let total = Math.random() * (40 - 5) + 5;
-    let absent = Math.random() * (20 - 2) + 2;
+    let total = Math.round(Math.random() * (40 - 5)) + 5;
+    let absent = Math.round(Math.random() * (total - 2)) + 2;
     let present = total - absent;
 
     return {'subjectName': subjectName, 
-            'totalClasses': Math.round(total).toString(), 
-            'classesAttended': Math.round(present).toString(), 
-            'classesAbsent': Math.round(absent).toString()};
+            'totalClasses': total.toString(), 
+            'classesAttended': present.toString(), 
+            'classesAbsent': absent.toString()
+            };
 }
 
 module.exports.change_attendance = (complete_object, which=null) => {
@@ -53,6 +55,54 @@ module.exports.change_attendance = (complete_object, which=null) => {
     return new_complete_object;
 
 }
+
+const check_attendance_component = (new_component, current_component) => {
+
+    //Add code for Firebase notifications
+
+    if(new_component != null && current_component != null) {
+
+        if(new_component.subjectName !== current_component.subjectName) {
+            return true;
+        }
+
+        // Check only total classes since any change in attendance the total classes value HAS to increase 
+        // open for debate since attendance changes can happen w/o total classes
+
+        if(new_component.totalClasses !== current_component.totalClasses) {
+            console.log('Old totalClasses value %s | New totalClasses value %s', current_component.totalClasses, new_component.totalClasses);
+            return true
+        }
+
+    } 
+
+    return false;
+}
+
+//CODE FOR CHECKING TWO SLCM DATA OBJECTS FOR DIFFERENCE    
+
+module.exports.check = (current_object, new_object) => {
+
+    let change = false;
+
+    /*let current_object = JSON.parse(fs.readFileSync('data.json', 'utf-8'))
+    let new_object = JSON.parse(fs.readFileSync('Generated-Data/gen-data.json', 'utf-8'))*/
+
+    let current_attn = this.get_attendance_for(current_object);
+    let new_attn = this.get_attendance_for(new_object);
+
+    for(var i = 0; i < current_attn.length; i++) {
+
+        if(check_attendance_component(new_attn[i], current_attn[i])) {
+            change = true;
+            console.log('Difference in %s', old_attn[i].subjectName);
+        }
+    }
+    
+    return change;
+
+}
+
 
 //TIME UTITLITIES
 

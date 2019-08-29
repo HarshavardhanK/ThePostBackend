@@ -25,24 +25,39 @@ const utilities = require('./utilities');
 
 const url = "mongodb://localhost:27017/";
 
-
-
 const fetch = (registration, password) => {
 
-  return axios.post('http://localhost:3000/values/update', {regNumber: registration, pass: password}).then(response => {
+  axios.post('http://localhost:3000/values/update', {regNumber: registration, pass: password}).then(response => {
 
-    return response;
+    //let new_object = JSON.parse(response);
+    console.log(response);
 
+    database.get_slcm_data({registration: registration, password: password}, 'ios').then(current_object => {
+
+      console.log(current_object);
+
+      let check = utilities.check(current_object, response)
+
+      if(check) {
+        console.log("Different values");
+      }
+
+    }).catch(error => {
+      console.log(error);
+      
+    })
+
+  
   }).catch(error => {
 
     console.log(error);
-    return null;
+   
 
   });
 
 }
 
-test_axios('170905022', 'FHJ-CSd-5rc-f5A');
+fetch('170905022', 'FHJ-CSd-5rc-f5A');
 
 
 /*while(true) {

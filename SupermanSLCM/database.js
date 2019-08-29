@@ -95,3 +95,22 @@ module.exports.get_slcm_data = async (filter, COLLECTION) => {
   }
 
 }
+
+const test_cursor = async (COLLECTION) => {
+
+  const client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => console.log(error));
+
+  if(!client) {
+    return null;
+  }
+
+  let collection = client.db('themitpost').collection(COLLECTION);
+
+  collection.find().forEach(function(document) {
+    console.log(document.registration, document.password);
+  });
+
+  client.close();
+
+}
+test_cursor('ios');

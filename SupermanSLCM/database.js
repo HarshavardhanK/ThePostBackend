@@ -96,6 +96,21 @@ module.exports.get_slcm_data = async (filter, COLLECTION) => {
 
 }
 
+module.exports.insert_response = async (filter, response) => {
+
+  let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => console.log(error));
+
+  if(!client) {
+    console.log('No MongoClient found');
+    return null;
+  }
+
+  let password = encrypt.encrypt(filter.password, filter.registration);
+  filter.password = password;
+
+  await client.db('themitpost').collection('response').replaceOne(filter, response);
+}
+
 const test_cursor = async (COLLECTION) => {
 
   const client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => console.log(error));
@@ -113,4 +128,4 @@ const test_cursor = async (COLLECTION) => {
   client.close();
 
 }
-test_cursor('ios');
+//test_cursor('ios');

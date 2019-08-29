@@ -129,6 +129,8 @@ module.exports.postValues = (app) => {
 
     console.log(COLLECTIONS.IOS_COLLECTION);
 
+    database.insert_response({registration: reg, password: pass}, res);
+
     database.get_slcm_data({registration: reg, password: pass}, COLLECTIONS.IOS_COLLECTION).then(response => {
 
       if(!response) {
@@ -160,6 +162,37 @@ module.exports.postValues = (app) => {
   });
 
 };
+
+module.exports.postSLCMValuesForUpdate = (app) => {
+
+  return app.post('/values/update', function(request, response) {
+
+    const registration = request.body.regNumber;
+    const password = request.body.pass;
+
+    const SHOULD_GET_MARKS = false;
+    const SHOULD_GET_ATT = false;
+    const GET_GRADES = false;
+
+    return scrape(registration,password,response, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, '').then((value) => {
+
+      console.log("success");
+      console.log(value);
+
+      response.send(value);
+
+      return value;
+
+    }).catch((error) => {
+
+      console.log(error);
+      return null;
+
+    });
+
+  });
+
+}
 
 module.exports.postMarks = (app) => {
 
@@ -197,6 +230,7 @@ module.exports.postMarks = (app) => {
   });
 
 };
+
 
 module.exports.postAttendance = (app) => {
 

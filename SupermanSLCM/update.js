@@ -16,14 +16,15 @@ R E P E A T
 
 */
 
+const crypto = require('crypto');
+const axios = require('axios');
+const deasync = require('deasync');
+const MongoClient = require('mongodb');
+
 
 const scraper = require('./modules/helper');
 const database = require('./database');
-
-const crypto = require('crypto');
-const deasync = require('deasync');
-
-const MongoClient = require('mongodb');
+const utilities = require('./utilities');
 
 
 // MARK:- SPECIFIC UTILITIES FOR TIME CONVERSIONS
@@ -47,11 +48,23 @@ const days = function(days) {
 
 const url = "mongodb://localhost:27017/";
 
+const test_axios = (registration, password) => {
 
-while(true) {
+  axios.post('http://localhost:3000/values/update', {regNumber: registration, pass: password}).then(response => {
+
+  console.log(response);
+
+  });
+
+}
+
+test_axios('170905022', 'FHJ-CSd-5rc-f5A');
+
+
+/*while(true) {
 
   update_all_users();
 
   deasync.sleep(hours(1));
 
-}
+}*/

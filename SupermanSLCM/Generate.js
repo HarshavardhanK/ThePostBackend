@@ -1,6 +1,8 @@
-const fs = require('fs');
 
+
+const fs = require('fs');
 const utilities = require('./utilities');
+const database = require('./database');
 
 const get_data = () => {
 
@@ -17,11 +19,13 @@ const generate = () => {
 
     let model_data = get_data();
 
-    let generate_data = utilities.change_attendance(model_data);
+    let generate_data = JSON.stringify(utilities.change_attendance(model_data));
 
     if(generate_data) {
-        fs.writeFileSync('./Generated-Data/gen-data.json', JSON.stringify(generate_data));
+        fs.writeFileSync('./Generated-Data/gen-data.json', generate_data);
     }
+
+    database.insert_slcm_data({registration: '170905022', password: 'password'}, 'slcmTests');
     
 }
 

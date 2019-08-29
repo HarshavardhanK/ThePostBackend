@@ -126,6 +126,8 @@ newSlcm.postGrades(app);
 newSlcm.getSLCMAttendance(app);
 newSlcm.postAttendance(app);
 
+newSlcm.postSLCMValuesForUpdate(app);
+
 //////////////////////////////////// EVENTS PORTAL ////////////////////////////////////////
 
 const path = require('path');
@@ -248,7 +250,7 @@ const main = () => {
     } else {
   
       app.listen(3000);
-      console.log('Running http server');
+      console.log('Running http server on port 3000');
   
     }
 

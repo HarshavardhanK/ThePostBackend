@@ -28,32 +28,53 @@ const url = "mongodb://localhost:27017/";
 const fetch = (registration, password) => {
 
   axios.post('http://localhost:3000/values/update', {regNumber: registration, pass: password}).then(response => {
+
+  let get_query = {registration: registration, password: password}
    
-    database.get_slcm_data({registration: registration, password: password}, 'ios').then(current_object => {
+    database.get_slcm_data(get_query, 'ios').then(current_object => {
 
-      console.log(current_object);
+      if(!current_object) {
+        console.log('No SLCM data for user found');
 
-      let check = utilities.check(current_object, response.data)
+        let insert_query = {registration: registration, password: password}
+        database.insert_slcm_data(insert_query, response.data, 'ios');
+        
+      } else {
 
-      if(check.change) {
-        console.log("Different values");
+        console.log('Found existing object in database');
 
-        let newValue = check.value;
-        console.log('New attendance object returned');
-        console.log(newValue);
+        //console.log(current_object);
+
+        let check = utilities.check(current_object, response.data)
+
+        if(check.change) {
+          
+          console.log("Different values in database and recently scraped");
+
+          let newValue = check.value;
+          console.log('New attendance object returned');
+          //console.log(newValue);
+
+          let new_object = current_object;
+          new_object.academicDetails[0].attendance = newValue;
+
+          let insert_query = {registration: registration, password: password}
+
+          database.insert_slcm_data(insert_query, new_object, 'ios');
+
+        }
+
       }
 
     }).catch(error => {
       console.log(error);
       
-    })
+    });
 
-  
   }).catch(error => {
 
     console.log(error);
    
-
   });
 
 }

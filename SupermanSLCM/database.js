@@ -8,6 +8,8 @@ const encrypt = require('./encryption');
 
 module.exports.insert_slcm_data = async (filter, value, COLLECTION='gen') => {
 
+  console.log("Calling MongoDB insert method")
+
   let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
 
   if(!client) {
@@ -16,9 +18,11 @@ module.exports.insert_slcm_data = async (filter, value, COLLECTION='gen') => {
 
   try {
 
-    console.log('cred before rncrypt insert');
+    console.log('Inserting data into %s collection', COLLECTION);
 
-    console.log(filter);
+    console.log('cred before encrypt insert');
+
+    //console.log(filter);
 
     let password = encrypt.encrypt(filter.password, filter.registration);
     filter.password = password;
@@ -37,7 +41,7 @@ module.exports.insert_slcm_data = async (filter, value, COLLECTION='gen') => {
 
     console.log(filter);
 
-    let result = await collection.insertOne(encrypted_value);
+    let result = await collection.updateOne(filter, {$set: {data: encrypted_value.data}}, {upsert: true});
 
   } catch(error) {
     console.log(error);
@@ -59,7 +63,7 @@ module.exports.get_slcm_data = async (filter, COLLECTION) => {
 
   try {
 
-    console.log(filter);
+   // console.log(filter);
 
     let password = encrypt.encrypt(filter.password, filter.registration);
     filter.password = password;

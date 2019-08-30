@@ -140,9 +140,15 @@ module.exports.postValues = (app) => {
           console.log("success");
           console.log(value);
 
-          res.send(value);
+          if(value !== 'invalid credentials') {
 
-          database.insert_slcm_data({registration: reg, password: pass}, value, COLLECTIONS.IOS_COLLECTION);
+            res.send(value);
+
+            database.insert_slcm_data({registration: reg, password: pass}, value, COLLECTIONS.IOS_COLLECTION);
+
+          } else {
+            response.send({message: 'BAD'});
+          }
 
         }).catch((error) => {
           console.log(error);
@@ -156,7 +162,7 @@ module.exports.postValues = (app) => {
     }).catch(error => {
 
       console.log(error);
-      res.send({status: 'BAD'});
+      response.send({message: 'BAD'});
     });
 
   });
@@ -165,7 +171,7 @@ module.exports.postValues = (app) => {
 
 module.exports.postSLCMValuesForUpdate = (app) => {
 
-  return app.post('/values/update', function(request, response) {
+  app.post('/values/update', function(request, response) {
 
     const registration = request.body.regNumber;
     const password = request.body.pass;
@@ -174,15 +180,19 @@ module.exports.postSLCMValuesForUpdate = (app) => {
     const SHOULD_GET_ATT = false;
     const GET_GRADES = false;
 
-    return scrape(registration,password,response, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, '').then((value) => {
+    scrape(registration,password,response, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, '').then((value) => {
 
-      console.log("success");
-      console.log(value);
+      if(value !== 'invalid credentials') {
 
-      response.send(value);
+        console.log("success");
+        console.log(value);
 
-      return value;
+        response.send(value);
 
+      } else {
+        response.send({message: 'BAD'});
+      }
+  
     }).catch((error) => {
 
       console.log(error);

@@ -1,9 +1,12 @@
 
+
+const deasync = require('deasync');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;
 const url = "mongodb://localhost:27017/themitpost";
 
 const encrypt = require('./encryption');
+const utilities = require('./utilities');
 
 
 module.exports.insert_slcm_data = async (filter, value, COLLECTION='gen') => {
@@ -130,6 +133,54 @@ const test_cursor = async (COLLECTION) => {
   });
 
   client.close();
+
+}
+
+module.exports.update_for_each = async (update) => {
+
+  const client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => console.log(error));
+
+  if(!client) {
+    console.log("Error creating client");
+    
+  } else {
+
+    try {
+
+      let collection = client.db('themitpost').collection('ios');
+
+      collection.find().forEach(function(document) {
+
+        if(document) {
+
+          if(document.registration && document.password) {
+
+            console.log(document.registration, document.password);
+
+            let password = encrypt.decrypt(document.password, document.registration);
+
+            console.log("pass is %s", password);
+
+            update(document.registration, document.password);
+
+          }
+      
+        } else {
+
+        }
+
+      });
+
+    } catch(error) {
+
+      console.log(error);
+      return false;
+
+    } finally {
+      client.close();
+    }
+
+  }
 
 }
 //test_cursor('ios');

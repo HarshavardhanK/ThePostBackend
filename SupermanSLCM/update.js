@@ -17,75 +17,83 @@ R E P E A T
 */
 
 const axios = require('axios');
-const deasync = require('deasync');
 const MongoClient = require('mongodb');
+const deasync = require('deasync');
 
 const database = require('./database');
 const utilities = require('./utilities');
 
 const url = "mongodb://localhost:27017/";
 
-const fetch = (registration, password) => {
+const fetch = async (registration, password) => {
 
-  axios.post('http://localhost:3000/values/update', {regNumber: registration, pass: password}).then(response => {
+  let response = await axios.post('http://localhost:3000/values/update', {regNumber: registration, pass: password});
 
-  let get_query = {registration: registration, password: password}
+    if(response.message === 'BAD') {
+      console.log('invalid')
+      return false;``
+
+    }
+
+    let get_query = {registration: registration, password: password}
+
+    console.log(get_query);
    
-    database.get_slcm_data(get_query, 'ios').then(current_object => {
+    let current_object = await database.get_slcm_data(get_query, 'ios')
 
-      if(!current_object) {
-        console.log('No SLCM data for user found');
+    if(!current_object) {
+      console.log('No SLCM data for user found');
 
-        let insert_query = {registration: registration, password: password}
-        database.insert_slcm_data(insert_query, response.data, 'ios');
+      let insert_query = {registration: registration, password: password}
+      database.insert_slcm_data(insert_query, response.data, 'ios');
+
+      return true
         
-      } else {
+    } else {
 
-        console.log('Found existing object in database');
+      console.log('Found existing object in database');
 
         //console.log(current_object);
 
-        let check = utilities.check(current_object, response.data)
+      let check = utilities.check(current_object, response.data)
 
-        if(check.change) {
-          
-          console.log("Different values in database and recently scraped");
+      if(check.change) {
 
-          let newValue = check.value;
-          console.log('New attendance object returned');
+        console.log("Different values in database and recently scraped");
+
+        let newValue = check.value;
+        console.log('New attendance object returned');
           //console.log(newValue);
 
-          let new_object = current_object;
-          new_object.academicDetails[0].attendance = newValue;
+        let new_object = current_object;
+        new_object.academicDetails[0].attendance = newValue;
 
-          let insert_query = {registration: registration, password: password}
+        let insert_query = {registration: registration, password: password}
 
-          database.insert_slcm_data(insert_query, new_object, 'ios');
+        database.insert_slcm_data(insert_query, new_object, 'ios');
 
-        }
+        return true;
 
       }
 
-    }).catch(error => {
-      console.log(error);
-      
-    });
-
-  }).catch(error => {
-
-    console.log(error);
-   
-  });
+    }
 
 }
 
-fetch('170905022', 'FHJ-CSd-5rc-f5A');
+const refresh = async () => {
 
+  await fetch('170905022', 'FHJ-CSd-5rc-f5A')
+  await fetch('170905054', 'tropicofleo110.')
 
-/*while(true) {
+}
 
-  update_all_users();
+refresh();
 
-  deasync.sleep(hours(1));
+const update_all = async (sleep_interval=30) => {
 
-}*/
+  await database.update_for_each(fetch);
+
+}
+
+//update_all(10);
+

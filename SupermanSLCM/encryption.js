@@ -2,8 +2,6 @@ const crypto = require('crypto');
 
 const database = require("./database");
 
-
-
 module.exports.encrypt = (data, password) => {
 
     var key = crypto.createCipher('aes-128-cbc', password);
@@ -13,20 +11,33 @@ module.exports.encrypt = (data, password) => {
 
     return string;
 
-  }
+}
 
 module.exports.decrypt = (data, password) => {
 
-    var myKey = crypto.createDecipher('aes-128-cbc', password);
-    return myKey.update(data, 'binary', 'binary') + myKey.final('binary');
+  var myKey = crypto.createDecipher('aes-128-cbc', password);
+  return myKey.update(data, 'binary', 'binary') + myKey.final('binary');
 
-  }
+}
 
-  const test = () => {
+const test = () => {
 
-    database.insert_slcm_data({_id: '17094955', password: 'hello'}, {"hein?": 'what?'}, 'test');
-    database.get_slcm_data({_id: '17094955', password: 'hello'}, 'test');
+  /*database.insert_slcm_data({_id: '17094955', password: 'hello'}, {"hein?": 'what?'}, 'test');
+  database.get_slcm_data({_id: '17094955', password: 'hello'}, 'test');*/
 
-  }
+  let pass = "abc";
+  let text = 'hello';
+
+  let encr = this.encrypt(text, pass);
+
+  console.log(encr);
+
+  let decr = this.decrypt(encr, pass);
+
+  console.log(decr);
+
+}
+
+//test();
 
   

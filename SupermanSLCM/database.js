@@ -118,24 +118,6 @@ module.exports.insert_response = async (filter, response) => {
   await client.db('themitpost').collection('response').replaceOne(filter, response);
 }
 
-const test_cursor = async (COLLECTION) => {
-
-  const client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => console.log(error));
-
-  if(!client) {
-    return null;
-  }
-
-  let collection = client.db('themitpost').collection(COLLECTION);
-
-  collection.find().forEach(function(document) {
-    console.log(document.registration, document.password);
-  });
-
-  client.close();
-
-}
-
 module.exports.update_for_each = async (update) => {
 
   const client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => console.log(error));
@@ -149,7 +131,7 @@ module.exports.update_for_each = async (update) => {
 
       let collection = client.db('themitpost').collection('ios');
 
-      collection.find().forEach(function(document) {
+      collection.find().forEach(async function (document) {
 
         if(document) {
 
@@ -161,7 +143,7 @@ module.exports.update_for_each = async (update) => {
 
             console.log("pass is %s", password);
 
-            update(document.registration, document.password);
+            await update(document.registration, document.password);
 
           }
       

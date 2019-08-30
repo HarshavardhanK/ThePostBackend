@@ -53,8 +53,6 @@ const fetch = async (registration, password) => {
 
       console.log('Found existing object in database');
 
-        //console.log(current_object);
-
       let check = utilities.check(current_object, response.data)
 
       if(check.change) {
@@ -63,7 +61,6 @@ const fetch = async (registration, password) => {
 
         let newValue = check.value;
         console.log('New attendance object returned');
-          //console.log(newValue);
 
         let new_object = current_object;
         new_object.academicDetails[0].attendance = newValue;
@@ -89,9 +86,9 @@ const refresh = async () => {
 
 refresh();
 
-const update_all = async (sleep_interval=30) => {
+const update_all = (sleep_interval=30) => {
 
-  await database.update_for_each(fetch);
+  database.update_for_each(fetch);
 
 }
 

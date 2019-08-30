@@ -94,12 +94,15 @@ module.exports.check = (current_object, new_object) => {
     for(var i = 0; i < current_attn.length; i++) {
 
         if(check_attendance_component(new_attn[i], current_attn[i])) {
+
             change = true;
-            console.log('Difference in %s', old_attn[i].subjectName);
+            console.log('Difference in %s', current_attn[i].subjectName);
+
+            new_attn[i].updatedAt = new Date().getTime();
         }
     }
     
-    return change;
+    return {change: change, value: new_attn};
 
 }
 

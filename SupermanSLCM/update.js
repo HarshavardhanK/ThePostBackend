@@ -28,18 +28,19 @@ const url = "mongodb://localhost:27017/";
 const fetch = (registration, password) => {
 
   axios.post('http://localhost:3000/values/update', {regNumber: registration, pass: password}).then(response => {
-
-    //let new_object = JSON.parse(response);
-    console.log(response);
-
+   
     database.get_slcm_data({registration: registration, password: password}, 'ios').then(current_object => {
 
       console.log(current_object);
 
-      let check = utilities.check(current_object, response)
+      let check = utilities.check(current_object, response.data)
 
-      if(check) {
+      if(check.change) {
         console.log("Different values");
+
+        let newValue = check.value;
+        console.log('New attendance object returned');
+        console.log(newValue);
       }
 
     }).catch(error => {

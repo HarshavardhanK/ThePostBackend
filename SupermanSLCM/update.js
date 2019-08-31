@@ -114,7 +114,13 @@ const update_all = async (test, sleep_interval=30) => {
   for(var i = 0; i < results.length; i++) {
     let password = encrypt.decrypt(results[i].password, results[i].registration)
 
-    await fetch(results[i].registration, password, test);
+    if(await fetch(results[i].registration, password, test)) {
+      console.log('Successfully fetched')
+
+    } else {
+      console.log('Error in fetching SLCM data')
+    }
+
   }
 
   console.log('Done');
@@ -172,7 +178,11 @@ const main = () => {
     console.log('command not recognized')
     console.log('update.js running update_all: method. Press Ctrl-C to stop');
 
-    update_all(test_);
+    while(true) {
+      update_all(test_);
+    }
+
+    
   }
   
 

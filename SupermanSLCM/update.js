@@ -143,8 +143,9 @@ const main = () => {
 
   } else {
     console.log('command not recognized')
-
     console.log('update.js running update_all: method. Press Ctrl-C to stop');
+
+    update_all();
   }
   
 

@@ -179,7 +179,7 @@ const main = () => {
     console.log('update.js running update_all: method. Press Ctrl-C to stop');
 
     while(true) {
-      update_all(test_);
+      await update_all(test_);
     }
 
     

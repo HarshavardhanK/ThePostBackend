@@ -20,6 +20,7 @@ R E P E A T
 const axios = require('axios');
 const MongoClient = require('mongodb');
 const deasync = require('deasync');
+const yargs = require('yargs')
 
 const database = require('./database');
 const utilities = require('./utilities');
@@ -110,7 +111,7 @@ const update_all = async (sleep_interval=30) => {
 
 }
 
-update_all();
+//update_all();
 
 const update_all_the_time = async () => {
 
@@ -120,6 +121,26 @@ const update_all_the_time = async () => {
   }
 
 }
+
+const main = () => {
+
+  let params = yargs.argv
+  
+  let refresh_ = params.refresh
+  let update_all_ = params.update_all;
+
+  if(refresh_ === 'y') {
+    refresh()
+  }
+
+  if(update_all_ === 'y') {
+    update_all();
+  }
+
+
+}
+
+main();
 
 //update_all_the_time();
 

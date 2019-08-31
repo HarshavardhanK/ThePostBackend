@@ -28,11 +28,21 @@ const encrypt = require('./encryption')
 
 const url = "mongodb://localhost:27017/";
 
-const fetch = async (registration, password) => {
+const fetch = async (registration, password, test) => {
+
+  let URL = 'https://localhost:8000/values/update';
+
+  if(test) {
+    URL = 'http://localhost:3000/values/update'
+    console.log('Sending POST to http')
+
+  } else {
+    console.log("Sending POST to https")
+  }
 
   try {
 
-    let response = await axios.post('http://localhost:3000/values/update', {regNumber: registration, pass: password});
+    let response = await axios.post(URL, {regNumber: registration, pass: password});
 
     if(response.message === 'BAD') {
       console.log('invalid')
@@ -78,7 +88,7 @@ const fetch = async (registration, password) => {
 
 
   } catch(error) {
-    console.log(error);
+    //console.log(error);
     return false;
 
   }
@@ -88,23 +98,23 @@ const fetch = async (registration, password) => {
 }
 
 
-const refresh = async () => {
+const refresh = async (test) => {
 
-  await fetch('170905022', 'FHJ-CSd-5rc-f5A')
-  await fetch('170905054', 'tropicofleo110.')
+  await fetch('170905022', 'FHJ-CSd-5rc-f5A', test)
+  await fetch('170905054', 'tropicofleo110.', test)
 
 }
 
 //refresh();
 
-const update_all = async (sleep_interval=30) => {
+const update_all = async (test, sleep_interval=30) => {
 
   let results = await database.get_all_credentials();
 
   for(var i = 0; i < results.length; i++) {
     let password = encrypt.decrypt(results[i].password, results[i].registration)
 
-    await fetch(results[i].registration, password);
+    await fetch(results[i].registration, password, test);
   }
 
   console.log('Done');
@@ -126,11 +136,28 @@ const main = () => {
 
   let params = yargs.argv
   
+  let test_ = false
+
+  if(params.test) {
+
+    console.log('test command')
+
+    if(params.test === 'y') {
+      test_ = true
+      console.log('Running in test mode')
+    }
+
+  }
+
+  if(test_) {
+    console.log('test is true');
+  }
+  
   if(params.refresh) {
     console.log('refresh')
 
     if(params.refresh === 'y') {
-      refresh()
+      refresh(test_)
     }
 
   } else if(params.update_all) {
@@ -138,14 +165,14 @@ const main = () => {
     console.log('update_all')
 
     if(params.update_all === 'y') {
-      update_all();
+      update_all(test_);
     }
 
   } else {
     console.log('command not recognized')
     console.log('update.js running update_all: method. Press Ctrl-C to stop');
 
-    update_all();
+    update_all(test_);
   }
   
 

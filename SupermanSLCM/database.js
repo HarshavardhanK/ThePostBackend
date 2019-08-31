@@ -131,7 +131,7 @@ module.exports.update_for_each = async (update) => {
 
       let collection = client.db('themitpost').collection('ios');
 
-      collection.find().forEach(async function (document) {
+      return await collection.find().forEach(async function (document) {
 
         if(document) {
 
@@ -143,11 +143,14 @@ module.exports.update_for_each = async (update) => {
 
             console.log("pass is %s", password);
 
-            await update(document.registration, document.password);
+            await update(document.registration, password);
+
+            return true;
 
           }
       
         } else {
+          return false;
 
         }
 
@@ -159,6 +162,7 @@ module.exports.update_for_each = async (update) => {
       return false;
 
     } finally {
+      console.log('Closing clietnt')
       client.close();
     }
 

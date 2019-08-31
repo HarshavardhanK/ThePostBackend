@@ -16,6 +16,7 @@ R E P E A T
 
 */
 
+
 const axios = require('axios');
 const MongoClient = require('mongodb');
 const deasync = require('deasync');
@@ -37,7 +38,7 @@ const fetch = async (registration, password) => {
 
     let get_query = {registration: registration, password: password}
 
-    console.log(get_query);
+    console.log("Query while fetching is", get_query);
    
     let current_object = await database.get_slcm_data(get_query, 'ios')
 
@@ -45,7 +46,7 @@ const fetch = async (registration, password) => {
       console.log('No SLCM data for user found');
 
       let insert_query = {registration: registration, password: password}
-      database.insert_slcm_data(insert_query, response.data, 'ios');
+      await database.insert_slcm_data(insert_query, response.data, 'ios');
 
       return true
         
@@ -67,7 +68,7 @@ const fetch = async (registration, password) => {
 
         let insert_query = {registration: registration, password: password}
 
-        database.insert_slcm_data(insert_query, new_object, 'ios');
+        await database.insert_slcm_data(insert_query, new_object, 'ios');
 
         return true;
 
@@ -77,6 +78,7 @@ const fetch = async (registration, password) => {
 
 }
 
+
 const refresh = async () => {
 
   await fetch('170905022', 'FHJ-CSd-5rc-f5A')
@@ -84,13 +86,15 @@ const refresh = async () => {
 
 }
 
-refresh();
+//refresh();
 
-const update_all = (sleep_interval=30) => {
+const update_all = async (sleep_interval=30) => {
 
-  database.update_for_each(fetch);
+  if(await database.update_for_each(fetch)) {
+    console.log('Successfully scraped data for all users');
+  }
 
 }
 
-//update_all(10);
+update_all(10);
 

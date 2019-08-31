@@ -30,7 +30,7 @@ const url = "mongodb://localhost:27017/";
 
 const fetch = async (registration, password, test) => {
 
-  let URL = 'https://localhost:8000/values/update';
+  let URL = 'https://api.themitpost.com/values/update';
 
   if(test) {
     URL = 'http://localhost:3000/values/update'

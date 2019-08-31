@@ -118,6 +118,26 @@ module.exports.insert_response = async (filter, response) => {
   await client.db('themitpost').collection('response').replaceOne(filter, response);
 }
 
+const update_for_each_cursor_function = async (document, update) => {
+
+  if(document) {
+
+    if(document.registration) {
+      //enough to check if its a valid SLCM document
+
+      let password = encrypt.decrypt(document.password, document.registration);
+
+      if(!await update(document.registration, password)){
+        console.log("error in updating document");
+        return false;
+      }
+
+      return truei
+
+    }
+  }
+}
+
 module.exports.update_for_each = async (update) => {
 
   const client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => console.log(error));
@@ -131,30 +151,7 @@ module.exports.update_for_each = async (update) => {
 
       let collection = client.db('themitpost').collection('ios');
 
-      return await collection.find().forEach(async function (document) {
-
-        if(document) {
-
-          if(document.registration && document.password) {
-
-            console.log(document.registration, document.password);
-
-            let password = encrypt.decrypt(document.password, document.registration);
-
-            console.log("pass is %s", password);
-
-            await update(document.registration, password);
-
-            return true;
-
-          }
-      
-        } else {
-          return false;
-
-        }
-
-      });
+      return await collection.find().forEach(await update_for_each_cursor_function(document, update));
 
     } catch(error) {
 
@@ -168,5 +165,41 @@ module.exports.update_for_each = async (update) => {
 
   }
 
+}
+
+//fetches documents sequentially from the collection
+
+module.exports.next_document = async () => {
+
+  let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => console.log(error));
+
+  if(!client) {
+    return false;
+  }
+
+  let collection = client.db('themitpost').collection('ios');
+
+  try {
+
+    return await collection.find().next(function (document) {
+
+      console.log('fetching the next document');
+
+      if(document) {
+        let result = {registration: document.registration, password: encrypt.decrypt(document.password, document.registration)}
+        console.log(result)
+        return result;
+  
+      }
+  
+      return false;
+  
+    });
+
+  } catch(error) {
+    return false;
+  }
+
+  
 }
 //test_cursor('ios');

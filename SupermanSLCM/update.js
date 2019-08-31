@@ -28,7 +28,9 @@ const url = "mongodb://localhost:27017/";
 
 const fetch = async (registration, password) => {
 
-  let response = await axios.post('http://localhost:3000/values/update', {regNumber: registration, pass: password});
+  try {
+
+    let response = await axios.post('http://localhost:3000/values/update', {regNumber: registration, pass: password});
 
     if(response.message === 'BAD') {
       console.log('invalid')
@@ -47,8 +49,6 @@ const fetch = async (registration, password) => {
 
       let insert_query = {registration: registration, password: password}
       await database.insert_slcm_data(insert_query, response.data, 'ios');
-
-      return true
         
     } else {
 
@@ -70,11 +70,18 @@ const fetch = async (registration, password) => {
 
         await database.insert_slcm_data(insert_query, new_object, 'ios');
 
-        return true;
-
       }
 
     }
+
+
+  } catch(error) {
+    console.log(error);
+    return false;
+
+  }
+
+  return true;
 
 }
 
@@ -94,7 +101,22 @@ const update_all = async (sleep_interval=30) => {
     console.log('Successfully scraped data for all users');
   }
 
+  console.log('Done scraping for all users')
+
 }
 
-update_all(10);
+update_all();
+
+const update_all_the_time = async () => {
+
+  while(true) {
+    //console.log('hello')
+    await update_all(10);
+  }
+
+}
+
+//update_all_the_time();
+
+
 

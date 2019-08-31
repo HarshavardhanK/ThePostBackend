@@ -125,17 +125,33 @@ const update_all_the_time = async () => {
 const main = () => {
 
   let params = yargs.argv
+  let command = params._[0];
+
+  if(command === '-b') {
+    console.log('-b');
+    update_all()
+    return;
+  }
+
+  if(params.refresh) {
+    console.log('refresh')
+
+    if(params.refresh === 'y') {
+      refresh()
+    }
+
+  } else if(params.update_all) {
+
+    console.log('update_all')
+    
+    if(params.update_all === 'y') {
+      update_all();
+    }
+
+  } else {
+    console.log('command not recognized')
+  }
   
-  let refresh_ = params.refresh
-  let update_all_ = params.update_all;
-
-  if(refresh_ === 'y') {
-    refresh()
-  }
-
-  if(update_all_ === 'y') {
-    update_all();
-  }
 
 
 }

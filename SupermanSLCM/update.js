@@ -138,7 +138,7 @@ const update_all_the_time = async () => {
 
 }
 
-const main = () => {
+const main = async () => {
 
   let params = yargs.argv
   

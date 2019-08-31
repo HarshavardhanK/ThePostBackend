@@ -138,68 +138,33 @@ const update_for_each_cursor_function = async (document, update) => {
   }
 }
 
-module.exports.update_for_each = async (update) => {
+module.exports.get_all_credentials = async () => {
 
-  const client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => console.log(error));
+  let client = await MongoClient.connect(url, {useNewUrlParser: true})
 
   if(!client) {
-    console.log("Error creating client");
-    
-  } else {
-
-    try {
-
-      let collection = client.db('themitpost').collection('ios');
-
-      return await collection.find().forEach(await update_for_each_cursor_function(document, update));
-
-    } catch(error) {
-
-      console.log(error);
-      return false;
-
-    } finally {
-      console.log('Closing clietnt')
-      client.close();
-    }
-
+    return false;
   }
 
+  try {
+
+    let collection = client.db('themitpost').collection('ios');
+
+    let all_docs = await collection.find().toArray();
+
+    return all_docs;
+
+  } catch(error) {
+    return null;
+
+  } finally {
+    client.close();
+  }
+
+  
 }
 
 //fetches documents sequentially from the collection
 
-module.exports.next_document = async () => {
 
-  let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => console.log(error));
-
-  if(!client) {
-    return false;
-  }
-
-  let collection = client.db('themitpost').collection('ios');
-
-  try {
-
-    return await collection.find().next(function (document) {
-
-      console.log('fetching the next document');
-
-      if(document) {
-        let result = {registration: document.registration, password: encrypt.decrypt(document.password, document.registration)}
-        console.log(result)
-        return result;
-  
-      }
-  
-      return false;
-  
-    });
-
-  } catch(error) {
-    return false;
-  }
-
-  
-}
 //test_cursor('ios');

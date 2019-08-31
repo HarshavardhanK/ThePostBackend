@@ -23,6 +23,7 @@ const deasync = require('deasync');
 
 const database = require('./database');
 const utilities = require('./utilities');
+const encrypt = require('./encryption')
 
 const url = "mongodb://localhost:27017/";
 
@@ -97,11 +98,15 @@ const refresh = async () => {
 
 const update_all = async (sleep_interval=30) => {
 
-  if(await database.update_for_each(fetch)) {
-    console.log('Successfully scraped data for all users');
+  let results = await database.get_all_credentials();
+
+  for(var i = 0; i < results.length; i++) {
+    let password = encrypt.decrypt(results[i].password, results[i].registration)
+
+    await fetch(results[i].registration, password);
   }
 
-  console.log('Done scraping for all users')
+  console.log('Done');
 
 }
 

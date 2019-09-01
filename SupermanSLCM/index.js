@@ -2,7 +2,7 @@
 const puppeteer = require('puppeteer');
 
 var Helper = require('./modules/helper');
-var deasync = require('deasync');
+var utilities = require('./utilities')
 var encrypt = require('./encryption');
 var database = require('./database');
 
@@ -142,9 +142,11 @@ module.exports.postValues = (app) => {
 
           if(value !== 'invalid credentials') {
 
-            res.send(value);
+            let new_value = utilities.sanitize(value)
 
-            database.insert_slcm_data({registration: reg, password: pass}, value, COLLECTIONS.IOS_COLLECTION);
+            res.send(new_value);
+
+            database.insert_slcm_data({registration: reg, password: pass}, new_value, COLLECTIONS.IOS_COLLECTION);
 
           } else {
             response.send({message: 'BAD'});

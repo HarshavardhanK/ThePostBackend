@@ -106,6 +106,22 @@ module.exports.check = (current_object, new_object) => {
 
 }
 
+module.exports.sanitize = (fresh_object) => {
+    let attn = this.get_attendance_for(fresh_object)
+
+    for(var i = 0; i < attn.length; i++) {
+
+        if(!attn[i].updatedAt) {
+
+            attn[i].updatedAt = -1
+        }
+    }
+
+    fresh_object.academicDetails[0].attendance = attn;
+
+    return fresh_object;
+}
+
 
 //TIME UTITLITIES
 

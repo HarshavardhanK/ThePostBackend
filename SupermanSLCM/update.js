@@ -115,7 +115,11 @@ const update_all = async (test, sleep_interval=30) => {
     let password = encrypt.decrypt(results[i].password, results[i].registration)
 
     if(await fetch(results[i].registration, password, test)) {
+
       console.log('Successfully fetched')
+
+      console.log('Sleeping for 10 seconds');
+      //deasync.sleep(utilities.seconds(10))
 
     } else {
       console.log('Error in fetching SLCM data')
@@ -178,12 +182,22 @@ const main = async () => {
     console.log('command not recognized')
     console.log('update.js running update_all: method. Press Ctrl-C to stop');
 
-    while(true) {
-      await update_all(test_);
-      console.log("Waiting for 100s")
-      deasync.sleep(utilities.seconds(15))
-    }
+    var i = 1;
 
+    while(true) {
+
+      await update_all(test_);
+      console.log("Waiting for 15s")
+      deasync.sleep(utilities.seconds(15))
+
+      i++
+
+      if(i % 11 == 0) {
+        deasync.sleep(utilities.minutes(10))
+        i = 1
+      }
+
+    }
     
   }
   

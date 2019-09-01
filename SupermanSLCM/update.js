@@ -52,8 +52,10 @@ const fetch = async (registration, password, test) => {
 
     let get_query = {registration: registration, password: password}
 
-    console.log("Query while fetching is", get_query);
-   
+    if(test) {
+      console.log("Query while fetching is", get_query);
+    }
+
     let current_object = await database.get_slcm_data(get_query, 'ios')
 
     if(!current_object) {
@@ -88,7 +90,7 @@ const fetch = async (registration, password, test) => {
 
 
   } catch(error) {
-    //console.log(error);
+    console.log(error);
     return false;
 
   }
@@ -188,13 +190,13 @@ const main = async () => {
 
       await update_all(test_);
       console.log("Waiting for 15s")
-      deasync.sleep(utilities.seconds(15))
+      deasync.sleep(utilities.minutes(20))
 
       i++
 
       if(i % 11 == 0) {
         console.log('sleeping for 10 minutes')
-        deasync.sleep(utilities.minutes(10))
+        deasync.sleep(utilities.minutes(30))
         i = 1
       }
 

@@ -118,7 +118,7 @@ const update_all = async (test, sleep_interval=30) => {
 
       console.log('Successfully fetched')
 
-      console.log('Sleeping for 10 seconds');
+      //console.log('Sleeping for 10 seconds');
       //deasync.sleep(utilities.seconds(10))
 
     } else {
@@ -193,6 +193,7 @@ const main = async () => {
       i++
 
       if(i % 11 == 0) {
+        console.log('sleeping for 10 minutes')
         deasync.sleep(utilities.minutes(10))
         i = 1
       }

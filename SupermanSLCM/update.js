@@ -163,7 +163,7 @@ const main = async () => {
     console.log('refresh')
 
     if(params.refresh === 'y') {
-      refresh(test_)
+      await refresh(test_)
     }
 
   } else if(params.update_all) {
@@ -171,7 +171,7 @@ const main = async () => {
     console.log('update_all')
 
     if(params.update_all === 'y') {
-      update_all(test_);
+      await update_all(test_);
     }
 
   } else {
@@ -180,6 +180,8 @@ const main = async () => {
 
     while(true) {
       await update_all(test_);
+      console.log("Waiting for 100s")
+      deasync.sleep(utilities.seconds(15))
     }
 
     

@@ -1,5 +1,5 @@
 
-const puppeteer = require('puppeteer-firefox');
+const puppeteer = require('puppeteer');
 
 var Helper = require('./modules/helper');
 var utilities = require('./utilities')

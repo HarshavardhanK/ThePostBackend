@@ -167,7 +167,7 @@ module.exports.postValues = (app) => {
     }).catch(error => {
 
       console.log(error);
-      response.send({message: 'BAD'});
+      //response.send({message: 'BAD'});
     });
 
   });

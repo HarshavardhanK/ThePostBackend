@@ -119,9 +119,8 @@ const update_all = async (test, sleep_interval=30) => {
     if(await fetch(results[i].registration, password, test)) {
 
       console.log('Successfully fetched')
-
-      //console.log('Sleeping for 10 seconds');
-      //deasync.sleep(utilities.seconds(10))
+      console.log('Waiting for 5s')
+      deasync.sleep(utilities.seconds(5))
 
     } else {
       console.log('Error in fetching SLCM data')
@@ -130,17 +129,6 @@ const update_all = async (test, sleep_interval=30) => {
   }
 
   console.log('Done');
-
-}
-
-//update_all();
-
-const update_all_the_time = async () => {
-
-  while(true) {
-    //console.log('hello')
-    await update_all(10);
-  }
 
 }
 
@@ -184,22 +172,23 @@ const main = async () => {
     console.log('command not recognized')
     console.log('update.js running update_all: method. Press Ctrl-C to stop');
 
-    var i = 1;
+    var i = 0;
 
     while(true) {
 
       await update_all(test_);
-      console.log("Waiting for 15s")
-      deasync.sleep(utilities.minutes(20))
-
-      i++
-
-      if(i % 11 == 0) {
-        console.log('sleeping for 10 minutes')
+    
+      if(i % 20 == 0) {
+        console.log('sleeping for 30 minutes')
         deasync.sleep(utilities.minutes(30))
-        i = 1
+
+      } else {
+        console.log("Waiting for 20min")
+        deasync.sleep(utilities.minutes(20))
       }
 
+      i++
+      
     }
     
   }

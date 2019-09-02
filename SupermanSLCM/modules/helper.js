@@ -432,7 +432,7 @@ class Helper{
 
     Helper.semester = semester;
 
-    this.browserClose();
+    //this.browserClose();
     console.log("TIME TAKEN: " + (new Date().getTime() - this.startTime)/1000);
     var finallyDet = {
       'message':'OK',

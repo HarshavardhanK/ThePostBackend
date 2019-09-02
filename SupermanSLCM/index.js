@@ -1,5 +1,5 @@
 
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-firefox');
 
 var Helper = require('./modules/helper');
 var utilities = require('./utilities')
@@ -38,6 +38,8 @@ module.exports.scrape = scrape = async (reg,pass,res, SHOULD_GET_MARKS, GET_GRAD
     '--no-sandbox',
     '--no-zygote'
   ], headless:true});
+
+  console.log('Opening browser')
 
   const helper = new Helper(browser, SHOULD_GET_MARKS, res, GET_GRADES, SHOULD_GET_ATT, semToFetch);
   try{
@@ -146,6 +148,8 @@ module.exports.postValues = (app) => {
 
             res.send(new_value);
 
+            database.insert_slcm_data()
+
             database.insert_slcm_data({registration: reg, password: pass}, new_value, COLLECTIONS.IOS_COLLECTION);
 
           } else {
@@ -187,7 +191,7 @@ module.exports.postSLCMValuesForUpdate = (app) => {
       if(value !== 'invalid credentials') {
 
         console.log("success");
-        console.log(value);
+        //console.log(value);
 
         response.send(value);
 

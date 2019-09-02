@@ -8,6 +8,35 @@ const url = "mongodb://localhost:27017/themitpost";
 const encrypt = require('./encryption');
 const utilities = require('./utilities');
 
+module.exports.insert_credentials = async (value) => {
+
+  let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => console.log(error))
+
+  if(!client) {
+    return;
+  }
+
+  try {
+
+    console.log('Inserting credentials')
+
+    let collection = client.db('themitpost').collection('credentials')
+
+    value.password = encrypt.encrypt(value.password, value.registration);
+
+    await collection.insertOne(value);
+    
+    console.log('saved credentials')
+
+  } catch(error) {
+    console.log(error)
+
+  } finally {
+    client.close()
+  }
+
+}
+
 
 module.exports.insert_slcm_data = async (filter, value, COLLECTION='gen') => {
 
@@ -148,7 +177,7 @@ module.exports.get_all_credentials = async () => {
 
   try {
 
-    let collection = client.db('themitpost').collection('ios');
+    let collection = client.db('themitpost').collection('credentials');
 
     let all_docs = await collection.find().toArray();
 

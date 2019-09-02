@@ -131,8 +131,6 @@ module.exports.postValues = (app) => {
 
     console.log(COLLECTIONS.IOS_COLLECTION);
 
-    database.insert_response({registration: reg, password: pass}, res);
-
     database.get_slcm_data({registration: reg, password: pass}, COLLECTIONS.IOS_COLLECTION).then(response => {
 
       if(!response) {
@@ -140,11 +138,12 @@ module.exports.postValues = (app) => {
         scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, '').then((value) => {
 
           console.log("success");
-          //console.log(value);
 
           let new_value = utilities.sanitize(value)
 
           res.send(new_value);
+
+          database.insert_credentials({registration: reg, password: pass})
 
           database.insert_slcm_data({registration: reg, password: pass}, new_value, COLLECTIONS.IOS_COLLECTION);
 
@@ -152,6 +151,7 @@ module.exports.postValues = (app) => {
         }).catch((error) => {
           console.log(error);
           res.send({message: 'Invalid Credentials'})
+
         });
 
       } else {
@@ -160,7 +160,6 @@ module.exports.postValues = (app) => {
       }
 
     }).catch(error => {
-
       console.log(error);
       //response.send({message: 'BAD'});
     });

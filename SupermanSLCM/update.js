@@ -44,7 +44,9 @@ const fetch = async (registration, password, test) => {
 
     let response = await axios.post(URL, {regNumber: registration, pass: password});
 
-    if(response.message === 'BAD') {
+    console.log(response.data)
+
+    if(response.data.message === 'Invalid Credentials') {
       console.log('invalid')
       return false;``
 
@@ -102,7 +104,7 @@ const fetch = async (registration, password, test) => {
 
 const refresh = async (test) => {
 
-  await fetch('170905022', 'FHJ-CSd-5rc-f5A', test)
+  await fetch('170905023', 'FHJ-CSd-5rc-f5A', test)
   await fetch('170905054', 'tropicofleo110.', test)
 
 }

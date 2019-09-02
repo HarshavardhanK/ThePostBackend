@@ -152,12 +152,11 @@ module.exports.postValues = (app) => {
 
             database.insert_slcm_data({registration: reg, password: pass}, new_value, COLLECTIONS.IOS_COLLECTION);
 
-          } else {
-            response.send({message: 'BAD'});
-          }
+          } 
 
         }).catch((error) => {
           console.log(error);
+          res.send({message: 'BAD'})
         });
 
       } else {
@@ -188,21 +187,13 @@ module.exports.postSLCMValuesForUpdate = (app) => {
 
     scrape(registration,password,response, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, '').then((value) => {
 
-      if(value !== 'invalid credentials') {
-
-        console.log("success");
-        //console.log(value);
-
-        response.send(value);
-
-      } else {
-        response.send({message: 'BAD'});
-      }
+      console.log("success")
+      response.send(value);
   
     }).catch((error) => {
 
       console.log(error);
-      return null;
+      //return {message: 'BAD'};
 
     });
 

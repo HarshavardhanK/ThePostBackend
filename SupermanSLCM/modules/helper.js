@@ -61,13 +61,14 @@ class Helper{
         var date = new Date();
         console.log("Login failed at " + date);
         throw new Error("Invalid Credentials.");
+       
       }
     }
     catch(error){
-      if(error.message == "Invalid Credentials."){
+      if(error.message === "Invalid Credentials."){
 
           utilities.displayError("Invalid Credentials",this.response);
-          return 'invalid credentials';
+          //return 'invalid credentials';
       }
       var date = new Date();
       console.log("Logged in at " + date);

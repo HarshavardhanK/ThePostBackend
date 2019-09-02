@@ -121,8 +121,8 @@ const update_all = async (test, sleep_interval=30) => {
     if(await fetch(results[i].registration, password, test)) {
 
       console.log('Successfully fetched')
-      console.log('Waiting for 5s')
-      deasync.sleep(utilities.seconds(5))
+      //console.log('Waiting for 5s')
+      //deasync.sleep(utilities.seconds(5))
 
     } else {
       console.log('Error in fetching SLCM data')
@@ -174,29 +174,10 @@ const main = async () => {
     console.log('command not recognized')
     console.log('update.js running update_all: method. Press Ctrl-C to stop');
 
-    var i = 0;
-
-    while(true) {
-
-      await update_all(test_);
-    
-      if(i % 20 == 0) {
-        console.log('sleeping for 30 minutes')
-        deasync.sleep(utilities.minutes(30))
-
-      } else {
-        console.log("Waiting for 20min")
-        deasync.sleep(utilities.minutes(20))
-      }
-
-      i++
-      
-    }
+    await update_all(test_);
     
   }
   
-
-
 }
 
 main();

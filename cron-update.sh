@@ -12,4 +12,4 @@ pm2 start server.js --max-memory-restart 200M -i max
 
 echo 'Scripts running succesfully'
 
-# 00 2-18 * * * ~/ThePostBackend/cron-update.sh
+# 34 2-18 * * * /root/ThePostBackend/cron-update

@@ -9,6 +9,6 @@
 
 /bin/pm2 start server.js --max-memory-restart 200M -i max
 
-/bin/echo 'Scripts running succesfully'
+/bin/echo 'Scripts running succesfully' >> cron-report.txt at $(/bin/date)
 
 # 34 2-18 * * * /root/ThePostBackend/cron-update

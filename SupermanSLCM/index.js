@@ -140,19 +140,14 @@ module.exports.postValues = (app) => {
         scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, '').then((value) => {
 
           console.log("success");
-          console.log(value);
+          //console.log(value);
 
-          if(value !== 'invalid credentials') {
+          let new_value = utilities.sanitize(value)
 
-            let new_value = utilities.sanitize(value)
+          res.send(new_value);
 
-            res.send(new_value);
+          database.insert_slcm_data({registration: reg, password: pass}, new_value, COLLECTIONS.IOS_COLLECTION);
 
-            database.insert_slcm_data()
-
-            database.insert_slcm_data({registration: reg, password: pass}, new_value, COLLECTIONS.IOS_COLLECTION);
-
-          } 
 
         }).catch((error) => {
           console.log(error);

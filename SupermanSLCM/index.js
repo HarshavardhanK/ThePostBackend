@@ -156,7 +156,7 @@ module.exports.postValues = (app) => {
 
         }).catch((error) => {
           console.log(error);
-          res.send({message: 'BAD'})
+          //res.send({message: 'BAD'})
         });
 
       } else {

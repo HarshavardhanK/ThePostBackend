@@ -92,7 +92,7 @@ class Helper{
 
       Helper.done = true;
 
-      while(!Helper.done) {deasync.sleep(1000);}
+      while(!Helper.done) {deasync.sleep(100);}
 
       await page.goto('http://slcm.manipal.edu/Academics.aspx');
 

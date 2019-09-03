@@ -95,7 +95,7 @@ class Helper{
 
       Helper.done = true;
 
-      if(this.SHOULD_GET_MARKS){
+      /*if(this.SHOULD_GET_MARKS){
         return this.getDataMarks(this.semToFetch);
 
       } else if(this.SHOULD_GET_ATT){
@@ -104,9 +104,9 @@ class Helper{
       } else if(this.GET_GRADES){
         return this.getGradeSheet(this.semToFetch);
 
-      } else {
+      } else {*/
         return this.getData();
-      }
+      //}
     }
   }
 

@@ -75,28 +75,69 @@ module.exports.isArrayNull = function(rawArray) {
   return rawArray.every(element => element === null)
 }
 
-module.exports.modifyAttendance = function(rawAttendanceArray){
+module.exports.modifyAttendance = function(headers, rawAttendanceArray){
 
     compiledArray = [];
     var i =0;
+    var inner_i = 0;
     var subjectName,totalClass, present, absent;
+
+    var subjectNameIndex = -1;
+    var totalClassIndex = -1;
+    var presentIndex = -1;
+    var absentIndex = -1;
+
+    headers.forEach(function(item) {
+
+      if(item.toLowerCase() == "subject"){
+
+        subjectNameIndex = inner_i;
+        inner_i++;
+        return;
+      }
+
+      else if(item.toLowerCase() == "total class"){
+
+        totalClassIndex = inner_i;
+        inner_i++;
+        return;
+      }
+
+      else if(item.toLowerCase() == "days present"){
+
+        presentIndex = inner_i;
+        inner_i++;
+        return;
+      }
+
+      else if(item.toLowerCase() == "days absent"){
+
+        absentIndex = inner_i;
+        inner_i++;
+        return;
+      }
+      else{
+        inner_i++;
+      }
+    })
+
     rawAttendanceArray.forEach(function(item) {
-      if(i%8==2){
+      if(i%8== subjectNameIndex){
         subjectName = item;
         i++;
         return;
       }
-      if(i%8==4){
+      if(i%8== totalClassIndex){
         totalClass = item;
         i++;
         return;
       }
-      if(i%8==5){
+      if(i%8== presentIndex){
         present = item;
         i++;
         return;
       }
-      if(i%8==6){
+      if(i%8== absentIndex){
         absent = item;
         i++;
 

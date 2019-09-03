@@ -158,7 +158,7 @@ class Helper{
 
       var attendanceStatus = true;
 
-      var attendanceHeaders = await page.$$eval('#tblAttendancePercentage tbody tr th', bs => bs.map((b) => {
+      var attendanceHeaders = await page.$$eval('#tblAttendancePercentage thead tr th', bs => bs.map((b) => {
         return b.innerText.trim();
       }));
 

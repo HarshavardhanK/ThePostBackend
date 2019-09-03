@@ -24,6 +24,7 @@ class Helper{
   async executeLogin(reg, pass){
 
     const page = await this.browser.newPage();
+    await page.setCacheEnabled(false);
     await page.setRequestInterception(true);
 
     page.on('request', (req) => {
@@ -61,7 +62,7 @@ class Helper{
         var date = new Date();
         console.log("Login failed at " + date);
         throw new Error("Invalid Credentials.");
-       
+
       }
     }
     catch(error){
@@ -103,13 +104,13 @@ class Helper{
       } else if(this.GET_GRADES){
         return this.getGradeSheet(this.semToFetch);
 
-      } else { 
+      } else {
         return this.getData();
       }
     }
   }
 
-  async getDataMarks(semToFetch){
+  /*async getDataMarks(semToFetch){
 
     const page = await this.browser.newPage();
 
@@ -341,13 +342,14 @@ class Helper{
 
     //this.response.send(finalGradeJson);
     return finalGradeJson;
-  }
+  }*/
 
   async getData() {
 
     while(!Helper.done) {deasync.sleep(1000);}
 
     const page = await this.browser.newPage();
+    await page.setCacheEnabled(false);
 
     await page.setRequestInterception(true);
 
@@ -361,6 +363,7 @@ class Helper{
     });
 
     await page.goto('http://slcm.manipal.edu/Academics.aspx');
+
     var finalDet = [];
 
     var prevSem = -1;

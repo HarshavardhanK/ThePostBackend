@@ -24,7 +24,7 @@
     "deasync": "^0.1.15",
     "express": "^4.17.1",
     "get-urls": "^9.1.0",
-    "mongodb": "^3.2.7",
+    "mongodb": "^3.3.2",
     "nodemon": "^1.19.1",
     "pug": "^2.0.4",
     "puppeteer": "^1.19.0",

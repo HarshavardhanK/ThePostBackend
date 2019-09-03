@@ -89,25 +89,117 @@ class Helper{
         utilities.displayError("Website Timed Out",this.response);
         return;
       }
-      Helper.cgpa = await page.$eval('#ContentPlaceHolder1_lblCGPA', bs => bs.innerText);
-
-      page.close();
 
       Helper.done = true;
 
-      /*if(this.SHOULD_GET_MARKS){
-        return this.getDataMarks(this.semToFetch);
+      while(!Helper.done) {deasync.sleep(1000);}
 
-      } else if(this.SHOULD_GET_ATT){
-        return this.getDataAttendance(this.semToFetch);
+      await page.goto('http://slcm.manipal.edu/Academics.aspx');
 
-      } else if(this.GET_GRADES){
-        return this.getGradeSheet(this.semToFetch);
+      var finalDet = [];
 
-      } else {*/
-        return this.getData();
-      //}
+      var prevSem = -1;
+      var loopContinues = false;
+
+      Helper.finalDet.semester = await page.$eval('#ContentPlaceHolder1_lblSemester', e => e.innerText);
+
+      Helper.finalDet.section = await page.$eval('#ContentPlaceHolder1_lblSection', e => e.innerText);
+
+      Helper.finalDet.rollNo = await page.$eval('#ContentPlaceHolder1_lblRollNo', e => e.innerText);
+
+      var teacherGuardianName = await page.$eval('#ContentPlaceHolder1_lblGuardian', e => e.innerText);
+
+      var teacherGuardianPhone = await page.$eval('#ContentPlaceHolder1_lblGuardianTeacherMobile', e => e.innerText);
+
+      var teacherGuardianEmail = await page.$eval('#ContentPlaceHolder1_lblGuardianTeacherEmail', e => e.innerText);
+
+      var teacherGuardianStatus;
+
+      if(teacherGuardianName == ""){
+        teacherGuardianStatus = "Not Assigned";
+      }
+      else{
+        teacherGuardianStatus = "Assigned";
+      }
+
+      Helper.finalDet.teacherGuardianStatus = teacherGuardianStatus;
+
+      var teacherGuardianJson = {
+        'name' : teacherGuardianName,
+        'phone' : teacherGuardianPhone,
+        'email' : teacherGuardianEmail
+      }
+
+      Helper.finalDet.teacherGuardianDetails = teacherGuardianJson;
+
+      Helper.finalDet.admittedYear = await page.$eval('#ContentPlaceHolder1_lblAdmittedYear', e => e.innerText);
+
+      try{
+        await page.waitForSelector('table#tblAttendancePercentage',{timeout:2000});
+      }
+      catch(error){
+        utilities.displayError("Server Error",this.response);
+        return;
+      }
+
+      const semester = await page.$eval('#ContentPlaceHolder1_ddlInternalSemester option[selected="selected"]', bs => bs.innerText);
+
+      var subjects = await page.$$eval('h4.panel-text.panel-title', bs => bs.map((b) => {
+        return b.innerText.trim().replace(/\s\s+/g, ' ');
+      }));
+
+      subjects = utilities.trimFromStart(subjects, 14);
+
+      var internalMarks = utilities.getTotalMarks(subjects);
+
+      subjects = utilities.trimFromEndForSubjects(subjects);
+
+      const marksStatus = internalMarks.length != 0;
+
+      var attendanceStatus = true;
+      var attendanceData = await page.$$eval('#tblAttendancePercentage tbody tr td', bs => bs.map((b) => {
+        return b.innerText.trim();
+      }));
+
+
+      attendanceData = utilities.modifyAttendance(attendanceData);
+      var reqJson = utilities.stylify(semester, subjects, marksStatus,attendanceStatus , attendanceData, internalMarks);
+      finalDet.push(reqJson);
+
+      Helper.semester = semester;
+
+      //this.browserClose();
+      console.log("TIME TAKEN: " + (new Date().getTime() - this.startTime)/1000);
+      var finallyDet = {
+        'message':'OK',
+        'status' : true,
+        'updatedAt': this.startTime,
+        'cgpa': Helper.cgpa,
+        'semester': Helper.finalDet.semester,
+        'section': Helper.finalDet.section,
+        'rollno': Helper.finalDet.rollNo,
+        'admittedYear': Helper.finalDet.admittedYear,
+        'teacherGuardianStatus': Helper.finalDet.teacherGuardianStatus,
+        'teacherGuardianDetails': Helper.finalDet.teacherGuardianDetails,
+        'academicDetails': finalDet
+      }
+      //this.response.send(finallyDet);
+
+      page.close();
+      this.browserClose();
+      this.hostFinalJson();
+      return finallyDet;
     }
+  }
+
+  browserClose(){
+    this.browser.close();
+  }
+
+  hostFinalJson(){
+
+    Helper.canHost = true;
+
   }
 
   /*async getDataMarks(semToFetch){
@@ -344,7 +436,7 @@ class Helper{
     return finalGradeJson;
   }*/
 
-  async getData() {
+  /*async getData() {
 
     while(!Helper.done) {deasync.sleep(1000);}
 
@@ -454,18 +546,7 @@ class Helper{
     //this.response.send(finallyDet);
 
     return finallyDet;
-  }
-
-  browserClose(){
-    this.browser.close();
-  }
-
-  hostFinalJson(){
-
-    Helper.canHost = true;
-
-  }
-
+  }*/
 }
 
 module.exports = Helper;

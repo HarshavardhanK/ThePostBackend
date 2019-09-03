@@ -94,22 +94,24 @@ class Helper{
 
       Helper.done = true;
 
-      if(this.SHOULD_GET_MARKS){
-        return this.getDataMarks(this.semToFetch);
+      // if(this.SHOULD_GET_MARKS){
+      //   return this.getDataMarks(this.semToFetch);
 
-      } else if(this.SHOULD_GET_ATT){
-        return this.getDataAttendance(this.semToFetch);
+      // } else if(this.SHOULD_GET_ATT){
+      //   return this.getDataAttendance(this.semToFetch);
 
-      } else if(this.GET_GRADES){
-        return this.getGradeSheet(this.semToFetch);
+      // } else if(this.GET_GRADES){
+      //   return this.getGradeSheet(this.semToFetch);
 
-      } else { 
-        return this.getData();
-      }
+      // } else { 
+        
+      // }
+
+      return this.getData();
     }
   }
 
-  async getDataMarks(semToFetch){
+  /*async getDataMarks(semToFetch){
 
     const page = await this.browser.newPage();
 
@@ -341,7 +343,7 @@ class Helper{
 
     //this.response.send(finalGradeJson);
     return finalGradeJson;
-  }
+  }*/
 
   async getData() {
 

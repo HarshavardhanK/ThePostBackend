@@ -157,12 +157,17 @@ class Helper{
       const marksStatus = internalMarks.length != 0;
 
       var attendanceStatus = true;
+
+      var attendanceHeaders = await page.$$eval('#tblAttendancePercentage tbody tr th', bs => bs.map((b) => {
+        return b.innerText.trim();
+      }));
+
       var attendanceData = await page.$$eval('#tblAttendancePercentage tbody tr td', bs => bs.map((b) => {
         return b.innerText.trim();
       }));
 
 
-      attendanceData = utilities.modifyAttendance(attendanceData);
+      attendanceData = utilities.modifyAttendance(attendanceHeaders, attendanceData);
       var reqJson = utilities.stylify(semester, subjects, marksStatus,attendanceStatus , attendanceData, internalMarks);
       finalDet.push(reqJson);
 

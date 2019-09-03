@@ -2,7 +2,7 @@
 const puppeteer = require('puppeteer');
 
 var Helper = require('./modules/helper');
-var deasync = require('deasync');
+var utilities = require('./utilities')
 var encrypt = require('./encryption');
 var database = require('./database');
 
@@ -38,6 +38,8 @@ module.exports.scrape = scrape = async (reg,pass,res, SHOULD_GET_MARKS, GET_GRAD
     '--no-sandbox',
     '--no-zygote'
   ], headless:true});
+
+  console.log('Opening browser')
 
   const helper = new Helper(browser, SHOULD_GET_MARKS, res, GET_GRADES, SHOULD_GET_ATT, semToFetch);
   try{
@@ -136,14 +138,20 @@ module.exports.postValues = (app) => {
         scrape(reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, '').then((value) => {
 
           console.log("success");
-          console.log(value);
 
-          res.send(value);
+          let new_value = utilities.sanitize(value)
 
-          database.insert_slcm_data({registration: reg, password: pass}, value, COLLECTIONS.IOS_COLLECTION);
+          res.send(new_value);
+
+          database.insert_credentials({registration: reg, password: pass})
+
+          database.insert_slcm_data({registration: reg, password: pass}, new_value, COLLECTIONS.IOS_COLLECTION);
+
 
         }).catch((error) => {
           console.log(error);
+          res.send({message: 'Invalid Credentials'})
+
         });
 
       } else {
@@ -152,14 +160,40 @@ module.exports.postValues = (app) => {
       }
 
     }).catch(error => {
-
       console.log(error);
-      res.send({status: 'BAD'});
+      //response.send({message: 'BAD'});
     });
 
   });
 
 };
+
+module.exports.postSLCMValuesForUpdate = (app) => {
+
+  app.post('/values/update', function(request, response) {
+
+    const registration = request.body.regNumber;
+    const password = request.body.pass;
+
+    const SHOULD_GET_MARKS = false;
+    const SHOULD_GET_ATT = false;
+    const GET_GRADES = false;
+
+    scrape(registration,password,response, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, '').then((value) => {
+
+      console.log("success")
+      response.send(value);
+  
+    }).catch((error) => {
+
+      console.log(error);
+      //return {message: 'BAD'};
+
+    });
+
+  });
+
+}
 
 module.exports.postMarks = (app) => {
 
@@ -197,6 +231,7 @@ module.exports.postMarks = (app) => {
   });
 
 };
+
 
 module.exports.postAttendance = (app) => {
 

@@ -1,12 +1,46 @@
 
+
+const deasync = require('deasync');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;
 const url = "mongodb://localhost:27017/themitpost";
 
 const encrypt = require('./encryption');
+const utilities = require('./utilities');
+
+module.exports.insert_credentials = async (value) => {
+
+  let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => console.log(error))
+
+  if(!client) {
+    return;
+  }
+
+  try {
+
+    console.log('Inserting credentials')
+
+    let collection = client.db('themitpost').collection('credentials')
+
+    value.password = encrypt.encrypt(value.password, value.registration);
+
+    await collection.insertOne(value);
+    
+    console.log('saved credentials')
+
+  } catch(error) {
+    console.log(error)
+
+  } finally {
+    client.close()
+  }
+
+}
 
 
 module.exports.insert_slcm_data = async (filter, value, COLLECTION='gen') => {
+
+  console.log("Calling MongoDB insert method")
 
   let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => {console.log(error)});
 
@@ -16,9 +50,11 @@ module.exports.insert_slcm_data = async (filter, value, COLLECTION='gen') => {
 
   try {
 
-    console.log('cred before rncrypt insert');
+    console.log('Inserting data into %s collection', COLLECTION);
 
-    console.log(filter);
+    console.log('cred before encrypt insert');
+
+    //console.log(filter);
 
     let password = encrypt.encrypt(filter.password, filter.registration);
     filter.password = password;
@@ -37,7 +73,7 @@ module.exports.insert_slcm_data = async (filter, value, COLLECTION='gen') => {
 
     console.log(filter);
 
-    let result = await collection.insertOne(encrypted_value);
+    let result = await collection.updateOne(filter, {$set: {data: encrypted_value.data}}, {upsert: true});
 
   } catch(error) {
     console.log(error);
@@ -59,7 +95,7 @@ module.exports.get_slcm_data = async (filter, COLLECTION) => {
 
   try {
 
-    console.log(filter);
+   // console.log(filter);
 
     let password = encrypt.encrypt(filter.password, filter.registration);
     filter.password = password;
@@ -95,3 +131,69 @@ module.exports.get_slcm_data = async (filter, COLLECTION) => {
   }
 
 }
+
+module.exports.insert_response = async (filter, response) => {
+
+  let client = await MongoClient.connect(url, {useNewUrlParser: true}).catch(error => console.log(error));
+
+  if(!client) {
+    console.log('No MongoClient found');
+    return null;
+  }
+
+  let password = encrypt.encrypt(filter.password, filter.registration);
+  filter.password = password;
+
+  await client.db('themitpost').collection('response').replaceOne(filter, response);
+}
+
+const update_for_each_cursor_function = async (document, update) => {
+
+  if(document) {
+
+    if(document.registration) {
+      //enough to check if its a valid SLCM document
+
+      let password = encrypt.decrypt(document.password, document.registration);
+
+      if(!await update(document.registration, password)){
+        console.log("error in updating document");
+        return false;
+      }
+
+      return truei
+
+    }
+  }
+}
+
+module.exports.get_all_credentials = async () => {
+
+  let client = await MongoClient.connect(url, {useNewUrlParser: true})
+
+  if(!client) {
+    return false;
+  }
+
+  try {
+
+    let collection = client.db('themitpost').collection('credentials');
+
+    let all_docs = await collection.find().toArray();
+
+    return all_docs;
+
+  } catch(error) {
+    return null;
+
+  } finally {
+    client.close();
+  }
+
+  
+}
+
+//fetches documents sequentially from the collection
+
+
+//test_cursor('ios');

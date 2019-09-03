@@ -61,10 +61,11 @@ class Helper{
         var date = new Date();
         console.log("Login failed at " + date);
         throw new Error("Invalid Credentials.");
+       
       }
     }
     catch(error){
-      if(error.message == "Invalid Credentials."){
+      if(error.message === "Invalid Credentials."){
 
           utilities.displayError("Invalid Credentials",this.response);
           return 'invalid credentials';
@@ -432,7 +433,7 @@ class Helper{
 
     Helper.semester = semester;
 
-    this.browserClose();
+    //this.browserClose();
     console.log("TIME TAKEN: " + (new Date().getTime() - this.startTime)/1000);
     var finallyDet = {
       'message':'OK',

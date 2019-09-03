@@ -12,8 +12,6 @@ const yargs = require('yargs');
 
 
 const database = require('./Articles/database.js');
-const slcm_database = require('./SLCM/database.js');
-const scraper = require('./SLCM/scraper.js');
 const articleWebView = require('./Articles/ArticleWebview/index');
 const newSlcm = require('./SupermanSLCM/index');
 
@@ -125,6 +123,8 @@ newSlcm.postGrades(app);
 
 newSlcm.getSLCMAttendance(app);
 newSlcm.postAttendance(app);
+
+newSlcm.postSLCMValuesForUpdate(app);
 
 //////////////////////////////////// EVENTS PORTAL ////////////////////////////////////////
 
@@ -248,8 +248,13 @@ const main = () => {
     } else {
 
       app.listen(3000);
+<<<<<<< HEAD
       console.log('Running http server');
 
+=======
+      console.log('Running http server on port 3000');
+  
+>>>>>>> 01d3eaf1b971ddcbf8745aebba4b5a63e9959746
     }
 
   } else {

@@ -89,21 +89,47 @@ class Helper{
         utilities.displayError("Website Timed Out",this.response);
         return;
       }
-      Helper.cgpa = await page.$eval('#ContentPlaceHolder1_lblCGPA', bs => bs.innerText);
-
-      page.close();
 
       Helper.done = true;
 
+<<<<<<< HEAD
       /*if(this.SHOULD_GET_MARKS){
         return this.getDataMarks(this.semToFetch);
+=======
+      while(!Helper.done) {deasync.sleep(100);}
 
-      } else if(this.SHOULD_GET_ATT){
-        return this.getDataAttendance(this.semToFetch);
+      await page.goto('http://slcm.manipal.edu/Academics.aspx');
 
-      } else if(this.GET_GRADES){
-        return this.getGradeSheet(this.semToFetch);
+      var finalDet = [];
 
+      var prevSem = -1;
+      var loopContinues = false;
+
+      Helper.finalDet.semester = await page.$eval('#ContentPlaceHolder1_lblSemester', e => e.innerText);
+
+      Helper.finalDet.section = await page.$eval('#ContentPlaceHolder1_lblSection', e => e.innerText);
+
+      Helper.finalDet.rollNo = await page.$eval('#ContentPlaceHolder1_lblRollNo', e => e.innerText);
+
+      var teacherGuardianName = await page.$eval('#ContentPlaceHolder1_lblGuardian', e => e.innerText);
+
+      var teacherGuardianPhone = await page.$eval('#ContentPlaceHolder1_lblGuardianTeacherMobile', e => e.innerText);
+
+      var teacherGuardianEmail = await page.$eval('#ContentPlaceHolder1_lblGuardianTeacherEmail', e => e.innerText);
+>>>>>>> c71d6526d4ba049979dad3f4c69051b7656e7a83
+
+      var teacherGuardianStatus;
+
+      if(teacherGuardianName == ""){
+        teacherGuardianStatus = "Not Assigned";
+      }
+      else{
+        teacherGuardianStatus = "Assigned";
+      }
+
+      Helper.finalDet.teacherGuardianStatus = teacherGuardianStatus;
+
+<<<<<<< HEAD
       } else {*/
         return this.getData();
       //}
@@ -111,50 +137,26 @@ class Helper{
   }
 
   /*async getDataMarks(semToFetch){
+=======
+      var teacherGuardianJson = {
+        'name' : teacherGuardianName,
+        'phone' : teacherGuardianPhone,
+        'email' : teacherGuardianEmail
+      }
 
-    const page = await this.browser.newPage();
+      Helper.finalDet.teacherGuardianDetails = teacherGuardianJson;
 
-    await page.setRequestInterception(true);
-
-    page.on('request', (req) => {
-        if(req.resourceType() == 'stylesheet' || req.resourceType() == 'font' || req.resourceType() == 'image'){
-            req.abort();
-        }
-        else {
-            req.continue();
-        }
-    });
-
-    await page.goto('http://slcm.manipal.edu/Academics.aspx');
-    var finalDet = [];
-
-    var prevSem = -1;
-    var loopContinues = true;
+      Helper.finalDet.admittedYear = await page.$eval('#ContentPlaceHolder1_lblAdmittedYear', e => e.innerText);
 
       try{
-        await page.waitForSelector('#ContentPlaceHolder1_ddlInternalSemester',{timeout:5000});
+        await page.waitForSelector('table#tblAttendancePercentage',{timeout:2000});
       }
       catch(error){
         utilities.displayError("Server Error",this.response);
         return;
       }
 
-      const semester = semToFetch
-
-          page.select('#ContentPlaceHolder1_ddlInternalSemester', semToFetch);
-          await page.waitFor(10);
-          await page.evaluate(()=>document.querySelector('#ContentPlaceHolder1_lnkBtnInternalMark').click());
-
-          var innerDone = true;
-
-          while(innerDone){
-            if(await page.$eval('#ContentPlaceHolder1_ddlInternalSemester option[selected="selected"]', bs => bs.innerText) == semToFetch)
-              innerDone = false;
-            else {
-              await page.waitFor(1);
-            }
-          }
-
+      const semester = await page.$eval('#ContentPlaceHolder1_ddlInternalSemester option[selected="selected"]', bs => bs.innerText);
 
       var subjects = await page.$$eval('h4.panel-text.panel-title', bs => bs.map((b) => {
         return b.innerText.trim().replace(/\s\s+/g, ' ');
@@ -168,26 +170,61 @@ class Helper{
 
       const marksStatus = internalMarks.length != 0;
 
+      var attendanceStatus = true;
+
+      var attendanceHeaders = await page.$$eval('#tblAttendancePercentage thead tr th', bs => bs.map((b) => {
+        return b.innerText.trim();
+      }));
+
+      var attendanceData = await page.$$eval('#tblAttendancePercentage tbody tr td', bs => bs.map((b) => {
+        return b.innerText.trim();
+      }));
+
+
+      attendanceData = utilities.modifyAttendance(attendanceHeaders, attendanceData);
+      var reqJson = utilities.stylify(semester, subjects, marksStatus,attendanceStatus , attendanceData, internalMarks);
+      finalDet.push(reqJson);
+
       Helper.semester = semester;
-      var attendanceStatus = false;
-      var attendanceData = [ ];
 
-        var reqJson = utilities.stylify(semester,subjects, marksStatus,attendanceStatus , attendanceData, internalMarks);
+      //this.browserClose();
+      console.log("TIME TAKEN: " + (new Date().getTime() - this.startTime)/1000);
+      var finallyDet = {
+        'message':'OK',
+        'status' : true,
+        'updatedAt': this.startTime,
+        'cgpa': Helper.cgpa,
+        'semester': Helper.finalDet.semester,
+        'section': Helper.finalDet.section,
+        'rollno': Helper.finalDet.rollNo,
+        'admittedYear': Helper.finalDet.admittedYear,
+        'teacherGuardianStatus': Helper.finalDet.teacherGuardianStatus,
+        'teacherGuardianDetails': Helper.finalDet.teacherGuardianDetails,
+        'academicDetails': finalDet
+      }
+      //this.response.send(finallyDet);
 
-    this.browserClose();
-
-    console.log("TIME TAKEN: " + (new Date().getTime() - this.startTime)/1000);
-
-    //this.response.send(reqJson);
-    return reqJson;
+      await page.close();
+      await this.browserClose();
+      await this.hostFinalJson();
+      return finallyDet;
+    }
   }
 
-  async getDataAttendance(semToFetch){
+  browserClose(){
+    this.browser.close();
+  }
+>>>>>>> c71d6526d4ba049979dad3f4c69051b7656e7a83
 
+  hostFinalJson(){
+
+    Helper.canHost = true;
+
+  }
+
+  /*async getDataMarks(semToFetch){
     const page = await this.browser.newPage();
-
     await page.setRequestInterception(true);
-
     page.on('request', (req) => {
         if(req.resourceType() == 'stylesheet' || req.resourceType() == 'font' || req.resourceType() == 'image'){
             req.abort();
@@ -196,19 +233,65 @@ class Helper{
             req.continue();
         }
     });
-
     await page.goto('http://slcm.manipal.edu/Academics.aspx');
     var finalDet = [];
-
     var prevSem = -1;
     var loopContinues = true;
-
+      try{
+        await page.waitForSelector('#ContentPlaceHolder1_ddlInternalSemester',{timeout:5000});
+      }
+      catch(error){
+        utilities.displayError("Server Error",this.response);
+        return;
+      }
+      const semester = semToFetch
+          page.select('#ContentPlaceHolder1_ddlInternalSemester', semToFetch);
+          await page.waitFor(10);
+          await page.evaluate(()=>document.querySelector('#ContentPlaceHolder1_lnkBtnInternalMark').click());
+          var innerDone = true;
+          while(innerDone){
+            if(await page.$eval('#ContentPlaceHolder1_ddlInternalSemester option[selected="selected"]', bs => bs.innerText) == semToFetch)
+              innerDone = false;
+            else {
+              await page.waitFor(1);
+            }
+          }
+      var subjects = await page.$$eval('h4.panel-text.panel-title', bs => bs.map((b) => {
+        return b.innerText.trim().replace(/\s\s+/g, ' ');
+      }));
+      subjects = utilities.trimFromStart(subjects, 14);
+      var internalMarks = utilities.getTotalMarks(subjects);
+      subjects = utilities.trimFromEndForSubjects(subjects);
+      const marksStatus = internalMarks.length != 0;
+      Helper.semester = semester;
+      var attendanceStatus = false;
+      var attendanceData = [ ];
+        var reqJson = utilities.stylify(semester,subjects, marksStatus,attendanceStatus , attendanceData, internalMarks);
+    this.browserClose();
+    console.log("TIME TAKEN: " + (new Date().getTime() - this.startTime)/1000);
+    //this.response.send(reqJson);
+    return reqJson;
+  }
+  async getDataAttendance(semToFetch){
+    const page = await this.browser.newPage();
+    await page.setRequestInterception(true);
+    page.on('request', (req) => {
+        if(req.resourceType() == 'stylesheet' || req.resourceType() == 'font' || req.resourceType() == 'image'){
+            req.abort();
+        }
+        else {
+            req.continue();
+        }
+    });
+    await page.goto('http://slcm.manipal.edu/Academics.aspx');
+    var finalDet = [];
+    var prevSem = -1;
+    var loopContinues = true;
     var teacherGuardianJson = {
       'name' : '',
       'phone' : '',
       'email' : ''
     }
-
     try{
         await page.waitForSelector('#ContentPlaceHolder1_ddlSemester',{timeout:2000});
       }
@@ -216,14 +299,10 @@ class Helper{
         utilities.displayError("Server Error",this.response);
         return;
       }
-
       const semester = semToFetch;
-
           page.select('#ContentPlaceHolder1_ddlSemester',semToFetch);
           await page.waitFor(10);
-
           var innerDone = true;
-
           while(innerDone){
             console.log(await page.$eval('#ContentPlaceHolder1_ddlSemester option[selected="selected"]', bs => bs.innerText));
             if(await page.$eval('#ContentPlaceHolder1_ddlSemester option[selected="selected"]', bs => bs.innerText) == semToFetch)
@@ -232,35 +311,22 @@ class Helper{
               await page.waitFor(1);
             }
           }
-
-
       const marksStatus = false;
-
       var attendanceStatus = true;
       var attendanceData = await page.$$eval('#tblAttendancePercentage tbody tr td', bs => bs.map((b) => {
         return b.innerText.trim();
       }));
-
       Helper.semester = semester;
-
-
         attendanceData = utilities.modifyAttendance(attendanceData);
-
         var reqJson = utilities.stylify(semester,[ ], marksStatus,attendanceStatus , attendanceData, [ ]);
-
     this.browserClose();
     console.log("TIME TAKEN: " + (new Date().getTime() - this.startTime)/1000);
-
     //this.response.send(reqJson);
     return reqJson;
   }
-
   async getGradeSheet(semToFetch){
-
     const page = await this.browser.newPage();
-
     await page.setRequestInterception(true);
-
     page.on('request', (req) => {
         if(req.resourceType() == 'stylesheet' || req.resourceType() == 'font' || req.resourceType() == 'image'){
             req.abort();
@@ -269,21 +335,17 @@ class Helper{
             req.continue();
         }
     });
-
     await page.goto('http://slcm.manipal.edu/GradeSheet.aspx');
-
     var gradeStatus = false;
     var done = false;
     var prevSem = -1;
     var grades = [];
-
     var finalGradeJson = {
       'message':'',
       'status':false,
       'cgpa': '',
       'semesterGrades': []
     }
-
     try{
       await page.waitForSelector('#ContentPlaceHolder1_ddlSemester',{timeout:25000});
     }
@@ -291,20 +353,15 @@ class Helper{
       utilities.displayError("Website Timed Out",this.response);
       return;
     }
-
     const cgpa = await page.$eval('#ContentPlaceHolder1_lblCGPA', bs => bs.innerText);
-
     page.select('#ContentPlaceHolder1_ddlSemester', semToFetch);
-
     try{
       await page.waitForSelector('#ContentPlaceHolder1_ddlSemester',{timeout:5000});
     }
     catch(error){
       utilities.displayError("Website Timed Out",this.response);
     }
-
     var innerDone = true;
-
     while(innerDone){
       if(await page.$eval('#ContentPlaceHolder1_ddlSemester option[selected="selected"]', bs => bs.innerText) == semToFetch)
         innerDone = false;
@@ -312,47 +369,42 @@ class Helper{
         await page.waitFor(1);
       }
     }
-
     const semester = semToFetch;
-
     var gradeSheetHeaders = await page.$$eval('#ContentPlaceHolder1_grvGradeSheet tbody tr th', bs => bs.map((b) => {
       return b.innerText.trim();
     }));
-
     var gradeSheet = await page.$$eval('#ContentPlaceHolder1_grvGradeSheet tbody tr td', bs => bs.map((b) => {
       return b.innerText.trim();
     }));
-
     const gpa = await page.$eval('#ContentPlaceHolder1_lblGPA', bs => bs.innerText);
     const credits = await page.$eval('#ContentPlaceHolder1_LabelTotalcredit', bs => bs.innerText);
-
     gradeSheet = utilities.modifyGradeSheet(gradeSheetHeaders, gradeSheet, semester, gpa, credits);
     grades.push(gradeSheet);
-
-
     finalGradeJson.semesterGrades = grades;
     finalGradeJson.cgpa = cgpa;
     finalGradeJson.status = true;
     finalGradeJson.message = 'OK';
-
     this.hostFinalJson();
     this.browserClose();
-
     console.log("TIME TAKEN: " + (new Date().getTime() - this.startTime)/1000)
-
     //this.response.send(finalGradeJson);
     return finalGradeJson;
   }*/
+<<<<<<< HEAD
 
   async getData() {
+=======
+>>>>>>> c71d6526d4ba049979dad3f4c69051b7656e7a83
 
+  /*async getData() {
     while(!Helper.done) {deasync.sleep(1000);}
-
     const page = await this.browser.newPage();
     await page.setCacheEnabled(false);
+<<<<<<< HEAD
 
+=======
+>>>>>>> c71d6526d4ba049979dad3f4c69051b7656e7a83
     await page.setRequestInterception(true);
-
     page.on('request', (req) => {
         if(req.resourceType() == 'stylesheet' || req.resourceType() == 'font' || req.resourceType() == 'image'){
             req.abort();
@@ -361,47 +413,32 @@ class Helper{
             req.continue();
         }
     });
-
     await page.goto('http://slcm.manipal.edu/Academics.aspx');
 
     var finalDet = [];
-
     var prevSem = -1;
     var loopContinues = false;
-
     Helper.finalDet.semester = await page.$eval('#ContentPlaceHolder1_lblSemester', e => e.innerText);
-
     Helper.finalDet.section = await page.$eval('#ContentPlaceHolder1_lblSection', e => e.innerText);
-
     Helper.finalDet.rollNo = await page.$eval('#ContentPlaceHolder1_lblRollNo', e => e.innerText);
-
     var teacherGuardianName = await page.$eval('#ContentPlaceHolder1_lblGuardian', e => e.innerText);
-
     var teacherGuardianPhone = await page.$eval('#ContentPlaceHolder1_lblGuardianTeacherMobile', e => e.innerText);
-
     var teacherGuardianEmail = await page.$eval('#ContentPlaceHolder1_lblGuardianTeacherEmail', e => e.innerText);
-
     var teacherGuardianStatus;
-
     if(teacherGuardianName == ""){
       teacherGuardianStatus = "Not Assigned";
     }
     else{
       teacherGuardianStatus = "Assigned";
     }
-
     Helper.finalDet.teacherGuardianStatus = teacherGuardianStatus;
-
     var teacherGuardianJson = {
       'name' : teacherGuardianName,
       'phone' : teacherGuardianPhone,
       'email' : teacherGuardianEmail
     }
-
     Helper.finalDet.teacherGuardianDetails = teacherGuardianJson;
-
     Helper.finalDet.admittedYear = await page.$eval('#ContentPlaceHolder1_lblAdmittedYear', e => e.innerText);
-
     try{
       await page.waitForSelector('table#tblAttendancePercentage',{timeout:2000});
     }
@@ -409,33 +446,22 @@ class Helper{
       utilities.displayError("Server Error",this.response);
       return;
     }
-
     const semester = await page.$eval('#ContentPlaceHolder1_ddlInternalSemester option[selected="selected"]', bs => bs.innerText);
-
     var subjects = await page.$$eval('h4.panel-text.panel-title', bs => bs.map((b) => {
       return b.innerText.trim().replace(/\s\s+/g, ' ');
     }));
-
     subjects = utilities.trimFromStart(subjects, 14);
-
     var internalMarks = utilities.getTotalMarks(subjects);
-
     subjects = utilities.trimFromEndForSubjects(subjects);
-
     const marksStatus = internalMarks.length != 0;
-
     var attendanceStatus = true;
     var attendanceData = await page.$$eval('#tblAttendancePercentage tbody tr td', bs => bs.map((b) => {
       return b.innerText.trim();
     }));
-
-
     attendanceData = utilities.modifyAttendance(attendanceData);
     var reqJson = utilities.stylify(semester, subjects, marksStatus,attendanceStatus , attendanceData, internalMarks);
     finalDet.push(reqJson);
-
     Helper.semester = semester;
-
     //this.browserClose();
     console.log("TIME TAKEN: " + (new Date().getTime() - this.startTime)/1000);
     var finallyDet = {
@@ -452,20 +478,8 @@ class Helper{
       'academicDetails': finalDet
     }
     //this.response.send(finallyDet);
-
     return finallyDet;
-  }
-
-  browserClose(){
-    this.browser.close();
-  }
-
-  hostFinalJson(){
-
-    Helper.canHost = true;
-
-  }
-
+  }*/
 }
 
 module.exports = Helper;

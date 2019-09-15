@@ -385,7 +385,7 @@ module.exports.modifyMarks = function(rawArray, subjects, non_empty){
 
     if(i>=2){
 
-      if((rawArray[i-1][0].toLowerCase().includes('assignment') || rawArray[i][0].toLowerCase().includes('assignment')) && (rawArray[i-1][0].toLowerCase().includes('sessional') || rawArray[i][0].toLowerCase().includes('sessional'))){}
+      if((rawArray[i-1][0].toLowerCase().includes('assignment') || rawArray[i][0].toLowerCase().includes('assignment')) && (rawArray[i-1][0].toLowerCase().includes('internal') || rawArray[i][0].toLowerCase().includes('internal'))){}
       else{
         for(var x=0;x<compiledArray.length;x++){
           if(non_empty[non_empty_index].toLowerCase().includes(compiledArray[x].subject_name.toLowerCase())){

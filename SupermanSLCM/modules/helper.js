@@ -164,11 +164,9 @@ class Helper{
 
       subjects = utilities.trimFromStart(subjects, 14);
 
-      var internalMarks = utilities.getTotalMarks(subjects);
+      var internalMarks = [];
 
       subjects = utilities.trimFromEndForSubjects(subjects);
-
-      const marksStatus = internalMarks.length != 0;
 
       var attendanceStatus = true;
 
@@ -180,8 +178,21 @@ class Helper{
         return b.innerText.trim();
       }));
 
+      var marksHeaders = await page.$$eval('div.panel-body.mit-bg table tbody', bs => bs.map((b) => {
+        return b.innerText.trim();
+      }));
+
+      var everything = await page.$$eval('div.panel-group.internalMarks', bs => bs.map((b) => {
+        return b.innerText.trim();
+      }));
+      everything = utilities.getEverythingSplit_marks(everything);
+
+      marksHeaders = utilities.getMarksSplit(marksHeaders);
 
       attendanceData = utilities.modifyAttendance(attendanceHeaders, attendanceData);
+      internalMarks = utilities.modifyMarks(marksHeaders, subjects, everything);
+
+      const marksStatus = internalMarks.length != 0;
       var reqJson = utilities.stylify(semester, subjects, marksStatus,attendanceStatus , attendanceData, internalMarks);
       finalDet.push(reqJson);
 
@@ -221,6 +232,7 @@ class Helper{
     Helper.canHost = true;
 
   }
+<<<<<<< HEAD
 
   /*async getDataMarks(semToFetch){
     const page = await this.browser.newPage();
@@ -480,6 +492,8 @@ class Helper{
     //this.response.send(finallyDet);
     return finallyDet;
   }*/
+=======
+>>>>>>> 0452bced39393196214850f4dbe1a247360b44c0
 }
 
 module.exports = Helper;

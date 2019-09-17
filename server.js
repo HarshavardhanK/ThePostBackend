@@ -248,13 +248,7 @@ const main = () => {
     } else {
 
       app.listen(3000);
-<<<<<<< HEAD
-      console.log('Running http server');
-
-=======
       console.log('Running http server on port 3000');
-  
->>>>>>> 01d3eaf1b971ddcbf8745aebba4b5a63e9959746
     }
 
   } else {

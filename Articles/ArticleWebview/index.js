@@ -2,6 +2,8 @@ const pug = require('pug');
 const path = require('path');
 const express = require('express');
 
+var getJSON = require('get-json')
+
 var database = require('../database');
 
 module.exports.renderArticle = (_id) => {
@@ -30,7 +32,7 @@ module.exports.getWebContent = (express_app) => {
   express_app.get('/posts/render/:tagId', (request, response) => {
 
       var _id = parseInt(request.params.tagId);
-      
+
       database.query_full_article({_id: _id}, 'unfiltered', (data) => {
 
         if(data) {
@@ -42,8 +44,39 @@ module.exports.getWebContent = (express_app) => {
         }
 
       });
-      
+
+      /*getJSON('https://api.themitpost.com/posts/raw/' + _id)
+        .then(function(res) {
+          response.render('article', res);
+        }).catch(function(error) {
+          console.log(error);
+        });*/
+
+});
+
+express_app.get('/posts/render/:tagId/dark', (request, response) => {
+
+    var _id = parseInt(request.params.tagId);
+
+    database.query_full_article({_id: _id}, 'unfiltered', (data) => {
+
+      if(data) {
+        console.log(response);
+        response.render('article-dark', data);
+
+      } else {
+        response.json({status: "BAD", data: []});
+      }
+
+    });
+
+    /*getJSON('https://api.themitpost.com/posts/raw/' + _id)
+      .then(function(res) {
+        response.render('article-dark', res);
+      }).catch(function(error) {
+        console.log(error);
+      });*/
+
 });
 
 }
-

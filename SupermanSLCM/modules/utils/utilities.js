@@ -1,3 +1,23 @@
+var splitOrig = String.prototype.split;
+
+function splitMulti(str, tokens){
+    var tempChar = tokens[0];
+    for(var i = 1; i < tokens.length; i++){
+        str = str.split(tokens[i]).join(tempChar);
+    }
+    str = str.split(tempChar);
+    return str;
+}
+
+String.prototype.split = function (){
+    if(arguments[0].length > 0){
+        if(Object.prototype.toString.call(arguments[0]) == "[object Array]" ) {
+            return splitMulti(this, arguments[0]);
+        }
+    }
+    return splitOrig.apply(this, arguments);
+};
+
 module.exports.trimFromStart = function(rawArray, startIndice){
 
   compiledArray  = [];
@@ -296,4 +316,139 @@ module.exports.stylify = function(semester,subjects, marksStatus, attendanceStat
   }
 
   return reqJson;
+}
+
+module.exports.getMarksSplit = function(raw){
+
+  var data = []
+
+  for(var i=0;i<raw.length;i++)
+    data.push(raw[i].split(['\n','\t']));
+
+  return data;
+}
+
+module.exports.getEverythingSplit_marks = function(raw){
+
+    var data = []
+
+    for(var i=0;i<raw.length;i++)
+      data = raw[i].split(['\n']);
+
+    var data_new = [];
+
+    for(var i=0;i<data.length;i++){
+      if(!data[i].toLowerCase().startsWith('subject code')){
+        if(data[i-1].toLowerCase().startsWith('subject code')){
+          data_new.push(data[i-1]);
+        }
+      }
+    }
+
+    return data_new;
+}
+
+module.exports.modifyMarks = function(rawArray, subjects, non_empty){
+
+  compiledArray = [];
+
+  for(var i=0;i<subjects.length;i++){
+
+    var core_json = {
+      'subject_name' : subjects[i],
+      'status' : false,
+      'is_lab' : false,
+      'sessional' : {
+        '_one':"-1",
+        '_two':"-1"
+      },
+      'assignment' : {
+        '_one':"-1",
+        '_two':"-1",
+        '_three':"-1",
+        '_four':"-1"
+      },
+      'lab' : {
+        'assessments' : []
+      }
+    };
+
+    compiledArray.push(core_json);
+  }
+
+  var non_empty_index = 0;
+
+  for(var i=0;i<rawArray.length;i++){
+
+    var subject_base = non_empty[i];
+    var index = -1;
+
+    if(i>=2){
+
+      if((rawArray[i-1][0].toLowerCase().includes('assignment') || rawArray[i][0].toLowerCase().includes('assignment')) && (rawArray[i-1][0].toLowerCase().includes('internal') || rawArray[i][0].toLowerCase().includes('internal'))){}
+      else{
+        for(var x=0;x<compiledArray.length;x++){
+          if(non_empty[non_empty_index].toLowerCase().includes(compiledArray[x].subject_name.toLowerCase())){
+            index = x;
+            non_empty_index++;
+            break;
+          }
+        }
+      }
+    }
+    else{
+      for(var x=0;x<compiledArray.length;x++){
+        if(non_empty[non_empty_index].toLowerCase().includes(compiledArray[x].subject_name.toLowerCase())){
+          index = x;
+          non_empty_index++;
+          break;
+        }
+      }
+    }
+
+    if(!rawArray[i][0].toLowerCase().includes('lab')){
+
+      compiledArray[index].is_lab = false;
+      compiledArray[index].status = true;
+
+      if(rawArray[i][0].toLowerCase().includes('assignment')){
+        for(var j=3;j<rawArray[i].length;j=j+3){
+
+          if(rawArray[i][j].includes('1'))
+            compiledArray[index].assignment._one = rawArray[i][j+2];
+          else if(rawArray[i][j].includes('2'))
+            compiledArray[index].assignment._two = rawArray[i][j+2];
+          else if(rawArray[i][j].includes('3'))
+            compiledArray[index].assignment._three = rawArray[i][j+2];
+          else if(rawArray[i][j].includes('4'))
+            compiledArray[index].assignment._four = rawArray[i][j+2];
+        }
+      }
+      else{
+        for(var j=3;j<rawArray[i].length;j=j+3){
+
+          if(rawArray[i][j].includes('1'))
+            compiledArray[index].sessional._one = rawArray[i][j+2];
+          else if(rawArray[i][j].includes('2'))
+            compiledArray[index].sessional._two = rawArray[i][j+2];
+        }
+      }
+    }
+    else{
+
+      compiledArray[index].is_lab = true;
+      compiledArray[index].status = true;
+
+      for(var j=3;j<rawArray[i].length;j=j+3){
+        var r = {
+          'assessment_desc' : rawArray[i][j],
+          'marks' : rawArray[i][j+2]
+        }
+
+        compiledArray[index].lab.assessments.push(r);
+      }
+    }
+  }
+
+  return compiledArray;
 }

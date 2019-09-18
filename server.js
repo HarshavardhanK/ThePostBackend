@@ -240,16 +240,15 @@ const main = () => {
         key: fs.readFileSync('/etc/ssl/private/key.pem'),
         cert: fs.readFileSync('/etc/ssl/certs/cert.pem')
       };
-  
+
       https.createServer(options, app).listen(8000);
-  
+
       console.log('Running https server on port 8000');
-  
+
     } else {
-  
+
       app.listen(3000);
       console.log('Running http server on port 3000');
-  
     }
 
   } else {
@@ -265,7 +264,7 @@ const main = () => {
 
   }
 
-  
+
 
 };
 

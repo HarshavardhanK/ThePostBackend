@@ -41,6 +41,7 @@ class Helper{
     }
     catch(error){
       utilities.displayError("Website Timed Out",this.response);
+      await this.browser.close();
       return;
     }
     try{
@@ -66,8 +67,9 @@ class Helper{
       }
     }
     catch(error){
-      if(error.message === "Invalid Credentials."){
-
+      
+      if(error.message === "Invalid Credentials.") {
+          this.browser.close();
           utilities.displayError("Invalid Credentials",this.response);
           return 'invalid credentials';
       }
@@ -79,7 +81,9 @@ class Helper{
       }
       catch(error){
         utilities.displayError("Website Timed Out",this.response);
+        this.browser.close();
         return;
+
       }
 
       try{
@@ -87,8 +91,9 @@ class Helper{
       }
       catch(error){
         utilities.displayError("Website Timed Out",this.response);
+        this.browser.close();
         return;
-      }
+      } 
 
       Helper.done = true;
 
@@ -139,8 +144,10 @@ class Helper{
       }
       catch(error){
         utilities.displayError("Server Error",this.response);
+        this.browser.close();
         return;
-      }
+
+      } 
 
       const semester = await page.$eval('#ContentPlaceHolder1_ddlInternalSemester option[selected="selected"]', bs => bs.innerText);
 
@@ -199,18 +206,20 @@ class Helper{
         'teacherGuardianDetails': Helper.finalDet.teacherGuardianDetails,
         'academicDetails': finalDet
       }
-      //this.response.send(finallyDet);
+  
+      return finallyDet;
+
+    } finally {
 
       await page.close();
-      await this.browserClose();
+      await this.browser.close();
       await this.hostFinalJson();
-      return finallyDet;
+
     }
+
   }
 
-  browserClose(){
-    this.browser.close();
-  }
+ 
 
   hostFinalJson(){
 

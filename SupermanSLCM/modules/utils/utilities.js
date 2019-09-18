@@ -359,14 +359,14 @@ module.exports.modifyMarks = function(rawArray, subjects, non_empty){
       'status' : false,
       'is_lab' : false,
       'sessional' : {
-        '_one':"-1",
-        '_two':"-1"
+        '_one':"NA",
+        '_two':"NA"
       },
       'assignment' : {
-        '_one':"-1",
-        '_two':"-1",
-        '_three':"-1",
-        '_four':"-1"
+        '_one':"NA",
+        '_two':"NA",
+        '_three':"NA",
+        '_four':"NA"
       },
       'lab' : {
         'assessments' : []

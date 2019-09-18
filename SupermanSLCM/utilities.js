@@ -26,6 +26,30 @@ module.exports.get_attendance_for = (complete_object, index=null) => {
     }
 }
 
+module.exports.get_marks_for = (complete_object, index=null) => {
+
+    if(complete_object) {
+
+        let marks_obj = complete_object.academicDetails[0].internalMarks
+        console.log(marks_obj.length)
+
+        if(index == null) {
+            return marks_obj
+        }
+
+        if(index > marks_obj.length) {
+            return marks_obj[marks_obj.length - 1]
+
+        } else {
+            return marks_obj[index]
+        }
+
+    } else {
+        console.log('null object')
+        return null
+    }
+}
+
 module.exports.get_random_attendance = (subjectName) => {
 
     let total = Math.round(Math.random() * (40 - 5)) + 5;
@@ -39,9 +63,57 @@ module.exports.get_random_attendance = (subjectName) => {
             };
 }
 
+module.exports.get_random_marks = (subjectName, sessional, assignment) => {
+
+    var marks = "NA"
+
+    let marks1 = "NA"
+    let marks2 = "NA" 
+    let marks3 = "NA" 
+    let marks4 = "NA" 
+
+    if(sessional) {
+        marks = Math.round(Math.random() * (15 - 5)) + 5
+    }
+
+    if(assignment) {
+        console.log('Changing assignment marks all')
+
+         marks1 = Math.round(Math.random() * (5 - 0))
+         marks2 = Math.round(Math.random() * (5 - 0)) 
+         marks3 = Math.round(Math.random() * (5 - 0)) 
+         marks4 = Math.round(Math.random() * (5 - 0)) 
+    }
+
+    return {"subjectName": subjectName,
+
+            "status": true,
+            "is_lab":false, 
+
+            "sessional": {
+                "_one": marks.toString(),
+                "_two": 'NA'
+            },
+
+            "assignment": {
+                "_one": marks1.toString(),
+                "_two": marks2.toString(),
+                "_three": marks3.toString(),
+                "_four": marks4.toString()
+            },
+
+            "lab": {
+                "assessments": []
+            }
+        }
+    
+
+}
+
 module.exports.change_attendance = (complete_object, which=null) => {
 
     let change_number = Math.round(Math.random() * (this.get_attendance_for(complete_object).length - 0));
+    
     let attendance_obj = this.get_attendance_for(complete_object, change_number);
 
     let gen_attendance = this.get_random_attendance(attendance_obj.subjectName);
@@ -54,6 +126,24 @@ module.exports.change_attendance = (complete_object, which=null) => {
 
     return new_complete_object;
 
+}
+
+module.exports.change_marks = (complete_object) => {
+
+    let marks = this.get_marks_for(complete_object)
+    let change_number = Math.round(Math.random() * (5 - 0));
+    console.log("Change number is %d", change_number)
+
+    let gen_marks = this.get_random_marks(marks[change_number].subject_name, true, true);
+
+    let new_obj = complete_object;
+    new_obj.academicDetails[0].internalMarks[change_number] = gen_marks
+
+    console.log("Changed this marks")
+    console.log(gen_marks)
+
+    return new_obj
+   
 }
 
 const check_attendance_component = (new_component, current_component) => {
@@ -79,9 +169,74 @@ const check_attendance_component = (new_component, current_component) => {
     return false;
 }
 
+const check_marks_component = (new_object, current_object) => {
+
+    //Add code for Firebase notifications
+
+    var sessionalChanged = [false, false]
+    var assignmentChanged = [false, false, false, false]
+
+    if(new_object != null && current_object != null) {
+
+        if(new_object.subjectName !== current_object.subjectName) {
+            return true;
+        }
+
+        if(new_object.is_lab) {
+            console.log('is lab.')
+        }
+
+        if(new_object.status) {
+
+            if(new_object.sessional._one !== current_object.sessional._one) {
+                sessionalChanged[0] = true
+            }
+
+            if(new_object.sessional._two !== current_object.sessional._two) {
+                sessionalChanged[1] = true
+            }
+
+            if(new_object.assignment._one != current_object.assignment._one) {
+                assignmentChanged[0] = true
+            }
+
+            if(new_object.assignment._two != current_object.assignment._two) {
+                assignmentChanged[1] = true
+            }
+
+            if(new_object.assignment._two != current_object.assignment._two) {
+                assignmentChanged[2] = true
+            }
+
+            if(new_object.assignment._two != current_object.assignment._two) {
+                assignmentChanged[3] = true
+            }
+
+            for(var i = 0; i < 2; i++) {
+                if(sessionalChanged[i]) {
+                    return true;
+                }
+            }
+
+            for(var i = 0; i < 4; i++) {
+                if(assignmentChanged[i]) {
+                    return true;
+                }
+            }
+                
+
+        } else {
+            return false;
+        }
+    }
+}
+
 //CODE FOR CHECKING TWO SLCM DATA OBJECTS FOR DIFFERENCE    
 
 module.exports.check = (current_object, new_object) => {
+
+    let marks_change = false;
+    let attendance_change = false;
 
     let change = false;
 
@@ -91,18 +246,39 @@ module.exports.check = (current_object, new_object) => {
     let current_attn = this.get_attendance_for(current_object);
     let new_attn = this.get_attendance_for(new_object);
 
+    let current_marks = this.get_marks_for(current_object);
+    let new_marks = this.get_marks_for(new_object);
+
     for(var i = 0; i < current_attn.length; i++) {
 
         if(check_attendance_component(new_attn[i], current_attn[i])) {
 
-            change = true;
+            attendance_change = true;
             console.log('Difference in %s', current_attn[i].subjectName);
 
             new_attn[i].updatedAt = new Date().getTime();
         }
+
+        if(check_marks_component(new_marks[i], current_marks[i])) {
+
+            marks_change = true;
+            console.log("Difference in %s", current_marks[i].subjectName)
+
+            new_marks.updatedAt = new Date().getTime();
+        }
     }
-    
-    return {change: change, value: new_attn};
+
+    if(marks_change) {
+        change = true
+        new_object.academicDetails[0].interalMarks = new_marks;
+    }
+
+    if(attendance_change) {
+        change = true
+        new_object.academicDetails[0].attendance = new_attn;
+    }
+
+    return {change: change, value: new_object};
 
 }
 

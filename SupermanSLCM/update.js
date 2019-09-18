@@ -77,11 +77,10 @@ const fetch = async (registration, password, test) => {
         console.log("Different values in database and recently scraped");
 
         let newValue = check.value;
-        console.log('New attendance object returned');
+        console.log('Update for user object returned');
 
-        let new_object = current_object;
-        new_object.academicDetails[0].attendance = newValue;
-
+        let new_object = newValue;;
+      
         let insert_query = {registration: registration, password: password}
 
         await database.insert_slcm_data(insert_query, new_object, 'ios');

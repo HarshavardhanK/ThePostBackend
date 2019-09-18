@@ -377,11 +377,11 @@ module.exports.modifyMarks = function(rawArray, subjects, non_empty){
   }
 
   var non_empty_index = 0;
+  var index = -1;
 
   for(var i=0;i<rawArray.length;i++){
 
     var subject_base = non_empty[i];
-    var index = -1;
 
     if(i>=2){
 

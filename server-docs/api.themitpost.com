@@ -25,12 +25,12 @@ server {
 
 	root /home/ubuntu/public_html;
 
-        server_name api.themitpost.com;
+        server_name app.themitpost.com;
         
         location / {
           proxy_pass http://localhost:3000;
         }
-       # return 302 $https://server_name$request_uri;        
+        return 302 $https://server_name$request_uri;        
 
 }
 
@@ -60,7 +60,7 @@ server {
 	# Add index.php to the list if you are using PHP
 	index index.html index.htm index.nginx-debian.html;
 
-	server_name api.themitpost.com www.api.themitpost.com;
+	server_name app.themitpost.com;
 
         location / {
           proxy_pass https://localhost:8000;

@@ -33,7 +33,7 @@ const fetch = async (registration, password, test) => {
   let URL = 'https://api.themitpost.com/values/update';
 
   if(test) {
-    URL = 'http://localhost:3000/values/update'
+    URL = 'http://localhost:3003/values/update'
     console.log('Sending POST to http')
 
   } else {

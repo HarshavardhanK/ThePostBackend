@@ -183,32 +183,38 @@ const check_marks_component = (new_object, current_object) => {
         }
 
         if(new_object.is_lab) {
-            console.log('is lab.')
+           // console.log('is lab.')
         }
 
         if(new_object.status) {
 
             if(new_object.sessional._one !== current_object.sessional._one) {
+                console.log('session 1 change')
                 sessionalChanged[0] = true
             }
 
             if(new_object.sessional._two !== current_object.sessional._two) {
+                console.log('session 2 change')
                 sessionalChanged[1] = true
             }
 
             if(new_object.assignment._one != current_object.assignment._one) {
+                console.log('assignment 1 change')
                 assignmentChanged[0] = true
             }
 
             if(new_object.assignment._two != current_object.assignment._two) {
+                console.log('assignment 2 change')
                 assignmentChanged[1] = true
             }
 
             if(new_object.assignment._two != current_object.assignment._two) {
+                console.log('assignment 3 change')
                 assignmentChanged[2] = true
             }
 
             if(new_object.assignment._two != current_object.assignment._two) {
+                console.log('assignment 4 change')
                 assignmentChanged[3] = true
             }
 
@@ -254,7 +260,7 @@ module.exports.check = (current_object, new_object) => {
         if(check_attendance_component(new_attn[i], current_attn[i])) {
 
             attendance_change = true;
-            console.log('Difference in %s', current_attn[i].subjectName);
+            console.log('Difference in attendance %s', current_attn[i].subjectName);
 
             new_attn[i].updatedAt = new Date().getTime();
         }
@@ -262,7 +268,7 @@ module.exports.check = (current_object, new_object) => {
         if(check_marks_component(new_marks[i], current_marks[i])) {
 
             marks_change = true;
-            console.log("Difference in %s", current_marks[i].subjectName)
+            console.log("Difference in marks %s", current_marks[i].subject_name)
 
             new_marks.updatedAt = new Date().getTime();
         }

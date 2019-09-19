@@ -3,9 +3,9 @@ const fs = require('fs');
 const utilities = require('./utilities');
 const database = require('./database');
 
-const get_data = () => {
+const get_data = (filename) => {
 
-    let json_data = JSON.parse(fs.readFileSync('data.json', 'utf-8'));
+    let json_data = JSON.parse(fs.readFileSync(filename, 'utf-8'));
 
     if(json_data) {
         return json_data
@@ -38,4 +38,16 @@ const generate_marks = () => {
     
 }
 
-generate_marks()
+const compare_marks = () => {
+
+    let original = get_data('data.json')
+    let generated = get_data('./Generated-Data/marks-gen-data.json')
+
+    let check = utilities.check(original, generated)
+
+    if(check.change) {
+        console.log('change detected')
+    }
+}
+
+compare_marks();

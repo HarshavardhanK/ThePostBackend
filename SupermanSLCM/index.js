@@ -30,14 +30,16 @@ let COLLECTIONS = {
 
 module.exports.scrape = scrape = async (reg,pass,res, SHOULD_GET_MARKS, GET_GRADES, SHOULD_GET_ATT, semToFetch) => {
 
-  const browser = await puppeteer.launch({args: [
+  /*const browser = await puppeteer.launch({args: [
     '--disable-gpu',
     '--disable-dev-shm-usage',
     '--disable-setuid-sandbox',
     '--no-first-run',
     '--no-sandbox',
     '--no-zygote'
-  ], headless:true});
+  ], headless:true});*/
+
+  const browser = await puppeteer.connect({ browserWSEndpoint: 'ws://localhost:3000' });
 
   console.log('Opening browser')
 

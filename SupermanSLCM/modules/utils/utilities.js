@@ -421,7 +421,7 @@ module.exports.modifyMarks = function(rawArray, subjects, non_empty, nums){
           }
         }
         else if(rawArray[sum][0].toLowerCase().includes('internal')){
-          for(var j=3;j<rawArray[i].length;j=j+3){
+          for(var j=3;j<rawArray[sum].length;j=j+3){
 
             if(rawArray[sum][j].includes('1'))
               compiledArray[i].sessional._one = rawArray[sum][j+2];
@@ -472,7 +472,7 @@ module.exports.modifyMarks = function(rawArray, subjects, non_empty, nums){
         else{
           compiledArray[i].is_lab = true;
 
-          for(var j=3;j<rawArray[i].length;j=j+3){
+          for(var j=3;j<rawArray[sum].length;j=j+3){
             var r = {
               'assessment_desc' : rawArray[sum][j],
               'marks' : rawArray[sum][j+2]

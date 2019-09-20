@@ -185,7 +185,7 @@ module.exports.postSLCMValuesForUpdate = (app) => {
 
       console.log("success")
       response.send(value);
-  
+
     }).catch((error) => {
 
       console.log(error);

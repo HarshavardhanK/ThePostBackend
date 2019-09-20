@@ -184,7 +184,6 @@ class Helper{
       var nums = everythingJSON.count;
 
       marksHeaders = utilities.getMarksSplit(marksHeaders);
-      console.log(marksHeaders);
 
       attendanceData = utilities.modifyAttendance(attendanceHeaders, attendanceData);
       internalMarks = utilities.modifyMarks(marksHeaders, subjects, everything, nums);

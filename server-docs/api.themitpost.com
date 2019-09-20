@@ -28,7 +28,7 @@ server {
         server_name app.themitpost.com www.api.themitpost.com;
         
         location / {
-          proxy_pass http://localhost:3000;
+          proxy_pass http://localhost:3003;
         }
         #return 302 $https://$server_name$request_uri;        
 

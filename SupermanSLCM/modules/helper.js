@@ -67,7 +67,7 @@ class Helper{
       }
     }
     catch(error){
-      
+
       if(error.message === "Invalid Credentials.") {
           this.browser.close();
           utilities.displayError("Invalid Credentials",this.response);
@@ -93,7 +93,7 @@ class Helper{
         utilities.displayError("Website Timed Out",this.response);
         this.browser.close();
         return;
-      } 
+      }
 
       Helper.done = true;
 
@@ -147,7 +147,7 @@ class Helper{
         this.browser.close();
         return;
 
-      } 
+      }
 
       const semester = await page.$eval('#ContentPlaceHolder1_ddlInternalSemester option[selected="selected"]', bs => bs.innerText);
 
@@ -178,12 +178,16 @@ class Helper{
       var everything = await page.$$eval('div.panel-group.internalMarks', bs => bs.map((b) => {
         return b.innerText.trim();
       }));
-      everything = utilities.getEverythingSplit_marks(everything);
+
+      var everythingJSON = utilities.getEverythingSplit_marks(everything);
+      everything = everythingJSON.subjects;
+      var nums = everythingJSON.count;
 
       marksHeaders = utilities.getMarksSplit(marksHeaders);
+      console.log(marksHeaders);
 
       attendanceData = utilities.modifyAttendance(attendanceHeaders, attendanceData);
-      internalMarks = utilities.modifyMarks(marksHeaders, subjects, everything);
+      internalMarks = utilities.modifyMarks(marksHeaders, subjects, everything, nums);
 
       const marksStatus = internalMarks.length != 0;
       var reqJson = utilities.stylify(semester, subjects, marksStatus,attendanceStatus , attendanceData, internalMarks);
@@ -206,7 +210,7 @@ class Helper{
         'teacherGuardianDetails': Helper.finalDet.teacherGuardianDetails,
         'academicDetails': finalDet
       }
-  
+
       return finallyDet;
 
     } finally {
@@ -219,7 +223,7 @@ class Helper{
 
   }
 
- 
+
 
   hostFinalJson(){
 

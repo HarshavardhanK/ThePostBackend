@@ -336,6 +336,7 @@ module.exports.getEverythingSplit_marks = function(raw){
       data = raw[i].split(['\n']);
 
     var data_new = [];
+    var data_num = [];
 
     for(var i=0;i<data.length;i++){
       if(!data[i].toLowerCase().startsWith('subject code')){
@@ -345,10 +346,29 @@ module.exports.getEverythingSplit_marks = function(raw){
       }
     }
 
-    return data_new;
+    for(var i=0;i<data.length;i++){
+      if(data[i].toLowerCase().startsWith('subject code')){
+        var num = 0;
+        var x;
+
+        for(x=i+1;x<data.length;x++){
+
+          if(data[x].toLowerCase().startsWith('subject code'))
+            break;
+          else if(data[x].split('\t')[1].toLowerCase().includes('maximum marks') || data[x].split('\t')[2].toLowerCase().includes('maximum marks'))
+            num++;
+        }
+        data_num.push(num);
+      }
+    }
+    var data_js = {
+      count : data_num,
+      subjects : data_new
+    }
+    return data_js;
 }
 
-module.exports.modifyMarks = function(rawArray, subjects, non_empty){
+module.exports.modifyMarks = function(rawArray, subjects, non_empty, nums){
 
   compiledArray = [];
 
@@ -378,8 +398,130 @@ module.exports.modifyMarks = function(rawArray, subjects, non_empty){
 
   var non_empty_index = 0;
   var index = -1;
+  var sum = 0;
 
-  for(var i=0;i<rawArray.length;i++){
+  for(var i=0;i<nums.length;i++){
+    switch(nums[i]){
+      case 0:
+        break;
+      case 1:
+        compiledArray[i].status = true;
+
+        if(rawArray[sum][0].toLowerCase().includes('assignment')){
+          for(var j=3;j<rawArray[sum].length;j=j+3){
+
+            if(rawArray[sum][j].includes('1'))
+              compiledArray[i].assignment._one = rawArray[sum][j+2];
+            else if(rawArray[sum][j].includes('2'))
+              compiledArray[i].assignment._two = rawArray[sum][j+2];
+            else if(rawArray[sum][j].includes('3'))
+              compiledArray[i].assignment._three = rawArray[sum][j+2];
+            else if(rawArray[sum][j].includes('4'))
+              compiledArray[i].assignment._four = rawArray[sum][j+2];
+          }
+        }
+        else if(rawArray[sum][0].toLowerCase().includes('internal')){
+          for(var j=3;j<rawArray[i].length;j=j+3){
+
+            if(rawArray[sum][j].includes('1'))
+              compiledArray[i].sessional._one = rawArray[sum][j+2];
+            else if(rawArray[sum][j].includes('2'))
+              compiledArray[i].sessional._two = rawArray[sum][j+2];
+          }
+        }
+        else{
+          compiledArray[i].is_lab = true;
+
+          for(var j=3;j<rawArray[sum].length;j=j+3){
+            var r = {
+              'assessment_desc' : rawArray[sum][j],
+              'marks' : rawArray[sum][j+2]
+            }
+
+            compiledArray[i].lab.assessments.push(r);
+          }
+        }
+        sum += 1;
+        break;
+
+      case 2:
+        compiledArray[i].status = true;
+
+        if(rawArray[sum][0].toLowerCase().includes('assignment')){
+          for(var j=3;j<rawArray[sum].length;j=j+3){
+
+            if(rawArray[sum][j].includes('1'))
+              compiledArray[i].assignment._one = rawArray[sum][j+2];
+            else if(rawArray[sum][j].includes('2'))
+              compiledArray[i].assignment._two = rawArray[sum][j+2];
+            else if(rawArray[sum][j].includes('3'))
+              compiledArray[i].assignment._three = rawArray[sum][j+2];
+            else if(rawArray[sum][j].includes('4'))
+              compiledArray[i].assignment._four = rawArray[sum][j+2];
+          }
+        }
+        else if(rawArray[sum][0].toLowerCase().includes('internal')){
+          for(var j=3;j<rawArray[sum].length;j=j+3){
+
+            if(rawArray[sum][j].includes('1'))
+              compiledArray[i].sessional._one = rawArray[sum][j+2];
+            else if(rawArray[sum][j].includes('2'))
+              compiledArray[i].sessional._two = rawArray[sum][j+2];
+          }
+        }
+        else{
+          compiledArray[i].is_lab = true;
+
+          for(var j=3;j<rawArray[i].length;j=j+3){
+            var r = {
+              'assessment_desc' : rawArray[sum][j],
+              'marks' : rawArray[sum][j+2]
+            }
+
+            compiledArray[i].lab.assessments.push(r);
+          }
+        }
+
+        if(rawArray[sum+1][0].toLowerCase().includes('assignment')){
+          for(var j=3;j<rawArray[sum+1].length;j=j+3){
+
+            if(rawArray[sum+1][j].includes('1'))
+              compiledArray[i].assignment._one = rawArray[sum+1][j+2];
+            else if(rawArray[sum+1][j].includes('2'))
+              compiledArray[i].assignment._two = rawArray[sum+1][j+2];
+            else if(rawArray[sum+1][j].includes('3'))
+              compiledArray[i].assignment._three = rawArray[sum+1][j+2];
+            else if(rawArray[sum+1][j].includes('4'))
+              compiledArray[i].assignment._four = rawArray[sum+1][j+2];
+          }
+        }
+        else if(rawArray[sum+1][0].toLowerCase().includes('internal')){
+          for(var j=3;j<rawArray[sum+1].length;j=j+3){
+
+            if(rawArray[sum+1][j].includes('1'))
+              compiledArray[i].sessional._one = rawArray[sum+1][j+2];
+            else if(rawArray[sum+1][j].includes('2'))
+              compiledArray[i].sessional._two = rawArray[sum+1][j+2];
+          }
+        }
+        else{
+          compiledArray[i].is_lab = true;
+
+          for(var j=3;j<rawArray[sum+1].length;j=j+3){
+            var r = {
+              'assessment_desc' : rawArray[sum+1][j],
+              'marks' : rawArray[sum+1][j+2]
+            }
+
+            compiledArray[i].lab.assessments.push(r);
+          }
+        }
+        sum += 2;
+        break;
+    }
+  }
+
+  /*for(var i=0;i<rawArray.length;i++){
 
     var subject_base = non_empty[i];
 
@@ -448,7 +590,7 @@ module.exports.modifyMarks = function(rawArray, subjects, non_empty){
         compiledArray[index].lab.assessments.push(r);
       }
     }
-  }
+  }*/
 
   return compiledArray;
 }

@@ -25,12 +25,12 @@ server {
 
 	root /home/ubuntu/public_html;
 
-        server_name app.themitpost.com;
+        server_name app.themitpost.com www.app.themitpost.com;
         
         location / {
           proxy_pass http://localhost:3000;
         }
-        return 302 $https://server_name$request_uri;        
+        #return 302 $https://$server_name$request_uri;        
 
 }
 

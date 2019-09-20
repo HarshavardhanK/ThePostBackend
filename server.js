@@ -29,15 +29,15 @@ app.get('/', (request, response) => {
   const message = {
 
     message: "Welcome to the official API of The MIT Post",
-    SLCM_UI_API: 'https://api.themitpost.com/slcm',
-    SLCM_POST_ADDRESS: 'https://api.themitpost.com/values',
-    ARTICLES_API: 'https://api.themitpost.com/posts',
-    ARTICLE_TAG_API: 'https://api.themitpost.com/posts/TAG',
-    ARTICLE_RAW_TAG_API: 'https://api.themitpost.com/posts/raw/TAG',
-    EVENT_PORTAL: 'https://api.themitpost.com/portal/events',
-    EVENT_PORTAL_API: 'https://api.themitpost.com/events',
-    NOTICES_PORTAL: 'https://api.themitpost.com/portal/notice',
-    NOTICES_PORTAL_API: 'https://api.themitpost.com/notices',
+    SLCM_UI_API: 'https://app.themitpost.com/slcmValues',
+    SLCM_POST_ADDRESS: 'https://app.themitpost.com/values',
+    ARTICLES_API: 'https://app.themitpost.com/posts',
+    ARTICLE_TAG_API: 'https://app.themitpost.com/posts/TAG',
+    ARTICLE_RAW_TAG_API: 'https://app.themitpost.com/posts/raw/TAG',
+    EVENT_PORTAL: 'https://app.themitpost.com/portal/events',
+    EVENT_PORTAL_API: 'https://app.themitpost.com/events',
+    NOTICES_PORTAL: 'https://app.themitpost.com/portal/notice',
+    NOTICES_PORTAL_API: 'https://app.themitpost.com/notices',
 
 
 };

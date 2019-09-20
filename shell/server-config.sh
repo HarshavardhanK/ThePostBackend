@@ -44,4 +44,6 @@ sudo ln -s /etc/nginx/sites-available/app.themitpost.com /etc/nginx/sites-enable
 sudo cp -i ~/ThePostBackend/server-docs/cert.pem /etc/ssl/certs/cert.pem
 sudo cp -i ~/ThePostBackend/server-docs/key.pem /etc/ssl/private/key.pem
 
+sudo systemctl restart nginx
+
 

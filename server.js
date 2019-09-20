@@ -49,6 +49,7 @@ app.get('/', (request, response) => {
 app.get('/posts', (request, response) => {
 
   query = {};
+  console.log("/posts")
 
   database.query_skeleton_article_all(query, (data) => {
 

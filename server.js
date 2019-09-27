@@ -229,6 +229,25 @@ app.get('/notices', function(request, response) {
 
 });
 
+
+///////// OTHER ENDPOINTS ////////////////////////////////
+
+app.get('/policy', function(request,response) {
+  response.sendFile(path.join(__dirname+'/StaticFiles/privacy.html'));
+});
+
+app.get('/policy/dark', function(request,response) {
+  response.sendFile(path.join(__dirname+'/StaticFiles/privacy_dark.html'));
+});
+
+app.get('/about', function(request,response) {
+  response.sendFile(path.join(__dirname+'/StaticFiles/about.html'));
+});
+
+app.get('/about/dark', function(request,response) {
+  response.sendFile(path.join(__dirname+'/StaticFiles/about_dark.html'));
+});
+
 const main = () => {
 
   const command = yargs.argv;
@@ -264,8 +283,6 @@ const main = () => {
     console.log('Running https server on port 8000');
 
   }
-
-
 
 };
 

@@ -8,7 +8,7 @@ const database = require('./database.js');
 
 const API = 'https://themitpost.com/wp-json/wp/v2/posts?per_page=50';
 const AUTHOR_API = 'https://themitpost.com/wp-json/wp/v2/users/';
-
+const CATEGORY_API = "https://themitpost.com/wp-json/wp/v2/categories?include=";
 const get_article = async(_API) => {
 
   try {
@@ -29,14 +29,22 @@ const get_article = async(_API) => {
 
       var author_ID = response.data[i].author;
       var author_api = AUTHOR_API + author_ID;
+      var category_api = CATEGORY_API + response.data[i].categories[0];
+
+      console.log(category_api);
 
       let author_response = await axios.get(author_api);
+      let category_response = await axios.get(category_api)
 
       let author = {name: author_response.data.name, url: author_response.data.link};
+      let category = category_response.data[0].name;
+
+      console.log(category)
 
       article = {
 
       '_id': response.data[i].id,
+      'category': category,
       'date': utilities.get_date(response.data[i].date),
       'title': response.data[i].title.rendered,
       'content': response.data[i].content.rendered,

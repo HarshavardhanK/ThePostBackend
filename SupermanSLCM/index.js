@@ -142,6 +142,7 @@ module.exports.postValues = (app) => {
           console.log("success");
 
           let new_value = utilities.sanitize(value)
+          console.log(new_value);
 
           res.send(new_value);
 

@@ -28,7 +28,7 @@ const generate_attendance = () => {
 
 const generate_marks = () => {
 
-    let model_data = get_data();
+    let model_data = get_data('data.json');
 
     let generate_data = JSON.stringify(utilities.change_marks(model_data));
 
@@ -49,5 +49,5 @@ const compare_marks = () => {
         console.log('change detected')
     }
 }
-
+generate_marks()
 compare_marks();

@@ -85,7 +85,7 @@ module.exports.get_random_marks = (subjectName, sessional, assignment) => {
          marks4 = Math.round(Math.random() * (5 - 0))
     }
 
-    return {"subjectName": subjectName,
+    return {"subject_name": subjectName,
 
             "status": true,
             "is_lab":false,
@@ -131,7 +131,7 @@ module.exports.change_attendance = (complete_object, which=null) => {
 module.exports.change_marks = (complete_object) => {
 
     let marks = this.get_marks_for(complete_object)
-    let change_number = Math.round(Math.random() * (5 - 0));
+    let change_number = Math.round(Math.random() * (4 - 0));
     console.log("Change number is %d", change_number)
 
     console.log("change num marks %s", marks[change_number]);
@@ -154,7 +154,7 @@ const check_attendance_component = (new_component, current_component) => {
     if(new_component != null && current_component != null) {
 
         if(new_component.subjectName !== current_component.subjectName) {
-            return true;
+            return false;
         }
 
         // Check only total classes since any change in attendance the total classes value HAS to increase
@@ -177,16 +177,19 @@ const check_marks_component = (new_object, current_object) => {
     var sessionalChanged = [false, false]
     var assignmentChanged = [false, false, false, false]
 
-    console.log(new_object)
-    console.log('curr');
-    console.log(current_object)
+    //console.log(new_object)
+    //console.log('curr');
+    //console.log(current_object)
 
     if(new_object != null && current_object != null) {
+
+        console.log("Recevied new object")
+        console.log(new_object)
 
         if(new_object.subject_name !== current_object.subject_name) {
           console.log(new_object.subject_name, current_object.subject_name);
           console.log('lol')
-            return true;
+          return false;
         }
 
         if(new_object.is_lab) {
@@ -253,17 +256,11 @@ module.exports.check = (current_object, new_object) => {
 
     let change = false;
 
-    /*let current_object = JSON.parse(fs.readFileSync('data.json', 'utf-8'))
-    let new_object = JSON.parse(fs.readFileSync('Generated-Data/gen-data.json', 'utf-8'))*/
-
     let current_attn = this.get_attendance_for(current_object);
     let new_attn = this.get_attendance_for(new_object);
 
     let current_marks = this.get_marks_for(current_object);
-    let new_marks = this.get_marks_for(new_object);
-
-    //console.log(current_marks);
-    //console.log(new_marks)
+    let new_marks = this.get_marks_for(new_object)
 
     for(var i = 0; i < current_attn.length; i++) {
 
@@ -274,6 +271,8 @@ module.exports.check = (current_object, new_object) => {
 
             new_attn[i].updatedAt = new Date().getTime();
         }
+
+       // console.log(new_marks[i])
 
         if(check_marks_component(new_marks[i], current_marks[i])) {
 
@@ -299,17 +298,20 @@ module.exports.check = (current_object, new_object) => {
 }
 
 module.exports.sanitize = (fresh_object) => {
+
     let attn = this.get_attendance_for(fresh_object)
+    let marks = this.get_marks_for(fresh_object)
 
     for(var i = 0; i < attn.length; i++) {
 
-        if(!attn[i].updatedAt) {
-
+        if(!attn[i].updatedAt && !marks[i].updatedAt) {
+            marks[i].updatedAt = -1
             attn[i].updatedAt = -1
         }
     }
 
     fresh_object.academicDetails[0].attendance = attn;
+    fresh_object.academicDetails[0].internalMarks = marks;
 
     return fresh_object;
 }

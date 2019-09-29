@@ -272,8 +272,6 @@ module.exports.check = (current_object, new_object) => {
             new_attn[i].updatedAt = new Date().getTime();
         }
 
-       // console.log(new_marks[i])
-
         if(check_marks_component(new_marks[i], current_marks[i])) {
 
             marks_change = true;

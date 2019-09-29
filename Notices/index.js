@@ -42,7 +42,7 @@ app.post('/portal/notices/submitted', function(request, response) {
     }
   };
 
-  if(notify == 'on'){
+  if(notify === 'on'){
 
     //If notify checkbox is checked then send notification
 

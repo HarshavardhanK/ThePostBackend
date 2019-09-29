@@ -27,16 +27,22 @@ app.post('/portal/events/submitted', function(request, response) {
   const imageURL = request.body.imageURL;
   const date = request.body.date;
   const time = request.body.time;
+  const location = request.body.location;
+  const formLink = request.body.formLink;
+
+  if(formLink.trim() == ""){
+    formLink = "NA";
+  }
 
   const event = {
-
     clubName: club,
     title: title,
     content: content,
     imageURL: imageURL,
     date: date,
-    time: time
-
+    time: time,
+    formLink: formLink,
+    location: location
   };
 
   database.insert_event(event, error => {

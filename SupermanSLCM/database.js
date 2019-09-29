@@ -24,6 +24,10 @@ module.exports.insert_credentials = async (value) => {
 
     value.password = encrypt.encrypt(value.password, value.registration);
 
+    console.log('inserting this credentials')
+
+    console.log(value)
+
     await collection.insertOne(value);
     
     console.log('saved credentials')
@@ -193,7 +197,28 @@ module.exports.get_all_credentials = async () => {
   
 }
 
-//fetches documents sequentially from the collection
+module.exports.get_credential = async (registration) => {
 
+  let client = await MongoClient.connect(url, {useNewUrlParser: true})
 
-//test_cursor('ios');
+  if(!client) {
+    return false;
+  }
+
+  try {
+
+    let collection = client.db('themitpost').collection('credentials');
+
+    let data = await collection.findOne({registration: registration});
+
+    return data;
+
+  } catch(error) {
+    console.log(error)
+    return null
+
+  } finally {
+    client.close();
+  }
+
+}

@@ -1,6 +1,6 @@
 
 
-
+const database = require('./database')
 const FCM = require('fcm-node');
 
 //Required to authenticate to FCM
@@ -45,12 +45,26 @@ module.exports.send_notification_to_user = (registration_token, title, content) 
 
 }
 
-const test = () => {
-    var token = "e6cGjCkIkZU:APA91bHvhL1MoEolKheLROxaeEhoobRr0t_XUaJ3zlDp2l4EHgTYHCUE0SaQclFM5Crt80GuWikiP4BJFsZmqH3z0nXUVs5lr3bgrQKE_0M36F9lDW4Y6tlaCXE8d_V8EJq4iiHJIDoP"
-    var title = "SLCM Test"
-    var content = "Tu Madarchhod h"
+module.exports.send_notification = async (registration, title, content) => {
 
-    this.send_notification_to_user(token, title, content)
+    let credentials = await database.get_credential(registration)
+    console.log(credentials)
+
+    if(credentials) {
+
+        if(credentials.token) {
+            this.send_notification_to_user(credentials.token, title, content)
+        }
+        
+    } else {
+        console.log('FCM token not found')
+    }
+
+}
+
+const test = () => {
+
+    this.send_notification('170905054', 'JOKER', 'Lets book royal seats. It is worth it')
 }
 
 test()

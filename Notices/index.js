@@ -23,7 +23,7 @@ const database = require('./database.js');
 // app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(bodyParser.json());
 
-module.exports.notice_post = (app) => {
+module.exports.notices_post = (app) => {
 
   app.post('/portal/notices/submitted', function(request, response) {
 

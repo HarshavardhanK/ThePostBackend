@@ -136,53 +136,9 @@ app.get('/portal/events',function(req,res){
   res.sendFile(path.join(__dirname+'/Events/static/initial.html'));
 });
 
-app.post('/portal/events/submitted', function(request, response) {
-
-  const club = request.body.club;
-  const title = request.body.title;
-  const content = request.body.content;
-  const imageURL = request.body.imageURL;
-  const date = request.body.date;
-  const time = request.body.time;
-
-  const event = {
-
-    clubName: club,
-    title: title,
-    content: content,
-    imageURL: imageURL,
-    date: date,
-    time: time
-
-  };
-
-  events_database.insert_event(event, error => {
-
-    if(error) {
-      throw (error);
-    }
-  });
-
-  response.send("<h1>EVENT INSERTED<h1>");
-
-
-});
-
-app.get('/events', function(request, response) {
-
-  events_database.get_event_all({}, result => {
-
-    if(result) {
-      result = {status: 'OK', data: result};
-      response.json(result);
-
-    } else {
-      console.log('Nothing found..');
-    }
-
-  });
-
-});
+const events = require('./Events/index')
+events.post_events(app)
+events.get_events(app)
 
 
 //////////// NOTICES PORTAL ////////////////////////////
@@ -193,7 +149,7 @@ app.get('/portal/notice',function(req,res){
 });
 
 const notices = require('./Notices/index.js')
-notices.notice_post(app);
+notices.notices_post(app);
 
 app.get('/notices', function(request, response) {
 

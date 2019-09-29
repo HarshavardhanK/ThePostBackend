@@ -192,27 +192,8 @@ app.get('/portal/notice',function(req,res){
   res.sendFile(path.join(__dirname+'/Notices/static/initial.html'));
 });
 
-app.post('/portal/notices/submitted', function(request, response) {
-
-  const title = request.body.title;
-  const content = request.body.content;
-  const imageURL = request.body.imageURL;
-  const date = request.body.date;
-  const time = request.body.time;
-
-  const notice = {
-    title: title,
-    content: content,
-    imageURL: imageURL,
-    date: date,
-    time: time
-  };
-
-  notices_database.insert_notice(notice);
-
-  response.send("<h1> NOTICE INSERTED </h1>");
-
-});
+const notices = require('./Notices/index.js')
+notices.notices_post(app);
 
 app.get('/notices', function(request, response) {
 

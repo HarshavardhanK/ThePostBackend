@@ -1,5 +1,7 @@
 const fs = require('fs');
 
+const notifications = require("./notifications")
+
 //CODE FOR GENERATING NEW SLCM DATA
 module.exports.get_attendance_for = (complete_object, index=null) => {
 
@@ -147,7 +149,7 @@ module.exports.change_marks = (complete_object) => {
 
 }
 
-const check_attendance_component = (new_component, current_component) => {
+const check_attendance_component = (registation, new_component, current_component) => {
 
     //Add code for Firebase notifications
 
@@ -161,6 +163,9 @@ const check_attendance_component = (new_component, current_component) => {
         // open for debate since attendance changes can happen w/o total classes
 
         if(new_component.totalClasses !== current_component.totalClasses) {
+            let body = new_component.subjectName + " attendance updated"
+            console.log(body)
+            notifications.send_notification(registration, 'Attendance Updated', body)
             console.log('Old totalClasses value %s | New totalClasses value %s', current_component.totalClasses, new_component.totalClasses);
             return true
         }
@@ -170,16 +175,12 @@ const check_attendance_component = (new_component, current_component) => {
     return false;
 }
 
-const check_marks_component = (new_object, current_object) => {
+const check_marks_component = (registration, new_object, current_object) => {
 
     //Add code for Firebase notifications
 
     var sessionalChanged = [false, false]
     var assignmentChanged = [false, false, false, false]
-
-    //console.log(new_object)
-    //console.log('curr');
-    //console.log(current_object)
 
     if(new_object != null && current_object != null) {
 
@@ -192,8 +193,9 @@ const check_marks_component = (new_object, current_object) => {
           return false;
         }
 
-        if(new_object.is_lab) {
+        if(new_object.is_lab || current_object.is_lab) {
            // console.log('is lab.')
+           return false;
         }
 
         if(new_object.status) {
@@ -230,12 +232,18 @@ const check_marks_component = (new_object, current_object) => {
 
             for(var i = 0; i < 2; i++) {
                 if(sessionalChanged[i]) {
+                    let body = new_object.subject_name + " marks updated"
+                    console.log(body)
+                    notifications.send_notification(registration, 'Sessional Marks Updated', body)
                     return true;
                 }
             }
 
             for(var i = 0; i < 4; i++) {
                 if(assignmentChanged[i]) {
+                    let body = new_object.subject_name + " marks updated"
+                    console.log(body)
+                    notifications.send_notification(registration, 'Assignment Marks Updated', body)
                     return true;
                 }
             }
@@ -249,7 +257,7 @@ const check_marks_component = (new_object, current_object) => {
 
 //CODE FOR CHECKING TWO SLCM DATA OBJECTS FOR DIFFERENCE
 
-module.exports.check = (current_object, new_object) => {
+module.exports.check = (registration, current_object, new_object) => {
 
     let marks_change = false;
     let attendance_change = false;
@@ -264,7 +272,7 @@ module.exports.check = (current_object, new_object) => {
 
     for(var i = 0; i < current_attn.length; i++) {
 
-        if(check_attendance_component(new_attn[i], current_attn[i])) {
+        if(check_attendance_component(registration, new_attn[i], current_attn[i])) {
 
             attendance_change = true;
             console.log('Difference in attendance %s', current_attn[i].subjectName);
@@ -272,7 +280,7 @@ module.exports.check = (current_object, new_object) => {
             new_attn[i].updatedAt = new Date().getTime();
         }
 
-        if(check_marks_component(new_marks[i], current_marks[i])) {
+        if(check_marks_component(registration, new_marks[i], current_marks[i])) {
 
             marks_change = true;
             console.log("Difference in marks %s", current_marks[i].subject_name)

@@ -62,9 +62,9 @@ module.exports.send_notification = async (registration, title, content) => {
 
 }
 
-const test = () => {
+// const test = () => {
 
-    this.send_notification('170905054', 'JOKER', 'Lets book royal seats. It is worth it')
-}
+//     this.send_notification('170905054', 'JOKER', 'Lets book royal seats. It is worth it')
+// }
 
-test()
+// test()

@@ -52,28 +52,36 @@
       <form method="post" action="/portal/events/submitted">
         <table cellspacing="10">
           <tr>
-            <td>Club Name: </td>
-            <td><input type="text" name="club" hint="Enter Club Name" required/></td>
+            <td>Club Name* </td>
+            <td><input type="text" name="club" placeholder="Enter Club Name" required/></td>
           </tr>
           <tr>
-            <td>Title: </td>
-            <td><input type="text" name="title" hint="Enter Title" required/></td>
+            <td>Title* </td>
+            <td><input type="text" name="title" placeholder="Enter Title" required/></td>
           </tr>
           <tr>
-            <td>Content: </td>
+            <td>Content </td>
             <td><textarea name="content" rows="8"></textarea></td>
           </tr>
           <tr>
-            <td>Image Link: </td>
-            <td><input type="text" name="imageURL" hint="Link for the Image"/></td>
+            <td>Image Link* </td>
+            <td><input type="text" name="imageURL" placeholder="Link for the Image"/></td>
           </tr>
           <tr>
-            <td>Date: </td>
-            <td><input type="date" name="date" hint="Date of Event" required/></td>
+            <td>Date </td>
+            <td><input type="date" name="date" placeholder="Date of Event" required/></td>
           </tr>
           <tr>
-            <td>Time: </td>
-            <td><input type="time" name="time" hint="Time of Event" required/></td>
+            <td>Time </td>
+            <td><input type="time" name="time" placeholder="Time of Event" required/></td>
+          </tr>
+          <tr>
+            <td>Location* </td>
+            <td><input type="text" name="location" placeholder="Location of Event" required/></td>
+          </tr>
+          <tr>
+            <td>Registration Link </td>
+            <td><input type="text" name="formLink" placeholder="Leave as is if no reg link"/></td>
           </tr>
           <tr>
             <td colspan="2">

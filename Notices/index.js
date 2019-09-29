@@ -26,25 +26,51 @@ app.use(bodyParser.json());
 
 app.post('/portal/notices/submitted', function(request, response) {
 
+  console.log(request.body);
+
   const title = request.body.title;
   const content = request.body.content;
   const date = request.body.date;
   const time = request.body.time;
+  const pdfLink = request.body.pdfLink;
+  const imageLink = request.body.imageURL;
 
   //Grab the value of the checkbox "notify?"
   const notify = request.body.notify;
+
+  const notice = {
+    title: title,
+    content: content,
+    date: date,
+    time: time,
+    imageLink:imageLink,
+    pdfLink: pdfLink
+  };
 
   var message = {
     to: topic,
     notification: {
       title: title,
       body:content
+    },
+    data : {
+
+        title: title,
+        content: content,
+        date: date,
+        time: time,
+        imageLink:imageLink,
+        pdfLink: pdfLink
     }
   };
 
-  if(notify === 'on'){
+  console.log(notify);
+
+  if(notify == 'on'){
 
     //If notify checkbox is checked then send notification
+
+    console.log("Attempting to send notification");
 
     fcm.send(message, function(err, response){
       if (err) {
@@ -55,29 +81,6 @@ app.post('/portal/notices/submitted', function(request, response) {
       }
     });
   }
-
-  const imagesTemp = request.body.imageURL;
-
-  var images = [];
-
-  for(var i=0;i<imagesTemp.length;i++) {
-
-    var element = imagesTemp[i];
-
-    if(element != null && element != '')
-      images.push(element);
-  }
-
-  const numImages = images.length;
-
-  const notice = {
-    title: title,
-    content: content,
-    date: date,
-    time: time,
-    numImages:numImages,
-    images:images
-  };
 
   database.insert_notice(notice);
 

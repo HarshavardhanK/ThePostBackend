@@ -56,9 +56,9 @@ module.exports.get_random_attendance = (subjectName) => {
     let absent = Math.round(Math.random() * (total - 2)) + 2;
     let present = total - absent;
 
-    return {'subjectName': subjectName, 
-            'totalClasses': total.toString(), 
-            'classesAttended': present.toString(), 
+    return {'subjectName': subjectName,
+            'totalClasses': total.toString(),
+            'classesAttended': present.toString(),
             'classesAbsent': absent.toString()
             };
 }
@@ -68,9 +68,9 @@ module.exports.get_random_marks = (subjectName, sessional, assignment) => {
     var marks = "NA"
 
     let marks1 = "NA"
-    let marks2 = "NA" 
-    let marks3 = "NA" 
-    let marks4 = "NA" 
+    let marks2 = "NA"
+    let marks3 = "NA"
+    let marks4 = "NA"
 
     if(sessional) {
         marks = Math.round(Math.random() * (15 - 5)) + 5
@@ -80,15 +80,15 @@ module.exports.get_random_marks = (subjectName, sessional, assignment) => {
         console.log('Changing assignment marks all')
 
          marks1 = Math.round(Math.random() * (5 - 0))
-         marks2 = Math.round(Math.random() * (5 - 0)) 
-         marks3 = Math.round(Math.random() * (5 - 0)) 
-         marks4 = Math.round(Math.random() * (5 - 0)) 
+         marks2 = Math.round(Math.random() * (5 - 0))
+         marks3 = Math.round(Math.random() * (5 - 0))
+         marks4 = Math.round(Math.random() * (5 - 0))
     }
 
     return {"subjectName": subjectName,
 
             "status": true,
-            "is_lab":false, 
+            "is_lab":false,
 
             "sessional": {
                 "_one": marks.toString(),
@@ -106,14 +106,14 @@ module.exports.get_random_marks = (subjectName, sessional, assignment) => {
                 "assessments": []
             }
         }
-    
+
 
 }
 
 module.exports.change_attendance = (complete_object, which=null) => {
 
     let change_number = Math.round(Math.random() * (this.get_attendance_for(complete_object).length - 0));
-    
+
     let attendance_obj = this.get_attendance_for(complete_object, change_number);
 
     let gen_attendance = this.get_random_attendance(attendance_obj.subjectName);
@@ -134,6 +134,7 @@ module.exports.change_marks = (complete_object) => {
     let change_number = Math.round(Math.random() * (5 - 0));
     console.log("Change number is %d", change_number)
 
+    console.log("change num marks %s", marks[change_number]);
     let gen_marks = this.get_random_marks(marks[change_number].subject_name, true, true);
 
     let new_obj = complete_object;
@@ -143,7 +144,7 @@ module.exports.change_marks = (complete_object) => {
     console.log(gen_marks)
 
     return new_obj
-   
+
 }
 
 const check_attendance_component = (new_component, current_component) => {
@@ -156,7 +157,7 @@ const check_attendance_component = (new_component, current_component) => {
             return true;
         }
 
-        // Check only total classes since any change in attendance the total classes value HAS to increase 
+        // Check only total classes since any change in attendance the total classes value HAS to increase
         // open for debate since attendance changes can happen w/o total classes
 
         if(new_component.totalClasses !== current_component.totalClasses) {
@@ -164,7 +165,7 @@ const check_attendance_component = (new_component, current_component) => {
             return true
         }
 
-    } 
+    }
 
     return false;
 }
@@ -176,9 +177,15 @@ const check_marks_component = (new_object, current_object) => {
     var sessionalChanged = [false, false]
     var assignmentChanged = [false, false, false, false]
 
+    console.log(new_object)
+    console.log('curr');
+    console.log(current_object)
+
     if(new_object != null && current_object != null) {
 
-        if(new_object.subjectName !== current_object.subjectName) {
+        if(new_object.subject_name !== current_object.subject_name) {
+          console.log(new_object.subject_name, current_object.subject_name);
+          console.log('lol')
             return true;
         }
 
@@ -229,7 +236,7 @@ const check_marks_component = (new_object, current_object) => {
                     return true;
                 }
             }
-                
+
 
         } else {
             return false;
@@ -237,7 +244,7 @@ const check_marks_component = (new_object, current_object) => {
     }
 }
 
-//CODE FOR CHECKING TWO SLCM DATA OBJECTS FOR DIFFERENCE    
+//CODE FOR CHECKING TWO SLCM DATA OBJECTS FOR DIFFERENCE
 
 module.exports.check = (current_object, new_object) => {
 
@@ -254,6 +261,9 @@ module.exports.check = (current_object, new_object) => {
 
     let current_marks = this.get_marks_for(current_object);
     let new_marks = this.get_marks_for(new_object);
+
+    //console.log(current_marks);
+    //console.log(new_marks)
 
     for(var i = 0; i < current_attn.length; i++) {
 
@@ -310,16 +320,15 @@ module.exports.sanitize = (fresh_object) => {
 module.exports.seconds = function(seconds) {
     return seconds * 1000;
   };
-  
+
 module.exports.minutes = function(minutes) {
     return 1000 * 60 * minutes;
   };
-  
+
 module.exports.hours = function(hours) {
     return 1000 * 60 * 60 * hours;
   };
-  
+
 module.exports.days = function(days) {
     return 1000 * 60 * 60 * 24 * days;
   };
-  

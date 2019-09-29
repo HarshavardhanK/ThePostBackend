@@ -13,94 +13,100 @@ var fcm = new FCM(server_key);
 
 const database = require('./database.js');
 
-app.get('/',function(req,res){
-  res.sendFile(path.join(__dirname+'/static/initial.html'));
-});
+// app.get('/',function(req,res){
+//   res.sendFile(path.join(__dirname+'/static/initial.html'));
+// });
 
-const bodyParser = require('body-parser');
-
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// const bodyParser = require('body-parser');
 
 
-app.post('/portal/notices/submitted', function(request, response) {
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
 
-  console.log(request.body);
+module.exports.notice_post = (app) => {
 
-  const title = request.body.title;
-  const content = request.body.content;
-  const date = request.body.date;
-  const time = request.body.time;
-  const pdfLink = request.body.pdfLink;
-  const imageLink = request.body.imageURL;
+  app.post('/portal/notices/submitted', function(request, response) {
 
-  //Grab the value of the checkbox "notify?"
-  const notify = request.body.notify;
-
-  const notice = {
-    title: title,
-    content: content,
-    date: date,
-    time: time,
-    imageLink:imageLink,
-    pdfLink: pdfLink
-  };
-
-  var message = {
-    to: topic,
-    notification: {
+    console.log(request.body);
+  
+    const title = request.body.title;
+    const content = request.body.content;
+    const date = request.body.date;
+    const time = request.body.time;
+    const pdfLink = request.body.pdfLink;
+    const imageLink = request.body.imageURL;
+  
+    //Grab the value of the checkbox "notify?"
+    const notify = request.body.notify;
+  
+    const notice = {
       title: title,
-      body:content
-    },
-    data : {
-
+      content: content,
+      date: date,
+      time: time,
+      imageLink:imageLink,
+      pdfLink: pdfLink
+    };
+  
+    var message = {
+      to: topic,
+      notification: {
         title: title,
-        content: content,
-        date: date,
-        time: time,
-        imageLink:imageLink,
-        pdfLink: pdfLink
-    }
-  };
-
-  console.log(notify);
-
-  if(notify == 'on'){
-
-    //If notify checkbox is checked then send notification
-
-    console.log("Attempting to send notification");
-
-    fcm.send(message, function(err, response){
-      if (err) {
-          console.log(err);
+        body:content
+      },
+      data : {
+  
+          title: title,
+          content: content,
+          date: date,
+          time: time,
+          imageLink:imageLink,
+          pdfLink: pdfLink
       }
-      else {
-          console.log("Successfully sent with response: ", response);
-      }
-    });
-  }
-
-  database.insert_notice(notice);
-
-  response.send('<h1>This notice has been added. Thank you!</h1><p>&copy The MIT Post 2019. All rights reserved.</p>');
-
-});
-
-app.get('/notices', function(request, response) {
-
-  database.get_notices_all(result => {
-
-    if(result) {
-      console.log(result);
-      result = {status: "OK", data: result};
-
-      response.json(result);
+    };
+  
+    console.log(notify);
+  
+    if(notify == 'on'){
+  
+      //If notify checkbox is checked then send notification
+  
+      console.log("Attempting to send notification");
+  
+      fcm.send(message, function(err, response){
+        if (err) {
+            console.log(err);
+        }
+        else {
+            console.log("Successfully sent with response: ", response);
+        }
+      });
     }
-
+  
+    database.insert_notice(notice);
+  
+    response.send('<h1>This notice has been added. Thank you!</h1><p>&copy The MIT Post 2019. All rights reserved.</p>');
+  
   });
 
-});
+}
 
-app.listen(8080);
+
+
+
+// app.get('/notices', function(request, response) {
+
+//   database.get_notices_all(result => {
+
+//     if(result) {
+//       console.log(result);
+//       result = {status: "OK", data: result};
+
+//       response.json(result);
+//     }
+
+//   });
+
+// });
+
+// app.listen(8080);

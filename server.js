@@ -193,7 +193,7 @@ app.get('/portal/notice',function(req,res){
 });
 
 const notices = require('./Notices/index.js')
-notices.notices_post(app);
+notices.notice_post(app);
 
 app.get('/notices', function(request, response) {
 

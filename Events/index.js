@@ -30,7 +30,7 @@ module.exports.post_events = (app) => {
     const date = request.body.date;
     const time = request.body.time;
     const location = request.body.location;
-    const formLink = request.body.formLink;
+    var formLink = request.body.formLink;
   
     if(formLink.trim() == ""){
       formLink = "NA";

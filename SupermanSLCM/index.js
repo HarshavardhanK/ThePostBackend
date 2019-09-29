@@ -125,6 +125,12 @@ module.exports.postValues = (app) => {
     const reg = req.body.regNumber;
     const pass = req.body.pass;
 
+    var fcm_token;
+
+    if(req.body.fcm_token) {
+      fcm_token = req.body.fcm_token;
+    }
+
     console.log(req.body);
 
     const SHOULD_GET_MARKS = false;
@@ -146,7 +152,7 @@ module.exports.postValues = (app) => {
 
           res.send(new_value);
 
-          database.insert_credentials({registration: reg, password: pass})
+          database.insert_credentials({registration: reg, password: pass, token: fcm_token})
 
           database.insert_slcm_data({registration: reg, password: pass}, new_value, COLLECTIONS.IOS_COLLECTION);
 

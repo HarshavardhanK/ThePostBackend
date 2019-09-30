@@ -55,13 +55,15 @@ module.exports.notices_post = (app) => {
         body:content
       },
       data : {
-  
-          title: title,
-          content: content,
-          date: date,
-          time: time,
-          imageLink:imageLink,
-          pdfLink: pdfLink
+          isNotice : true,
+          internalData : {
+              title: title,
+              content: content,
+              date: date,
+              time: time,
+              imageLink:imageLink,
+              pdfLink: pdfLink
+          }
       }
     };
   

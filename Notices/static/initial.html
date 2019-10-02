@@ -139,7 +139,7 @@
 
         today = yyyy + '-' + mm + '-' + dd;
         console.log(today);
-        document.getElementById("date").value = today;
+        document.getElementById("dt").value = today;
         document.getElementById("time").value = time;
       }
 
@@ -168,6 +168,15 @@
            return false;
          }
       });
+        function mydate1() {
+          d = new Date(document.getElementById("dt").value);
+          dt = d.getDate();
+          mn = d.getMonth();
+          mn++;
+          yy = d.getFullYear();
+          document.getElementById("ndt").value = yy + "-" + mn + "-" + dt;
+        }
+
     </script>
   </head>
   <body>
@@ -198,8 +207,13 @@
             <td colspan="2"><input type="text" name="imageURL" hint="Link for the Image"/></td>
           </tr>
           <tr>
-            <td>Date: </td>
-            <td><input type="date" name="date" hint="Date of Upload" id="date"/></td>
+            <td>
+              Date:
+            </td>
+              <td>
+                <input type="date" id="dt" onchange="mydate1();"/>
+                <input type="text" id="ndt" name="date" hidden />
+              </td>
           </tr>
           <tr>
             <td>Time: </td>

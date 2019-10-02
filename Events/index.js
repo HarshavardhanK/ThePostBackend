@@ -31,11 +31,11 @@ module.exports.post_events = (app) => {
     const time = request.body.time;
     const location = request.body.location;
     var formLink = request.body.formLink;
-  
+
     if(formLink.trim() == ""){
       formLink = "NA";
     }
-  
+
     const event = {
       clubName: club,
       title: title,
@@ -46,17 +46,17 @@ module.exports.post_events = (app) => {
       formLink: formLink,
       location: location
     };
-  
+
     database.insert_event(event, error => {
-  
+
       if(error) {
         throw (error);
       }
     });
-  
+
     response.send("<h1>EVENT INSERTED<h1>");
-  
-  
+
+
   });
 
 }
@@ -66,17 +66,17 @@ module.exports.get_events = (app) => {
   app.get('/events', function(request, response) {
 
     database.get_event_all({}, result => {
-  
+
       if(result) {
         result = {status: 'OK', data: result};
         response.json(result);
-  
+
       } else {
         console.log('Nothing found..');
       }
-  
+
     });
-  
+
   });
 
 }

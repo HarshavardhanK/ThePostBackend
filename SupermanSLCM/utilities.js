@@ -185,7 +185,7 @@ const check_marks_component = (registration, new_object, current_object) => {
     if(new_object != null && current_object != null) {
 
         console.log("Recevied new object")
-        console.log(new_object)
+        //console.log(new_object)
 
         if(new_object.subject_name !== current_object.subject_name) {
           console.log(new_object.subject_name, current_object.subject_name);

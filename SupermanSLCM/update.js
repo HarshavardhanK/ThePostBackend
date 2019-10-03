@@ -176,7 +176,8 @@ const main = async () => {
 
     while(1) {
       await update_all(test_);
-      deasync.sleep(utilities.minutes(10))
+      console.log("Sleeping for 15min")
+      deasync.sleep(utilities.minutes(15))
     }
     
   }

@@ -70,7 +70,7 @@ const fetch = async (registration, password, test) => {
 
       console.log('Found existing object in database');
 
-      let check = utilities.check(current_object, response.data)
+      let check = utilities.check(registration, current_object, response.data)
 
       if(check.change) {
 
@@ -173,7 +173,9 @@ const main = async () => {
     console.log('command not recognized')
     console.log('update.js running update_all: method. Press Ctrl-C to stop');
 
-    await update_all(test_);
+    while(1) {
+      await update_all(test_);
+    }
     
   }
   

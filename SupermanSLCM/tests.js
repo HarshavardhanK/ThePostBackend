@@ -43,7 +43,7 @@ const compare_marks = () => {
     let original = get_data('data.json')
     let generated = get_data('./Generated-Data/marks-gen-data.json')
 
-    let check = utilities.check('170905054', original, generated)
+    let check = utilities.check('170905022', original, generated)
 
     if(check.change) {
         console.log('change detected')

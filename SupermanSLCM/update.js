@@ -60,7 +60,7 @@ const fetch = async (registration, password, test) => {
 
     let current_object = await database.get_slcm_data(get_query, 'ios')
 
-    if(!current_object) {
+    if(current_object == null) {
       console.log('No SLCM data for user found');
 
       current_object = utilities.sanitize(current_object)

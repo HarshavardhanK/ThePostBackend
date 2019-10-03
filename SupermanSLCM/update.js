@@ -63,6 +63,7 @@ const fetch = async (registration, password, test) => {
     if(!current_object) {
       console.log('No SLCM data for user found');
 
+      current_object = utilities.sanitize(current_object)
       let insert_query = {registration: registration, password: password}
       await database.insert_slcm_data(insert_query, response.data, 'ios');
         
@@ -175,6 +176,7 @@ const main = async () => {
 
     while(1) {
       await update_all(test_);
+      deasync.sleep(utilities.minutes(10))
     }
     
   }

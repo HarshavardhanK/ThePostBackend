@@ -149,7 +149,7 @@ module.exports.change_marks = (complete_object) => {
 
 }
 
-const check_attendance_component = (registation, new_component, current_component) => {
+const check_attendance_component = (registration, new_component, current_component) => {
 
     //Add code for Firebase notifications
 

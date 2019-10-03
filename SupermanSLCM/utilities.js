@@ -165,7 +165,7 @@ const check_attendance_component = (registation, new_component, current_componen
         if(new_component.totalClasses !== current_component.totalClasses) {
             let body = new_component.subjectName + " attendance updated"
             console.log(body)
-            notifications.send_notification(registration, 'Attendance Updated', body)
+            notifications.send_notification(registration, 'Attendance Updated. Tap to check', body)
             console.log('Old totalClasses value %s | New totalClasses value %s', current_component.totalClasses, new_component.totalClasses);
             return true
         }
@@ -234,7 +234,7 @@ const check_marks_component = (registration, new_object, current_object) => {
                 if(sessionalChanged[i]) {
                     let body = new_object.subject_name + " marks updated"
                     console.log(body)
-                    notifications.send_notification(registration, 'Sessional Marks Updated', body)
+                    notifications.send_notification(registration, 'Sessional Marks Updated. Tap to check', body)
                     return true;
                 }
             }
@@ -243,7 +243,7 @@ const check_marks_component = (registration, new_object, current_object) => {
                 if(assignmentChanged[i]) {
                     let body = new_object.subject_name + " marks updated"
                     console.log(body)
-                    notifications.send_notification(registration, 'Assignment Marks Updated', body)
+                    notifications.send_notification(registration, 'Assignment Marks Updated. Tap to check', body)
                     return true;
                 }
             }

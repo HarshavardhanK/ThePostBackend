@@ -27,22 +27,26 @@ const generate_message = (registration_token, title, content) => {
 module.exports.send_notification_to_user = (registration_token, title, content) => {
 
     console.log('Notification code')
-    
-    const message = generate_message(registration_token, title, content)
 
-    return fcm.send(message, function(err, response) {
+    if(registration_token != null) {
 
-        if (err) {
-            console.log("Something has gone wrong!")
-            console.log(err)
+        const message = generate_message(registration_token, title, content)
 
-            return false
-        } else {
-            console.log("Successfully sent with response: ", response)
+        return fcm.send(message, function(err, response) {
 
-            return true
-        }
-    })
+            if (err) {
+                console.log("Something has gone wrong!")
+                console.log(err)
+
+                return false
+            } else {
+                console.log("Successfully sent with response: ", response)
+
+                return true
+            }
+        })
+
+    }
 
 }
 

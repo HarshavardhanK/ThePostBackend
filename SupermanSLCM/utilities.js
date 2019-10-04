@@ -285,7 +285,7 @@ module.exports.check = (registration, current_object, new_object) => {
             marks_change = true;
             console.log("Difference in marks %s", current_marks[i].subject_name)
 
-            new_marks.updatedAt = new Date().getTime();
+            new_marks[i].updatedAt = new Date().getTime();
         }
     }
 

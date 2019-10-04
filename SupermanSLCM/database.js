@@ -21,6 +21,7 @@ module.exports.insert_credentials = async (value) => {
     console.log('Inserting credentials')
 
     let collection = client.db('themitpost').collection('credentials')
+    console.log(value)
 
     value.password = encrypt.encrypt(value.password, value.registration);
 
@@ -28,7 +29,22 @@ module.exports.insert_credentials = async (value) => {
 
     console.log(value)
 
-    await collection.insertOne(value);
+    //await collection.insertOne(value);
+    let query = {_id: value._id, registration: value.registration, password: value.password}
+    let update = {$set: {_id: value._id, registration: value.registration, password: value.password, token: value.token, status: value.status}}
+
+    collection.insertOne(query)
+
+    collection.updateOne(query, update, function(error, response) {
+      if(error) {
+        console.log(error)
+        throw error
+      }
+
+      console.log("credentials updated with");
+      console.log(update)
+
+    })
     
     console.log('saved credentials')
 

@@ -28,7 +28,7 @@ const encrypt = require('./encryption')
 
 const url = "mongodb://localhost:27017/";
 
-const fetch = async (registration, password, test) => {
+const fetch = async (cred, test) => {
 
   let URL = 'https://app.themitpost.com/values/update';
 
@@ -42,7 +42,7 @@ const fetch = async (registration, password, test) => {
 
   try {
 
-    let response = await axios.post(URL, {regNumber: registration, pass: password});
+    let response = await axios.post(URL, {regNumber: cred.registration, pass: cred.password});
 
     console.log(response.data)
 
@@ -71,7 +71,7 @@ const fetch = async (registration, password, test) => {
 
       console.log('Found existing object in database');
 
-      let check = utilities.check(registration, current_object, response.data)
+      let check = utilities.check(cred, current_object, response.data)
 
       if(check.change) {
 
@@ -82,7 +82,7 @@ const fetch = async (registration, password, test) => {
 
         let new_object = newValue;;
       
-        let insert_query = {registration: registration, password: password}
+        let insert_query = {registration: cred.registration, password: cred.password}
 
         await database.insert_slcm_data(insert_query, new_object, 'ios');
 
@@ -116,9 +116,10 @@ const update_all = async (test, sleep_interval=30) => {
   let results = await database.get_all_credentials();
 
   for(var i = 0; i < results.length; i++) {
+
     let password = encrypt.decrypt(results[i].password, results[i].registration)
 
-    if(await fetch(results[i].registration, password, test)) {
+    if(await fetch(results[i], password, test)) {
 
       console.log('Successfully fetched')
       //console.log('Waiting for 5s')

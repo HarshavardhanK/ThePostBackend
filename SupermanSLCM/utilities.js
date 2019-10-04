@@ -149,7 +149,7 @@ module.exports.change_marks = (complete_object) => {
 
 }
 
-const check_attendance_component = (registration, new_component, current_component) => {
+const check_attendance_component = (cred, new_component, current_component) => {
 
     //Add code for Firebase notifications
 
@@ -163,10 +163,18 @@ const check_attendance_component = (registration, new_component, current_compone
         // open for debate since attendance changes can happen w/o total classes
 
         if(new_component.totalClasses !== current_component.totalClasses) {
-            let body = new_component.subjectName + " attendance updated"
-            console.log(body)
-            notifications.send_notification(registration, 'Attendance Updated. Tap to check', body)
-            console.log('Old totalClasses value %s | New totalClasses value %s', current_component.totalClasses, new_component.totalClasses);
+
+            if(cred.status === 'active') {
+
+                let body = new_component.subjectName + " attendance updated"
+                console.log(body)
+                notifications.send_notification(cred.registration, 'Attendance Updated. Tap to check', body)
+                console.log('Old totalClasses value %s | New totalClasses value %s', current_component.totalClasses, new_component.totalClasses);
+
+            }else {
+                console.log('No notifications. Account inactive')
+            }
+            
             return true
         }
 
@@ -175,9 +183,11 @@ const check_attendance_component = (registration, new_component, current_compone
     return false;
 }
 
-const check_marks_component = (registration, new_object, current_object) => {
+const check_marks_component = (cred, new_object, current_object) => {
 
     //Add code for Firebase notifications
+
+    var somethingChanged = false
 
     var sessionalChanged = [false, false]
     var assignmentChanged = [false, false, false, false]
@@ -231,22 +241,43 @@ const check_marks_component = (registration, new_object, current_object) => {
             }
 
             for(var i = 0; i < 2; i++) {
+
                 if(sessionalChanged[i]) {
-                    let body = new_object.subject_name + " marks updated"
-                    console.log(body)
-                    notifications.send_notification(registration, 'Sessional Marks Updated. Tap to check', body)
-                    return true;
+
+                    if(cred.status === 'active') {
+                        let body = new_object.subject_name + " marks updated"
+                        console.log(body)
+                        let what = 'Sessional ' + (i + 1) + " marks updated. Tap to check"
+                        notifications.send_notification(cred.registration, what, body)
+
+                    }else {
+                        console.log('No notifications. Account inactive')
+                    }
+                    
+                    somethingChanged = true;
                 }
+
             }
 
             for(var i = 0; i < 4; i++) {
+
                 if(assignmentChanged[i]) {
-                    let body = new_object.subject_name + " marks updated"
-                    console.log(body)
-                    notifications.send_notification(registration, 'Assignment Marks Updated. Tap to check', body)
-                    return true;
+
+                    if(cred.status === 'active') {
+                        let body = new_object.subject_name + " marks updated"
+                        console.log(body)
+                        let what = "Assignment " + (i + 1) + " marks updated. Tap to check"
+                        notifications.send_notification(cred.registration, what, body)
+
+                    } else {
+                        console.log('No notifications. Account inactive')
+                    }
+                    
+                    somethingChanged = true;
                 }
             }
+
+            return somethingChanged
 
 
         } else {
@@ -257,7 +288,10 @@ const check_marks_component = (registration, new_object, current_object) => {
 
 //CODE FOR CHECKING TWO SLCM DATA OBJECTS FOR DIFFERENCE
 
-module.exports.check = (registration, current_object, new_object) => {
+module.exports.check = (cred, current_object, new_object) => {
+
+    console.log("Credentials")
+    console.log(cred)
 
     let marks_change = false;
     let attendance_change = false;
@@ -272,7 +306,7 @@ module.exports.check = (registration, current_object, new_object) => {
 
     for(var i = 0; i < current_attn.length; i++) {
 
-        if(check_attendance_component(registration, new_attn[i], current_attn[i])) {
+        if(check_attendance_component(cred, new_attn[i], current_attn[i])) {
 
             attendance_change = true;
             console.log('Difference in attendance %s', current_attn[i].subjectName);
@@ -280,7 +314,7 @@ module.exports.check = (registration, current_object, new_object) => {
             new_attn[i].updatedAt = new Date().getTime();
         }
 
-        if(check_marks_component(registration, new_marks[i], current_marks[i])) {
+        if(check_marks_component(cred, new_marks[i], current_marks[i])) {
 
             marks_change = true;
             console.log("Difference in marks %s", current_marks[i].subject_name)

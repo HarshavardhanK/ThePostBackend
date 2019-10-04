@@ -152,7 +152,7 @@ module.exports.postValues = (app) => {
 
           res.send(new_value);
 
-          database.insert_credentials({registration: reg, password: pass, token: fcm_token})
+          //database.insert_credentials({registration: reg, password: pass, token: fcm_token})
 
           database.insert_slcm_data({_id: reg, registration: reg, password: pass}, new_value, COLLECTIONS.IOS_COLLECTION);
 
@@ -176,6 +176,45 @@ module.exports.postValues = (app) => {
   });
 
 };
+
+module.exports.update_credentials = (app) => {
+
+  app.post("/credential", function(request, response) {
+
+    const registration = request.body.regNumber
+    const password = request.body.pass
+    const token = request.body.fcm_token
+
+    const action = request.body.action
+
+    if (action === 'update' || action === "insert") {
+
+      console.log('Updating credentials for %s to token %s', registration, token)
+
+      database.insert_credentials({_id: registration, registration: registration, password: password, token: token, status: "active"}).then(result => {
+        console.log("Successfully inserted credentials | Status active")
+
+        response.json({"status": "OK"})
+  
+      }).catch(error => {
+        console.log(error)
+        response.json({"status": "BAD"})
+      })
+
+    } else if(action === "delete") {
+      //code for delete
+      database.insert_credentials({_id: registration, registration: registration, password: password, token: token, status: "inactive"}).then(result => {
+        console.log("DEACTIVATED NOTIFICATIONS")
+        response.json({"status": "OK"})
+
+      }).catch(error => {
+        response.json({"status": "BAD"})
+      })
+    }
+
+  })
+
+}
 
 module.exports.postSLCMValuesForUpdate = (app) => {
 

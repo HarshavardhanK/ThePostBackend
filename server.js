@@ -126,6 +126,7 @@ newSlcm.getSLCMAttendance(app);
 newSlcm.postAttendance(app);
 
 newSlcm.postSLCMValuesForUpdate(app);
+newSlcm.update_credentials(app);
 
 //////////////////////////////////// EVENTS PORTAL ////////////////////////////////////////
 

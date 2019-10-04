@@ -38,12 +38,15 @@ const generate_marks = () => {
     
 }
 
-const compare_marks = () => {
+const compare_marks = async () => {
 
     let original = get_data('data.json')
     let generated = get_data('./Generated-Data/marks-gen-data.json')
 
-    let check = utilities.check('170905022', original, generated)
+    let cred = await database.get_credential('170905022')
+    console.log(cred)
+
+    let check = utilities.check(cred, original, generated)
 
     if(check.change) {
         console.log('change detected')

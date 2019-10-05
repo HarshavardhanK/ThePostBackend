@@ -53,6 +53,7 @@ module.exports.notices_post = (app) => {
       notification: {
         title: title,
         body:content,
+        image: imageLink,
         //type of message should not be mixed with its data contents
         type: "notice"
       },

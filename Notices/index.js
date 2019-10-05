@@ -57,8 +57,8 @@ module.exports.notices_post = (app) => {
         type: "notice"
       },
       data : {
+        isNotice: true,
           internalData : {
-              isNotice: true,
               title: title,
               content: content,
               date: date,

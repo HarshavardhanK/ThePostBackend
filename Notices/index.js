@@ -58,6 +58,7 @@ module.exports.notices_post = (app) => {
       },
       data : {
           internalData : {
+              isNotice: true,
               title: title,
               content: content,
               date: date,

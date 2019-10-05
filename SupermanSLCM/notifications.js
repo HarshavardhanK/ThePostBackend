@@ -8,7 +8,7 @@ const server_key = "AAAAG-SAMsE:APA91bHO8utPUH9yrRyJA37KlCSUiUg44NdyQicqJCbdk0f5
 
 const fcm = new FCM(server_key)
 
-const generate_message = (registration_token, title, content) => {
+const generate_message = (registration_token, title, content, type='general') => {
 
     var message = { 
         to: registration_token, 
@@ -17,20 +17,21 @@ const generate_message = (registration_token, title, content) => {
         notification: {
             title: title, 
             body: content,
-            sound: "default"
+            sound: "default",
+            type: type
         }
     };
 
     return message
 }
 
-module.exports.send_notification_to_user = (registration_token, title, content) => {
+module.exports.send_notification_to_user = (registration_token, title, content, type) => {
 
     console.log('Notification code')
 
     if(registration_token != null) {
 
-        const message = generate_message(registration_token, title, content)
+        const message = generate_message(registration_token, title, content, type)
 
         return fcm.send(message, function(err, response) {
 
@@ -50,7 +51,7 @@ module.exports.send_notification_to_user = (registration_token, title, content) 
 
 }
 
-module.exports.send_notification = async (registration, title, content) => {
+module.exports.send_notification = async (registration, title, content, type) => {
 
     let credentials = await database.get_credential(registration)
     console.log(credentials)
@@ -58,7 +59,7 @@ module.exports.send_notification = async (registration, title, content) => {
     if(credentials) {
 
         if(credentials.token) {
-            this.send_notification_to_user(credentials.token, title, content)
+            this.send_notification_to_user(credentials.token, title, content, type)
         }
         
     } else {
@@ -69,7 +70,12 @@ module.exports.send_notification = async (registration, title, content) => {
 
 const test = () => {
 
-    this.send_notification('170905054', 'JOKER', 'AMAZING MOVIE')
+    //this.send_notification('170905054', 'JOKER', 'AMAZING MOVIE')
+
+    //let token = "dRsw1xcUFLM:APA91bEpIh_xlpbBJOudK9k1TgIbnPfAtJyENBE6y-dGdrXj-39XC-cW4bfs_-c7ppOBKyJFkO-sakAY8iUW6iguWYEHESx_wSMUR4P3sVWNhAyBI-rBkAEVAstxIEwMxbfRB2_GeHjh"
+    //this.send_notification_to_user(token, "Knock knock, October", "Who? Anshu month is that you?")
 }
+
+
 
 //test()

@@ -52,10 +52,11 @@ module.exports.notices_post = (app) => {
       to: topic,
       notification: {
         title: title,
-        body:content
+        body:content,
+        //type of message should not be mixed with its data contents
+        type: "notice"
       },
       data : {
-          isNotice : true,
           internalData : {
               title: title,
               content: content,

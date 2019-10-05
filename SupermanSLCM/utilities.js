@@ -168,7 +168,7 @@ const check_attendance_component = (cred, new_component, current_component) => {
 
                 let body = new_component.subjectName + " attendance updated"
                 console.log(body)
-                notifications.send_notification(cred.registration, 'Attendance Updated. Tap to check', body)
+                notifications.send_notification(cred.registration, 'Attendance Updated. Tap to check', body, "slcm")
                 console.log('Old totalClasses value %s | New totalClasses value %s', current_component.totalClasses, new_component.totalClasses);
 
             }else {
@@ -248,7 +248,7 @@ const check_marks_component = (cred, new_object, current_object) => {
                         let body = new_object.subject_name + " marks updated"
                         console.log(body)
                         let what = 'Sessional ' + (i + 1) + " marks updated. Tap to check"
-                        notifications.send_notification(cred.registration, what, body)
+                        notifications.send_notification(cred.registration, what, body, "slcm")
 
                     }else {
                         console.log('No notifications. Account inactive')
@@ -267,7 +267,7 @@ const check_marks_component = (cred, new_object, current_object) => {
                         let body = new_object.subject_name + " marks updated"
                         console.log(body)
                         let what = "Assignment " + (i + 1) + " marks updated. Tap to check"
-                        notifications.send_notification(cred.registration, what, body)
+                        notifications.send_notification(cred.registration, what, body, "slcm")
 
                     } else {
                         console.log('No notifications. Account inactive')

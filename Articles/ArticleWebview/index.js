@@ -8,7 +8,7 @@ var database = require('../database');
 
 module.exports.renderArticle = (_id) => {
 
-  var url = 'https://api.themitpost.com/posts/raw/' + _id;
+  var url = 'https://app.themitpost.com/posts/raw/' + _id;
 
   return getJSON(url).then((response) => {
 
@@ -45,7 +45,7 @@ module.exports.getWebContent = (express_app) => {
 
       });
 
-      /*getJSON('https://api.themitpost.com/posts/raw/' + _id)
+      /*getJSON('https://app.themitpost.com/posts/raw/' + _id)
         .then(function(res) {
           response.render('article', res);
         }).catch(function(error) {
@@ -70,7 +70,7 @@ express_app.get('/posts/render/:tagId/dark', (request, response) => {
 
     });
 
-    /*getJSON('https://api.themitpost.com/posts/raw/' + _id)
+    /*getJSON('https://app.themitpost.com/posts/raw/' + _id)
       .then(function(res) {
         response.render('article-dark', res);
       }).catch(function(error) {

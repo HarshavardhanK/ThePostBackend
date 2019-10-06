@@ -186,6 +186,10 @@ app.get('/about/dark', function(request,response) {
   response.sendFile(path.join(__dirname+'/StaticFiles/about_dark.html'));
 });
 
+app.get('/static/images/academic_calendar', function(request, response) {
+  response.sendFile(path.join(__dirname+'/StaticFiles/academic_calendar_2019.jpg'));
+});
+
 const main = () => {
 
   const command = yargs.argv;

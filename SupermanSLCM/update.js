@@ -123,7 +123,7 @@ const update_all = async (test, sleep_interval=30) => {
     let password = encrypt.decrypt(results[i].password, results[i].registration)
     console.log('Update all %s %s', results[i].registration, password)
 
-    if(await fetch(results[i], password, test)) {
+    if(await fetch(results[i], password, false)) {
 
       console.log('Successfully fetched')
       //console.log('Waiting for 5s')

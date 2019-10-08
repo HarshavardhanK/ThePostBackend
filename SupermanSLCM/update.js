@@ -43,7 +43,7 @@ const fetch = async (cred, password, test) => {
 
   try {
 
-    console.log(cred.registration, password)
+    console.log(cred.registration, password, test)
 
     let response = await axios.post(URL, {regNumber: cred.registration, pass: password});
 

@@ -22,13 +22,14 @@ const MongoClient = require('mongodb');
 const deasync = require('deasync');
 const yargs = require('yargs')
 
+
 const database = require('./database');
 const utilities = require('./utilities');
 const encrypt = require('./encryption')
 
 const url = "mongodb://localhost:27017/";
 
-const fetch = async (cred, test) => {
+const fetch = async (cred, password, test) => {
 
   let URL = 'https://app.themitpost.com/values/update';
 
@@ -42,7 +43,7 @@ const fetch = async (cred, test) => {
 
   try {
 
-    let response = await axios.post(URL, {regNumber: cred.registration, pass: cred.password});
+    let response = await axios.post(URL, {regNumber: cred.registration, pass: password});
 
     console.log(response.data)
 
@@ -52,7 +53,7 @@ const fetch = async (cred, test) => {
 
     }
 
-    let get_query = {registration: registration, password: password}
+    let get_query = {registration: cred.registration, password: password}
 
     if(test) {
       console.log("Query while fetching is", get_query);

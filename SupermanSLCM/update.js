@@ -85,7 +85,7 @@ const fetch = async (cred, password, test) => {
 
         let new_object = newValue;;
       
-        let insert_query = {registration: cred.registration, password: cred.password}
+        let insert_query = {registration: cred.registration, password: password}
 
         await database.insert_slcm_data(insert_query, new_object, 'ios');
 

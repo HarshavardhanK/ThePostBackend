@@ -121,6 +121,7 @@ const update_all = async (test, sleep_interval=30) => {
   for(var i = 0; i < results.length; i++) {
 
     let password = encrypt.decrypt(results[i].password, results[i].registration)
+    console.log('Update all %s %s', results[i].registration, password)
 
     if(await fetch(results[i], password, test)) {
 

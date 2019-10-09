@@ -22,13 +22,14 @@ const MongoClient = require('mongodb');
 const deasync = require('deasync');
 const yargs = require('yargs')
 
+
 const database = require('./database');
 const utilities = require('./utilities');
 const encrypt = require('./encryption')
 
 const url = "mongodb://localhost:27017/";
 
-const fetch = async (cred, test) => {
+const fetch = async (cred, password, test) => {
 
   let URL = 'https://app.themitpost.com/values/update';
 
@@ -42,7 +43,9 @@ const fetch = async (cred, test) => {
 
   try {
 
-    let response = await axios.post(URL, {regNumber: cred.registration, pass: cred.password});
+    console.log(cred.registration, password, test)
+
+    let response = await axios.post(URL, {regNumber: cred.registration, pass: password});
 
     console.log(response.data)
 
@@ -52,7 +55,7 @@ const fetch = async (cred, test) => {
 
     }
 
-    let get_query = {registration: registration, password: password}
+    let get_query = {registration: cred.registration, password: password}
 
     if(test) {
       console.log("Query while fetching is", get_query);
@@ -82,7 +85,7 @@ const fetch = async (cred, test) => {
 
         let new_object = newValue;;
       
-        let insert_query = {registration: cred.registration, password: cred.password}
+        let insert_query = {registration: cred.registration, password: password}
 
         await database.insert_slcm_data(insert_query, new_object, 'ios');
 
@@ -118,8 +121,9 @@ const update_all = async (test, sleep_interval=30) => {
   for(var i = 0; i < results.length; i++) {
 
     let password = encrypt.decrypt(results[i].password, results[i].registration)
+    console.log('Update all %s %s', results[i].registration, password)
 
-    if(await fetch(results[i], password, test)) {
+    if(await fetch(results[i], password, false)) {
 
       console.log('Successfully fetched')
       //console.log('Waiting for 5s')

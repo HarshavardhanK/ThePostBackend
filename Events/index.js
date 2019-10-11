@@ -68,7 +68,10 @@ module.exports.get_events = (app) => {
     database.get_event_all()
     .then(result => {
       console.log(result)
-      response.json(result)
+      let value = {}
+      value.data = result
+      value.status = "OK"
+      response.json(value)
     })
     .catch(err => {
       response.json({"status" : "BAD"})

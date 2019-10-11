@@ -312,6 +312,7 @@ module.exports.check = (cred, current_object, new_object) => {
             console.log('Difference in attendance %s', current_attn[i].subjectName);
 
             new_attn[i].updatedAt = new Date().getTime();
+            new_object.academicDetails[0].attendance[i] = new_attn[i];
         }
 
         if(check_marks_component(cred, new_marks[i], current_marks[i])) {
@@ -320,17 +321,12 @@ module.exports.check = (cred, current_object, new_object) => {
             console.log("Difference in marks %s", current_marks[i].subject_name)
 
             new_marks[i].updatedAt = new Date().getTime();
+            new_object.academicDetails[0].interalMarks[i] = new_marks[i];
         }
     }
 
-    if(marks_change) {
+    if(marks_change || attendance_change) {
         change = true
-        new_object.academicDetails[0].interalMarks = new_marks;
-    }
-
-    if(attendance_change) {
-        change = true
-        new_object.academicDetails[0].attendance = new_attn;
     }
 
     return {change: change, value: new_object};

@@ -65,24 +65,17 @@ module.exports.get_events = (app) => {
 
   app.get('/events', function(request, response) {
 
-    database.get_event_all({}, result => {
-
-      if(result) {
-        result = {status: 'OK', data: result};
-        response.json(result);
-
-      } else {
-        console.log('Nothing found..');
-      }
-
-    });
+    database.get_event_all()
+    .then(result => {
+      console.log(result)
+      response.json(result)
+    })
+    .catch(err => {
+      response.json({"status" : "BAD"})
+    })
 
   });
 
 }
 
 
-
-
-
-// app.listen(8080);

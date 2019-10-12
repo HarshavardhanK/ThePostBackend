@@ -18,7 +18,11 @@ const generate_message = (registration_token, title, content, type='general') =>
             title: title, 
             body: content,
             sound: "default",
+            badge: 1,
             type: type
+        },
+        data: {
+            isSLCM: true
         }
     };
 
@@ -70,7 +74,7 @@ module.exports.send_notification = async (registration, title, content, type) =>
 
 const test = () => {
 
-    this.send_notification('170905022', 'JOKER', 'AMAZING MOVIE')
+    this.send_notification('170905022', 'JOKER', 'AMAZING MOVIE', 'slcm')
 
     //let token = "dRsw1xcUFLM:APA91bEpIh_xlpbBJOudK9k1TgIbnPfAtJyENBE6y-dGdrXj-39XC-cW4bfs_-c7ppOBKyJFkO-sakAY8iUW6iguWYEHESx_wSMUR4P3sVWNhAyBI-rBkAEVAstxIEwMxbfRB2_GeHjh"
     //this.send_notification_to_user(token, "Knock knock, October", "Who? Anshu month is that you?")
@@ -78,4 +82,4 @@ const test = () => {
 
 
 
-//test()
+test()

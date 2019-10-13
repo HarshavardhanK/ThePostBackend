@@ -75,6 +75,7 @@ module.exports.insert_slcm_data = async (filter, value, COLLECTION='gen') => {
     console.log('cred before encrypt insert');
 
     //console.log(filter);
+    //console.log(filter)
 
     let password = encrypt.encrypt(filter.password, filter.registration);
     filter.password = password;

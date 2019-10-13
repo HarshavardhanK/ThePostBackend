@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const database = require("./database");
 
 module.exports.encrypt = (data, password) => {
+  //console.log(password)
 
     var key = crypto.createCipher('aes-128-cbc', password);
     var string = key.update(data, 'binary', 'binary');
@@ -21,9 +22,6 @@ module.exports.decrypt = (data, password) => {
 }
 
 const test = () => {
-
-  /*database.insert_slcm_data({_id: '17094955', password: 'hello'}, {"hein?": 'what?'}, 'test');
-  database.get_slcm_data({_id: '17094955', password: 'hello'}, 'test');*/
 
   let pass = "abc";
   let text = 'hello';

@@ -159,6 +159,8 @@ const check_attendance_component = (cred, new_component, current_component) => {
             return false;
         }
 
+        let subjectname = new_component.subjectName.substring(9, new_component.subjectName.length)
+
         // Check only total classes since any change in attendance the total classes value HAS to increase
         // open for debate since attendance changes can happen w/o total classes
 
@@ -193,6 +195,7 @@ const check_marks_component = (cred, new_object, current_object) => {
     var assignmentChanged = [false, false, false, false]
 
     if(new_object != null && current_object != null) {
+        let subjectname = new_object.subject_name.substring(9, new_object.subject_name.length)
 
         console.log("Recevied new object")
         //console.log(new_object)
@@ -204,8 +207,16 @@ const check_marks_component = (cred, new_object, current_object) => {
         }
 
         if(new_object.is_lab || current_object.is_lab) {
-           // console.log('is lab.')
-           return false;
+
+           console.log('is lab.')
+
+           if(new_object.lab.assessments.length != current_object.lab.assessments.length) {
+               let title = subjectname + " marks changed"
+               notifications.send_notification(cred.registration, )
+               return true
+           }
+
+           return false
         }
 
         if(new_object.status) {
@@ -230,12 +241,12 @@ const check_marks_component = (cred, new_object, current_object) => {
                 assignmentChanged[1] = true
             }
 
-            if(new_object.assignment._two != current_object.assignment._two) {
+            if(new_object.assignment._three != current_object.assignment._three) {
                 console.log('assignment 3 change')
                 assignmentChanged[2] = true
             }
 
-            if(new_object.assignment._two != current_object.assignment._two) {
+            if(new_object.assignment._four != current_object.assignment._four) {
                 console.log('assignment 4 change')
                 assignmentChanged[3] = true
             }
@@ -245,12 +256,12 @@ const check_marks_component = (cred, new_object, current_object) => {
                 if(sessionalChanged[i]) {
 
                     if(cred.status === 'active') {
-                        let body = new_object.subject_name + " marks updated"
+                        let body = subjectname + " marks updated"
                         console.log(body)
                         let what = 'Sessional ' + (i + 1) + " marks updated. Tap to check"
                         notifications.send_notification(cred.registration, what, body, "slcm")
 
-                    }else {
+                    } else {
                         console.log('No notifications. Account inactive')
                     }
                     
@@ -264,7 +275,7 @@ const check_marks_component = (cred, new_object, current_object) => {
                 if(assignmentChanged[i]) {
 
                     if(cred.status === 'active') {
-                        let body = new_object.subject_name + " marks updated"
+                        let body = subjectname + " marks updated"
                         console.log(body)
                         let what = "Assignment " + (i + 1) + " marks updated. Tap to check"
                         notifications.send_notification(cred.registration, what, body, "slcm")
@@ -329,7 +340,7 @@ module.exports.check = (cred, current_object, new_object) => {
         change = true
     }
 
-    return {change: change, value: new_object};
+    return {change: change, value: current_object};
 
 }
 

@@ -76,8 +76,8 @@ const test = () => {
 
     this.send_notification('170905022', 'JOKER', 'AMAZING MOVIE', 'slcm')
 
-    //let token = "dRsw1xcUFLM:APA91bEpIh_xlpbBJOudK9k1TgIbnPfAtJyENBE6y-dGdrXj-39XC-cW4bfs_-c7ppOBKyJFkO-sakAY8iUW6iguWYEHESx_wSMUR4P3sVWNhAyBI-rBkAEVAstxIEwMxbfRB2_GeHjh"
-    //this.send_notification_to_user(token, "Knock knock, October", "Who? Anshu month is that you?")
+    let token = "etLUrIHc0YQ:APA91bEFGkxeMndxjpIrIcPLOE2sa4i_YkuZvP6OeA9zm3DNUIul42Iut5SNTQN2Tf2tTKLlpsmI7TqptvedpU0PS7zuSd-sbf6Jh2_i7dihAnn7yP3DpcJdpUYlb61_UwjYuytS4tu6"
+    this.send_notification_to_user(token, "Knock knock, October", "Who? Anshu month is that you?")
 }
 
 

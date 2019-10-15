@@ -31,6 +31,11 @@ const url = "mongodb://localhost:27017/";
 
 const fetch = async (cred, password, test) => {
 
+  if(cred.registration.length < 9 || cred.password.length <= 0) {
+    console.log("Empty piece of shit")
+    return
+  }
+
   let URL = 'https://app.themitpost.com/values/update';
 
   if(test) {
@@ -80,19 +85,14 @@ const fetch = async (cred, password, test) => {
 
         console.log("Different values in database and recently scraped");
 
-        let newValue = check.value;
         console.log('Update for user object returned');
-
-        let new_object = newValue;;
-      
         let insert_query = {registration: cred.registration, password: password}
 
-        await database.insert_slcm_data(insert_query, new_object, 'ios');
+        await database.insert_slcm_data(insert_query, check.value, 'ios');
 
       }
 
     }
-
 
   } catch(error) {
     console.log(error);

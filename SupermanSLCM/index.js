@@ -152,7 +152,7 @@ module.exports.postValues = (app) => {
 
           res.send(new_value);
 
-          database.insert_credentials({registration: reg, password: pass, token: fcm_token})
+          database.insert_credentials({_id: reg, registration: reg, password: pass, token: fcm_token})
 
           database.insert_slcm_data({_id: reg, registration: reg, password: pass}, new_value, COLLECTIONS.IOS_COLLECTION);
 

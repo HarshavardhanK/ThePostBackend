@@ -43,7 +43,7 @@ const compare_marks = async () => {
     let original = get_data('data.json')
     let generated = get_data('./Generated-Data/marks-gen-data.json')
 
-    let cred = await database.get_credential('170905054')
+    let cred = await database.get_credential('170905022')
     console.log(cred)
 
     let check = utilities.check(cred, original, generated)

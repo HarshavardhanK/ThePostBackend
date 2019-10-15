@@ -159,6 +159,8 @@ const check_attendance_component = (cred, new_component, current_component) => {
             return false;
         }
 
+        let subjectname = new_component.subjectName.substring(9, new_component.subjectName.length)
+
         // Check only total classes since any change in attendance the total classes value HAS to increase
         // open for debate since attendance changes can happen w/o total classes
 
@@ -193,7 +195,7 @@ const check_marks_component = (cred, new_object, current_object) => {
     var assignmentChanged = [false, false, false, false]
 
     if(new_object != null && current_object != null) {
-        let subjectname = new_object.subject_name.substring(10, new_object.subject_name.length)
+        let subjectname = new_object.subject_name.substring(9, new_object.subject_name.length)
 
         console.log("Recevied new object")
         //console.log(new_object)

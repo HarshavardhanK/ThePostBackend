@@ -85,11 +85,7 @@ const update = async function(number, command) {
     if(response != undefined) {
 
       for(var i = 0; i < response.length; i += 1) {
-
-        if(command.save_raw === 'y' || command.save_raw === 'Y') {
-          database.insert_article(response[i], 'unfiltered'); 
-        }
-  
+        database.insert_article(response[i], 'unfiltered');
       }
 
       return true;

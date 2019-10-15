@@ -239,3 +239,29 @@ module.exports.get_credential = async (registration) => {
   }
 
 }
+
+module.exports.delete_credential = async (registration) => {
+
+  let client = await MongoClient.connect(url, {useNewUrlParser: true})
+
+  if(!client) {
+    return false;
+  }
+
+  try {
+
+    let collection = client.db('themitpost').collection('credentials');
+
+    let data = await collection.deleteOne({registration: registration});
+
+    return data;
+
+  } catch(error) {
+    console.log(error)
+    return null
+
+  } finally {
+    client.close();
+  }
+
+}

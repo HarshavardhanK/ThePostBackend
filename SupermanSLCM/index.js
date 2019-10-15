@@ -118,6 +118,25 @@ module.exports.getSLCMAttendance = (app) => {
 
 };
 
+module.exports.deleteCredential = (app) => {
+
+  app.post('/slcm/purge', function(request, response) {
+
+    const reg = request.body.regNumber;
+
+    if(reg) {
+
+      database.delete_credential(reg);
+      response.json({"status": "OK"});
+
+    } else {
+      response.json({"status": "NOTFOUND"});
+    }
+
+  })
+
+}
+
 module.exports.postValues = (app) => {
 
   app.post('/values', function(req, res) {

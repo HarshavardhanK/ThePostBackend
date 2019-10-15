@@ -23,7 +23,7 @@ const get_article = async(_API) => {
 
     for(var i = 0; i < num_articles; i += 1) {
 
-      if(response.data[i].title.rendered.indexOf("Playlist") != -1) {
+      if(response.data[i].title.rendered.indexOf("Playlist") != -1 || response.data[i].title.rendered.indexOf("Newsletter") != -1 || response.data[i].title.rendered.indexOf("Liveblog") != -1) {
         continue;
       }
 

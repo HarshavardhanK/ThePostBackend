@@ -325,6 +325,9 @@ module.exports.check = (cred, current_object, new_object) => {
             new_attn[i].updatedAt = new Date().getTime();
             current_object.academicDetails[0].attendance[i] = new_attn[i];
         }
+    }
+
+    for(var i = 0; i < current_marks.length; i++) {
 
         if(check_marks_component(cred, new_marks[i], current_marks[i])) {
 
@@ -333,9 +336,12 @@ module.exports.check = (cred, current_object, new_object) => {
 
             new_marks[i].updatedAt = new Date().getTime();
             current_object.academicDetails[0].interalMarks[i] = new_marks[i];
+        
         }
+
     }
 
+    
     if(marks_change || attendance_change) {
         change = true
     }

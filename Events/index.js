@@ -63,7 +63,7 @@ module.exports.post_events = (app) => {
       response.send("<h1>EVENT INSERTED<h1>");
 
 
-    });
+    };
   }
 
 }

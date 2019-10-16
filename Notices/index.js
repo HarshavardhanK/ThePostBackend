@@ -41,7 +41,7 @@ module.exports.notices_post = (app) => {
     const notify = request.body.notify;
 
     if(passcode != '}Y~$GS06_5?9{)s'){
-      res.send('Notice NOT inserted. Check back all details.');
+      response.send('Notice NOT inserted. Check back all details.');
     }
     else{
 

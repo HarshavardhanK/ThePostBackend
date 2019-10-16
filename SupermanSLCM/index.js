@@ -127,6 +127,7 @@ module.exports.deleteCredential = (app) => {
     if(reg) {
 
       database.delete_credential(reg);
+      //delete from marks database as well
       response.json({"status": "OK"});
 
     } else {

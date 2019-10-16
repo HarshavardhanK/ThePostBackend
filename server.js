@@ -139,7 +139,7 @@ app.get('/portal/events',function(req,res){
 });
 
 const events = require('./Events/index')
-events.post_events(app)
+//events.post_events(app)
 events.get_events(app)
 
 
@@ -151,7 +151,7 @@ app.get('/portal/notice',function(req,res){
 });
 
 const notices = require('./Notices/index.js')
-notices.notices_post(app);
+//notices.notices_post(app);
 
 app.get('/notices', function(request, response) {
 

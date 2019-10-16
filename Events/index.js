@@ -36,7 +36,7 @@ module.exports.post_events = (app) => {
     if(passcode != ':e<3,F )-H]h^eP-'){
       response.send('Event NOT added. Check back all details.');
     }
-    else{
+    else {
 
       if(formLink.trim() == ""){
         formLink = "NA";
@@ -64,8 +64,7 @@ module.exports.post_events = (app) => {
 
 
     };
-  }
-
+  });
 }
 
 module.exports.get_events = (app) => {

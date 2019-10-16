@@ -136,10 +136,10 @@ const events_database = require('./Events/database.js');
 
 /*app.get('/portal/events',function(req,res){
   res.sendFile(path.join(__dirname+'/Events/static/initial.html'));
-});
+});*/
 
 const events = require('./Events/index')
-//events.post_events(app)
+events.post_events(app)
 events.get_events(app)
 
 
@@ -151,7 +151,7 @@ const notices_database = require('./Notices/database.js');
 });*/
 
 const notices = require('./Notices/index.js')
-//notices.notices_post(app);
+notices.notices_post(app);
 
 app.get('/notices', function(request, response) {
 

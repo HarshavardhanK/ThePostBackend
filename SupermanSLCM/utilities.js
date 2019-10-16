@@ -212,7 +212,7 @@ const check_marks_component = (cred, new_object, current_object) => {
 
            if(new_object.lab.assessments.length != current_object.lab.assessments.length) {
                let title = subjectname + " marks changed"
-               notifications.send_notification(cred.registration, )
+               notifications.send_notification(cred.registration, title, "", 'slcm')
                return true
            }
 

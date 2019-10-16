@@ -157,7 +157,7 @@ app.get('/notices', function(request, response) {
   notices_database.get_notices_all(result => {
 
     if(result) {
-      console.log(result);
+      //console.log(result);
       result = {status: "OK", data: result};
 
       response.json(result);

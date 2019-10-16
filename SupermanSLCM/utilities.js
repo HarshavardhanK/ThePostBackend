@@ -335,7 +335,7 @@ module.exports.check = (cred, current_object, new_object) => {
             console.log("Difference in marks %s", current_marks[i].subject_name)
 
             new_marks[i].updatedAt = new Date().getTime();
-            current_object.academicDetails[0].interalMarks[i] = new_marks[i];
+            current_object.academicDetails[0].internalMarks[i] = new_marks[i];
         
         }
 

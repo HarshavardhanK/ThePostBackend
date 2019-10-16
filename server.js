@@ -56,7 +56,6 @@ app.get('/posts', (request, response) => {
     if(data.length > 0) {
 
       console.log('Query successful');
-      console.log(data);
       response.json(data);
 
     } else {

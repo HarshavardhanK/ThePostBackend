@@ -144,6 +144,16 @@ module.exports.postValues = (app) => {
 
     const reg = req.body.regNumber;
     const pass = req.body.pass;
+    const key = req.body.key
+
+    if(key) {
+      if(key !== "joker01124713115BatmanThanos") {
+        res.json({status: "BAD"})
+      }
+    } else {
+      res.json({status: "BAD"})
+      return
+    }
 
     var fcm_token = null;
 

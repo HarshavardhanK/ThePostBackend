@@ -31,33 +31,40 @@ module.exports.post_events = (app) => {
     const time = request.body.time;
     const location = request.body.location;
     var formLink = request.body.formLink;
+    const passcode = request.body.pass;
 
-    if(formLink.trim() == ""){
-      formLink = "NA";
+    if(passcode != ':e<3,F )-H]h^eP-'){
+      response.send('Event NOT added. Check back all details.');
     }
+    else{
 
-    const event = {
-      clubName: club,
-      title: title,
-      content: content,
-      imageURL: imageURL,
-      date: date,
-      time: time,
-      formLink: formLink,
-      location: location
-    };
-
-    database.insert_event(event, error => {
-
-      if(error) {
-        throw (error);
+      if(formLink.trim() == ""){
+        formLink = "NA";
       }
+
+      const event = {
+        clubName: club,
+        title: title,
+        content: content,
+        imageURL: imageURL,
+        date: date,
+        time: time,
+        formLink: formLink,
+        location: location
+      };
+
+      database.insert_event(event, error => {
+
+        if(error) {
+          throw (error);
+        }
+      });
+
+      response.send("<h1>EVENT INSERTED<h1>");
+
+
     });
-
-    response.send("<h1>EVENT INSERTED<h1>");
-
-
-  });
+  }
 
 }
 
@@ -80,5 +87,3 @@ module.exports.get_events = (app) => {
   });
 
 }
-
-

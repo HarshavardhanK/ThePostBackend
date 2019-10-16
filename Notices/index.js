@@ -35,64 +35,71 @@ module.exports.notices_post = (app) => {
     const time = request.body.time;
     const pdfLink = request.body.pdfLink;
     const imageLink = request.body.imageURL;
+    const passcode = request.body.pass;
 
     //Grab the value of the checkbox "notify?"
     const notify = request.body.notify;
 
-    const notice = {
-      title: title,
-      content: content,
-      date: date,
-      time: time,
-      imageLink:imageLink,
-      pdfLink: pdfLink
-    };
-
-    var message = {
-      to: topic,
-      notification: {
-        title: title,
-        body:content,
-        image: imageLink,
-        //type of message should not be mixed with its data contents
-        type: "notice"
-      },
-      data : {
-        isNotice: true,
-          internalData : {
-              title: title,
-              content: content,
-              date: date,
-              time: time,
-              imageLink:imageLink,
-              pdfLink: pdfLink
-          }
-      }
-    };
-
-    console.log(notify);
-
-    if(notify == 'on'){
-
-      //If notify checkbox is checked then send notification
-
-      console.log("Attempting to send notification");
-
-      fcm.send(message, function(err, response){
-        if (err) {
-            console.log(err);
-        }
-        else {
-            console.log("Successfully sent with response: ", response);
-        }
-      });
+    if(passcode != '}Y~$GS06_5?9{)s'){
+      res.send('Notice NOT inserted. Check back all details.');
     }
+    else{
 
-    database.insert_notice(notice);
+      const notice = {
+        title: title,
+        content: content,
+        date: date,
+        time: time,
+        imageLink:imageLink,
+        pdfLink: pdfLink
+      };
 
-    response.send('<h1>This notice has been added. Thank you!</h1><p>&copy The MIT Post 2019. All rights reserved.</p>');
+      var message = {
+        to: topic,
+        notification: {
+          title: title,
+          body:content,
+          image: imageLink,
+          //type of message should not be mixed with its data contents
+          type: "notice"
+        },
+        data : {
+          isNotice: true,
+            internalData : {
+                title: title,
+                content: content,
+                date: date,
+                time: time,
+                imageLink:imageLink,
+                pdfLink: pdfLink
+            }
+        }
+      };
 
-  });
+      console.log(notify);
+
+      if(notify == 'on'){
+
+        //If notify checkbox is checked then send notification
+
+        console.log("Attempting to send notification");
+
+        fcm.send(message, function(err, response){
+          if (err) {
+              console.log(err);
+          }
+          else {
+              console.log("Successfully sent with response: ", response);
+          }
+        });
+      }
+
+      database.insert_notice(notice);
+
+      response.send('<h1>This notice has been added. Thank you!</h1><p>&copy The MIT Post 2019. All rights reserved.</p>');
+
+    });
+  }
 
 }
 

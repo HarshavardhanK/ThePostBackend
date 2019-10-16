@@ -134,9 +134,9 @@ newSlcm.deleteCredential(app);
 const path = require('path');
 const events_database = require('./Events/database.js');
 
-/*app.get('/portal/events',function(req,res){
+app.get('/portal/events',function(req,res){
   res.sendFile(path.join(__dirname+'/Events/static/initial.html'));
-});*/
+});
 
 const events = require('./Events/index')
 events.post_events(app)
@@ -146,9 +146,9 @@ events.get_events(app)
 //////////// NOTICES PORTAL ////////////////////////////
 const notices_database = require('./Notices/database.js');
 
-/*app.get('/portal/notice',function(req,res){
+app.get('/portal/notice',function(req,res){
   res.sendFile(path.join(__dirname+'/Notices/static/initial.html'));
-});*/
+});
 
 const notices = require('./Notices/index.js')
 notices.notices_post(app);

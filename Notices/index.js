@@ -97,10 +97,9 @@ module.exports.notices_post = (app) => {
       database.insert_notice(notice);
 
       response.send('<h1>This notice has been added. Thank you!</h1><p>&copy The MIT Post 2019. All rights reserved.</p>');
+    }
 
     });
-  }
-
 }
 
 

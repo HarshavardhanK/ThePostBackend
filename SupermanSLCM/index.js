@@ -146,14 +146,14 @@ module.exports.postValues = (app) => {
     const pass = req.body.pass;
     const key = req.body.key
 
-    if(key) {
+    /*if(key) {
       if(key !== "joker01124713115BatmanThanos") {
-        res.json({status: "BAD"})
+        res.json({status: false})
       }
     } else {
-      res.json({status: "BAD"})
+      res.json({status: false})
       return
-    }
+    }*/
 
     var fcm_token = null;
 

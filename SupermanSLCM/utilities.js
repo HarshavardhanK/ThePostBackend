@@ -166,7 +166,7 @@ const check_attendance_component = (cred, new_component, current_component) => {
 
         if(new_component.totalClasses !== current_component.totalClasses) {
 
-            /*if(cred.status === 'active') {
+            if(cred.status === 'active') {
 
                 let body = new_component.subjectName + " attendance updated"
                 console.log(body)
@@ -175,7 +175,7 @@ const check_attendance_component = (cred, new_component, current_component) => {
 
             }else {
                 console.log('No notifications. Account inactive')
-            }*/
+            }
             
             return true
         }
@@ -212,7 +212,7 @@ const check_marks_component = (cred, new_object, current_object) => {
 
            if(new_object.lab.assessments.length != current_object.lab.assessments.length) {
                let title = subjectname + " marks changed"
-               notifications.send_notification(cred.registration, title, "", 'slcm')
+               //notifications.send_notification(cred.registration, title, "", 'slcm')
                return true
            }
 
@@ -255,7 +255,7 @@ const check_marks_component = (cred, new_object, current_object) => {
 
                 if(sessionalChanged[i]) {
 
-                    /*if(cred.status === 'active') {
+                    if(cred.status === 'active') {
                         let body = subjectname + " marks updated"
                         console.log(body)
                         let what = 'Sessional ' + (i + 1) + " marks updated. Tap to check"
@@ -263,7 +263,7 @@ const check_marks_component = (cred, new_object, current_object) => {
 
                     } else {
                         console.log('No notifications. Account inactive')
-                    }*/
+                    }
                     
                     somethingChanged = true;
                 }

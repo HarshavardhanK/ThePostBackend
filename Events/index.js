@@ -34,6 +34,15 @@ const sortEvents = (eventsList) => {
       return event.difference > 0
     })
 
+    if (currEvents.lenght == 0) {
+
+      eventsList.sort(function(eventA, eventB) {
+        return eventA.difference > eventB.difference;
+      })
+
+      resolve(eventsList)
+    }
+
     console.log("running events")
     currEvents = currEvents.reverse()
     console.log(currEvents)
@@ -41,6 +50,15 @@ const sortEvents = (eventsList) => {
     let expiredEvents = eventsList.filter(function(event) {
       return event.difference < 0
     })
+
+    if (expiredEvents.lenght == 0) {
+
+      eventsList.sort(function(eventA, eventB) {
+        return eventA.difference < eventB.difference;
+      })
+
+      resolve(eventsList)
+    }
 
     console.log("expired events")
     console.log(expiredEvents)

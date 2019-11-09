@@ -39,7 +39,11 @@ const sortEvents = (eventsList) => {
       console.log("No running events")
 
       eventsList.sort(function(eventA, eventB) {
-        return eventA.difference > eventB.difference;
+
+        eventA.difference = (eventA.timestamp - Date.now() + 24*60*1000) 
+        eventB.difference = (eventB.timestamp - Date.now() + 24*60*1000)
+
+        return eventA.difference > eventB.difference
       })
 
       resolve(eventsList)

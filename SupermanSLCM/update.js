@@ -51,12 +51,12 @@ const fetch = async (cred, password, test) => {
     console.log(cred.registration, password, test)
 
     let response = await axios.post(URL, {regNumber: cred.registration, pass: password});
-
+    console.log("Recevied response is");
     console.log(response.data)
 
     if(response.data.message === 'Invalid Credentials') {
       console.log('invalid')
-      return false;``
+      return false;
 
     }
 
@@ -107,8 +107,13 @@ const fetch = async (cred, password, test) => {
 
 const refresh = async (test) => {
 
-  await fetch('170905022', 'FHJ-CSd-5rc-f5A', test)
-  await fetch('170905054', 'tropicofleo110.', test)
+  const h_cred = {
+    registration: '170905022',
+    password: 'FHJ-CSd-5rc-f5A'
+  }
+
+  await fetch(h_cred, h_cred.password , test)
+  //await fetch('170905054', 'tropicofleo110.', test)
 
 }
 

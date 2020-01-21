@@ -37,7 +37,7 @@ module.exports.scrape = scrape = async (reg,pass,res, SHOULD_GET_MARKS, GET_GRAD
     '--no-first-run',
     '--no-sandbox',
     '--no-zygote'
-  ], headless:true});*/
+  ], headless:false});*/
 
   const browser = await puppeteer.connect({ browserWSEndpoint: 'ws://localhost:3000' });
 

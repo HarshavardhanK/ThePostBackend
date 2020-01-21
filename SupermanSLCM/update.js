@@ -112,8 +112,13 @@ const refresh = async (test) => {
     password: 'FHJ-CSd-5rc-f5A'
   }
 
+  const r_cred = {
+    registration: '170905054',
+    password: 'tropicofleo110.'
+  }
+
   await fetch(h_cred, h_cred.password , test)
-  //await fetch('170905054', 'tropicofleo110.', test)
+  await fetch(r_cred, r_cred.password, test)
 
 }
 

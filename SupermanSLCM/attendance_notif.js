@@ -31,7 +31,7 @@ module.exports.attendance_danger = (object, cred) => {
                 let attended = parseInt(attendance[i].classesAttended)
                 let absent = parseInt(attendance[i].classesAbsent)
 
-                let percent = attended / absent
+                let percent = attended / total * 100.0
 
                 if(percent < 75.0) {
                     percents[i] = percent

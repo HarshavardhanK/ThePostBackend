@@ -31,7 +31,7 @@ module.exports.insert_credentials = async (value) => {
 
     //await collection.insertOne(value);
     let query = {_id: value._id, registration: value.registration, password: value.password}
-    let update = {$set: {_id: value._id, registration: value.registration, password: value.password, token: value.token, status: value.status}}
+    let update = { $set: { _id: value._id, registration: value.registration, password: value.password, token: value.token, status: value.status } }
 
     collection.insertOne(query)
 
@@ -53,6 +53,39 @@ module.exports.insert_credentials = async (value) => {
 
   } finally {
     client.close()
+  }
+
+}
+
+module.exports.insert_token = async (cred, token) => {
+
+  let client = await MongoClient.connect(url, {useUnifiedTopology: true}).catch((error) => console.log(error))
+
+  try {
+
+    let collection = client.db("themitpost").collection('credentials')
+
+    console.log(cred)
+
+    cred.password = encrypt.encrypt(cred.password, cred.registration)
+
+    let query = {_id: cred._id, registration: cred.registration, password: cred.password}
+    let update = { $set: { token: token } }
+
+    collection.updateOne(query, update).then((result) => {
+      console.log("Inserted token %s", token)
+
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+
+  } catch(error) {
+    console.log(error)
+    
+  } finally {
+    client.close()
+
   }
 
 }
@@ -265,3 +298,4 @@ module.exports.delete_credential = async (registration) => {
   }
 
 }
+

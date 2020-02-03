@@ -26,6 +26,7 @@ const yargs = require('yargs')
 const database = require('./database');
 const utilities = require('./utilities');
 const encrypt = require('./encryption')
+const attendance_notif = require('./attendance_notif')
 
 const url = "mongodb://localhost:27017/";
 
@@ -74,6 +75,8 @@ const fetch = async (cred, password, test) => {
       current_object = utilities.sanitize(response.data)
       let insert_query = {registration: cred.registration, password: password}
       await database.insert_slcm_data(insert_query, response.data, 'ios');
+
+      attendance_notif.attendance_danger(current_object, cred)
         
     } else {
 
@@ -89,6 +92,8 @@ const fetch = async (cred, password, test) => {
         let insert_query = {registration: cred.registration, password: password}
 
         await database.insert_slcm_data(insert_query, check.value, 'ios');
+
+        attendance_notif.attendance_danger(check.value, cred)
 
       }
 

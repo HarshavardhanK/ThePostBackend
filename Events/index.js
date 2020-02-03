@@ -1,22 +1,6 @@
-// const express = require('express');
-// const path = require('path');
-// const app = express();
+
 
 const database = require('./database.js');
-
-// app.get('/portal/events',function(req,res){
-//   res.sendFile(path.join(__dirname+'/static/initial.html'));
-// });
-
-
-
-// ////// GET VALUES FROM PORTAL /////////////////
-
-// const bodyParser = require('body-parser');
-
-
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(bodyParser.json());
 
 const sortEvents = (eventsList) => {
   

@@ -2,6 +2,9 @@
 const fs = require('fs');
 const utilities = require('./utilities');
 const database = require('./database');
+const crpyto = require('./encryption')
+
+const attendance_notif = require('./attendance_notif')
 
 const get_data = (filename) => {
 
@@ -52,5 +55,30 @@ const compare_marks = async () => {
         console.log('change detected')
     }
 }
-generate_marks()
-compare_marks()
+
+const check_attendance_notification = async () => {
+
+    let token = "cah-3pEzYRo:APA91bGA-NZeu-P7JzXnfE2a_WgfHFnWtHdlSxwSs-UOUDpYZSxWtoXTkEMVolsYv6UMhxBm8stimV5UfhBM9SJbWxYcRIwfNs5opugHJQjC6a0J1wY2yFd4LWKD_hiOCO3OutquE7oW"
+
+    let data = get_data('data.json')
+    //let cred = await database.get_credential('170905022')
+    let cred = {}
+    cred.registration = '170905022'
+    cred.password = "FHJ-CSd-5rc-f5A"
+    //cred.password = crpyto.encrypt(password, cred.registration)
+    cred._id = '170905022'
+    //console.log(cred)
+    cred.token = token
+
+    await database.insert_credentials(cred)
+
+    //await database.insert_token(cred, token)
+
+    cred = await database.get_credential('170905022')
+
+    console.log(cred.token)
+
+    attendance_notif.attendance_danger(data, cred)
+}
+
+check_attendance_notification()

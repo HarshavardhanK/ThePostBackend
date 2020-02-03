@@ -2,7 +2,6 @@ const fs = require('fs');
 
 const notifications = require("./notifications")
 
-//CODE FOR GENERATING NEW SLCM DATA
 module.exports.get_attendance_for = (complete_object, index=null) => {
 
     if(complete_object) {
@@ -51,6 +50,8 @@ module.exports.get_marks_for = (complete_object, index=null) => {
         return null
     }
 }
+
+//CODE FOR GENERATING NEW SLCM DATA
 
 module.exports.get_random_attendance = (subjectName) => {
 
@@ -159,7 +160,7 @@ const check_attendance_component = (cred, new_component, current_component) => {
             return false;
         }
 
-        let subjectname = new_component.subjectName.substring(9, new_component.subjectName.length)
+        let subjectname = this.sanitize_subject_name(new_component.subjectName.substring(9, new_component.subjectName.length))
 
         // Check only total classes since any change in attendance the total classes value HAS to increase
         // open for debate since attendance changes can happen w/o total classes
@@ -195,7 +196,8 @@ const check_marks_component = (cred, new_object, current_object) => {
     var assignmentChanged = [false, false, false, false]
 
     if(new_object != null && current_object != null) {
-        let subjectname = new_object.subject_name.substring(9, new_object.subject_name.length)
+        let subjectname = this.sanitize_subject_name(new_object.subject_name.substring(9, new_object.subject_name.length))
+        
 
         console.log("Recevied new object")
         //console.log(new_object)
@@ -367,6 +369,15 @@ module.exports.sanitize = (fresh_object) => {
     fresh_object.academicDetails[0].internalMarks = marks;
 
     return fresh_object;
+}
+
+//Subject name sanitizer
+module.exports.sanitize_subject_name = (name) => {
+
+    return name.toLowerCase()
+    .split(' ')
+    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+    .join(' ');
 }
 
 

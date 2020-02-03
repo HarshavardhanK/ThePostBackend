@@ -9,9 +9,12 @@ module.exports.attendance_danger = (object, cred) => {
 
     let attendance = utils.get_attendance_for(object)
 
+    if(!attendance || !attendance.length) {
+        return
+    }
+
     var percents = []
     var names = []
-    var hit = 0
 
     console.log(attendance)
 
@@ -59,8 +62,6 @@ module.exports.attendance_danger = (object, cred) => {
                 notifications.send_notification(cred.registration, title, body, "slcm")
             }
         }
-
-
 
     }
 

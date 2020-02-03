@@ -46,18 +46,22 @@ module.exports.attendance_danger = (object, cred) => {
 
     }
 
-    if(names.length > 2) {
-        let body = "Attendance of multiple subjects have dropped below 75%"
-        notifications.send_notification(cred.registration, title, body, "slcm")
+    if(cred.status === 'active') {
 
-    } else {
-
-        for(var i = 0; i < names.length; i += 1) {
-            let body = "Your attendance in " + names[i] + " is now at " + Math.round(percents[i]) + "%"
+        if(names.length > 2) {
+            let body = "Attendance of multiple subjects have dropped below 75%"
             notifications.send_notification(cred.registration, title, body, "slcm")
+    
+        } else {
+    
+            for(var i = 0; i < names.length; i += 1) {
+                let body = "Your attendance in " + names[i] + " is now at " + Math.round(percents[i]) + "%"
+                notifications.send_notification(cred.registration, title, body, "slcm")
+            }
         }
+
+
+
     }
 
-
-    
 }

@@ -169,9 +169,9 @@ const check_attendance_component = (cred, new_component, current_component) => {
 
             if(cred.status === 'active') {
 
-                let body = new_component.subjectName + " attendance updated"
+                let body = this.sanitize_subject_name(new_component.subjectName) + " attendance updated"
                 console.log(body)
-                notifications.send_notification(cred.registration, 'Attendance Updated. Tap to check', body, "slcm")
+                notifications.send_notification(cred.registration, 'Attendance Updated. Tap to check 👆', body, "slcm")
                 console.log('Old totalClasses value %s | New totalClasses value %s', current_component.totalClasses, new_component.totalClasses);
 
             }else {
@@ -260,7 +260,7 @@ const check_marks_component = (cred, new_object, current_object) => {
                     if(cred.status === 'active') {
                         let body = subjectname + " marks updated"
                         console.log(body)
-                        let what = 'Sessional ' + (i + 1) + " marks updated. Tap to check"
+                        let what = 'Sessional ' + (i + 1) + " marks updated. Tap to check 👆"
                         notifications.send_notification(cred.registration, what, body, "slcm")
 
                     } else {
@@ -276,15 +276,15 @@ const check_marks_component = (cred, new_object, current_object) => {
 
                 if(assignmentChanged[i]) {
 
-                    /*if(cred.status === 'active') {
+                    if(cred.status === 'active') {
                         let body = subjectname + " marks updated"
                         console.log(body)
-                        let what = "Assignment " + (i + 1) + " marks updated. Tap to check"
+                        let what = "Assignment " + (i + 1) + " marks uploaded. Tap to see 👆"
                         notifications.send_notification(cred.registration, what, body, "slcm")
 
                     } else {
                         console.log('No notifications. Account inactive')
-                    }*/
+                    }
                     
                     somethingChanged = true;
                 }

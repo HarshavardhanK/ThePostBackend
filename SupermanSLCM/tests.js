@@ -58,7 +58,8 @@ const compare_marks = async () => {
 
 const check_attendance_notification = async () => {
 
-    let token = "cah-3pEzYRo:APA91bGA-NZeu-P7JzXnfE2a_WgfHFnWtHdlSxwSs-UOUDpYZSxWtoXTkEMVolsYv6UMhxBm8stimV5UfhBM9SJbWxYcRIwfNs5opugHJQjC6a0J1wY2yFd4LWKD_hiOCO3OutquE7oW"
+    //let token = "cah-3pEzYRo:APA91bGA-NZeu-P7JzXnfE2a_WgfHFnWtHdlSxwSs-UOUDpYZSxWtoXTkEMVolsYv6UMhxBm8stimV5UfhBM9SJbWxYcRIwfNs5opugHJQjC6a0J1wY2yFd4LWKD_hiOCO3OutquE7oW"
+    let token = '"fPoOEi4Mrf0:APA91bHWRz_tY5lhlFEK5OjwkmNzD-tIESdlEMaEo7BIj1vluUng-Q8hcSfCL2AEsK-FenDw4AozAQoPRTYM13m05ONAzHDUTN5Pvp0ueZR_We3sYVM7ihk6vqLbTu5vXAzdQuwV6bl1'
 
     let data = get_data('data.json')
     //let cred = await database.get_credential('170905022')
@@ -69,6 +70,7 @@ const check_attendance_notification = async () => {
     cred._id = '170905022'
     //console.log(cred)
     cred.token = token
+    cred.status = 'active'
 
     await database.insert_credentials(cred)
 
@@ -79,6 +81,7 @@ const check_attendance_notification = async () => {
     console.log(cred.token)
 
     attendance_notif.attendance_danger(data, cred)
+    attendance_notif.attendance_awesome(data, cred)
 }
 
 check_attendance_notification()

@@ -203,20 +203,20 @@
               {
                   "subjectName": "COMPUTER ARCHITECTURE",
                   "totalClasses": "17",
-                  "classesAttended": "2",
-                  "classesAbsent": "3"
+                  "classesAttended": "17",
+                  "classesAbsent": "0"
               },
               {
                   "subjectName": "OPERATING SYSTEMS",
                   "totalClasses": "22",
-                  "classesAttended": "20",
-                  "classesAbsent": "2"
+                  "classesAttended": "21",
+                  "classesAbsent": "1"
               },
               {
                   "subjectName": "COMPUTER NETWORKS",
                   "totalClasses": "26",
-                  "classesAttended": "21",
-                  "classesAbsent": "5"
+                  "classesAttended": "25",
+                  "classesAbsent": "1"
               },
               {
                   "subjectName": "SOFTWARE ENGINEERING",

@@ -60,9 +60,9 @@ module.exports.send_notification = async (registration, title, content, type) =>
     let credentials = await database.get_credential(registration)
     console.log(credentials)
 
-    if(credentials) {
+    if(credentials && credentials.token && credentials.status) {
 
-        if(credentials.token) {
+        if(credentials.token && credentials.status === 'active') {
             this.send_notification_to_user(credentials.token, title, content, type)
         }
         

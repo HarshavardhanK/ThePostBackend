@@ -99,7 +99,7 @@ module.exports.attendance_danger = (object, cred) => {
 
 
     }
-    
+
 
 }
 
@@ -131,7 +131,7 @@ module.exports.attendance_awesome = (object, cred) => {
 
                 let percent = (attended / total) * 100.0
 
-                if(percent >= 95.0 && total >= 10 && total % 5 == 0) {
+                if(percent >= 95.0 && total >= 10 && (total % 3 == 0) || (total % 4 == 0)) {
                     percents[i] = percent
 
                     names.push(utils.sanitize_subject_name(attendance[i].subjectName))

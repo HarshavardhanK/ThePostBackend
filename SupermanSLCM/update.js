@@ -74,6 +74,7 @@ const fetch = async (cred, password, test) => {
 
       current_object = utilities.sanitize(response.data)
       let insert_query = {registration: cred.registration, password: password}
+
       await database.insert_slcm_data(insert_query, response.data, 'ios');
 
       attendance_notif.attendance_danger(current_object, cred)
@@ -95,7 +96,7 @@ const fetch = async (cred, password, test) => {
         await database.insert_slcm_data(insert_query, check.value, 'ios');
 
         attendance_notif.attendance_danger(check.value, cred)
-        attendance_notif.attendance_awesome(current_object, cred)
+        attendance_notif.attendance_awesome(check.value, cred)
 
       }
 

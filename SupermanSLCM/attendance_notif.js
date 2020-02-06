@@ -16,6 +16,9 @@ module.exports.attendance_danger = (object, cred) => {
     var percents = []
     var names = []
 
+    var case2_percents = []
+    var case2_names = []
+
     console.log(attendance)
 
     let title = "Attendance below 75% warning!"
@@ -30,13 +33,19 @@ module.exports.attendance_danger = (object, cred) => {
 
                 let attended = parseInt(attendance[i].classesAttended)
                 let absent = parseInt(attendance[i].classesAbsent)
+                let subjectName = utils.sanitize_subject_name(attendance[i].subjectName)
 
                 let percent = attended / total * 100.0
 
                 if(percent < 75.0) {
-                    percents[i] = percent
 
-                    names.push(utils.sanitize_subject_name(attendance[i].subjectName))
+                    percents.push(percent)
+                    names.push(subjectName)
+
+                } else if(percent >= 75.0 && percent <= 78.0) {
+
+                    case2_percents.push(percent)
+                    case2_names.push(subjectName)
 
                 }
 
@@ -65,7 +74,32 @@ module.exports.attendance_danger = (object, cred) => {
 
     }
 
+    if(cred.status === 'active') {
 
+        if(case2_names.length > 2) {
+
+            let title = "Attendance warning 🔴"
+            let body = "Your attendance in " + case2_names.length + " subjects is very close to 75%"
+
+            notifications.send_notification(cred.registration, title, body, "slcm")
+
+        } else {
+
+            for(var i = 0; i < case2_names.length; i += 1) {
+
+                let title = "Attendance warning 🔴"
+                let body = "Your attendance in " + case2_names[i] + " is at " + Math.round(case2_percents[i])
+
+                notifications.send_notification(cred.registration, title, body, "slcm")
+
+            }
+
+
+        }
+
+
+    }
+    
 
 }
 
@@ -97,7 +131,7 @@ module.exports.attendance_awesome = (object, cred) => {
 
                 let percent = (attended / total) * 100.0
 
-                if(percent >= 95.0 && total >= 10) {
+                if(percent >= 95.0 && total >= 10 && total % 5 == 0) {
                     percents[i] = percent
 
                     names.push(utils.sanitize_subject_name(attendance[i].subjectName))
@@ -127,17 +161,11 @@ module.exports.attendance_awesome = (object, cred) => {
                     let body = "Your attendance in " + names[i] + " is now at " + Math.round(percents[i]) + "% 💪"
                     notifications.send_notification(cred.registration, title, body, "slcm")
 
-                } else {
-                    let body = "Your attendance in " + names[i] + " is above 95% 💪"
-                    notifications.send_notification(cred.registration, title, body, "slcm")
-                }
-                
+                } 
                 
             }
         }
 
     }
-
-
 
 }

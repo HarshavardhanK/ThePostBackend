@@ -169,12 +169,12 @@ const check_attendance_component = (cred, new_component, current_component) => {
 
             if(cred.status === 'active') {
 
-                let body = this.sanitize_subject_name(new_component.subjectName) + " attendance updated"
+                /*let body = this.sanitize_subject_name(new_component.subjectName) + " attendance updated"
                 console.log(body)
-                notifications.send_notification(cred.registration, 'Attendance Updated. Tap to check 👆', body, "slcm")
+                notifications.send_notification(cred.registration, 'Attendance Updated. Tap to check 👆', body, "slcm")*/
                 console.log('Old totalClasses value %s | New totalClasses value %s', current_component.totalClasses, new_component.totalClasses);
 
-            }else {
+            } else {
                 console.log('No notifications. Account inactive')
             }
             
@@ -213,8 +213,8 @@ const check_marks_component = (cred, new_object, current_object) => {
            console.log('is lab.')
 
            if(new_object.lab.assessments.length != current_object.lab.assessments.length) {
-               let title = subjectname + " marks changed"
-               //notifications.send_notification(cred.registration, title, "", 'slcm')
+               let title = subjectname + " marks added"
+               notifications.send_notification(cred.registration, title, "", 'slcm')
                return true
            }
 
@@ -317,6 +317,11 @@ module.exports.check = (cred, current_object, new_object) => {
     let current_marks = this.get_marks_for(current_object);
     let new_marks = this.get_marks_for(new_object)
 
+    //Holds names of subjects in which attendance has changed
+    //This is to ensure that attendance update notification isn't sent multiple times. Can get annoying.
+
+    let attendance_change_arr = []
+
     for(var i = 0; i < current_attn.length; i++) {
 
         if(check_attendance_component(cred, new_attn[i], current_attn[i])) {
@@ -324,8 +329,29 @@ module.exports.check = (cred, current_object, new_object) => {
             attendance_change = true;
             console.log('Difference in attendance %s', current_attn[i].subjectName);
 
+            attendance_change_arr.push(current_attn[i].subjectName)
+
             new_attn[i].updatedAt = new Date().getTime();
             current_object.academicDetails[0].attendance[i] = new_attn[i];
+        }
+    }
+
+    if(attendance_change_arr.length > 2) {
+
+        let title = "Attedance updated"
+        let body = "Attendance of " + attendance_change_arr.length + " subjects updated. Tap to check 👆"
+
+        notifications.send_notification(cred.registration, title, body, "slcm")
+
+    } else {
+
+        for(var i = 0; i < attendance_change_arr.length; i += 1) {
+
+            let title = "Attendance updated"
+            let body = "Attendance of " + attendance_change_arr[i] + " updated. Tap to check 👆"
+
+            notifications.send_notification(cred.registration, title, body, "slcm")
+            
         }
     }
 

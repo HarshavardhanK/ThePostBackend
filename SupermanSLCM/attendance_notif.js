@@ -116,7 +116,7 @@ module.exports.attendance_awesome = (object, cred) => {
 
     console.log(attendance)
 
-    let title = "Streak 🔥"
+    let titles = ["Streak 🔥", "Going strong! 📚", "Well done! 😁"]
 
     for(var i = 0; i < attendance.length; i += 1) {
 
@@ -150,6 +150,10 @@ module.exports.attendance_awesome = (object, cred) => {
     if(cred.status === 'active') {
 
         if(names.length > 2) {
+
+            let title_index = titles % names.length
+            let title = titles[title_index]
+
             let body = "Attendance of " + names.length + " subjects is above 95% 💪"
             notifications.send_notification(cred.registration, title, body, "slcm")
     
@@ -158,12 +162,18 @@ module.exports.attendance_awesome = (object, cred) => {
             for(var i = 0; i < names.length; i += 1) {
 
                 if(percents[i]) {
+
+                    let title_index = titles % names.length
+                    let title = titles[title_index]
+
                     let body = "Your attendance in " + names[i] + " is at " + Math.round(percents[i]) + "% 💪"
                     notifications.send_notification(cred.registration, title, body, "slcm")
 
                 } 
+
                 
             }
+
         }
 
     }

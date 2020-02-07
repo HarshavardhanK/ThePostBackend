@@ -61,7 +61,7 @@ module.exports.attendance_danger = (object, cred) => {
     if(cred.status === 'active') {
 
         if(names.length > 2) {
-            let body = "Attendance of " + names.length + " subjects have dropped below 75% 😕"
+            let body = "Attendance of " + names.length + " subjects has dropped below 75% 😕"
             notifications.send_notification(cred.registration, title, body, "slcm")
     
         } else {
@@ -150,7 +150,7 @@ module.exports.attendance_awesome = (object, cred) => {
     if(cred.status === 'active') {
 
         if(names.length > 2) {
-            let body = "Attendance of " + names.length + " subjects are above 95% 💪"
+            let body = "Attendance of " + names.length + " subjects is above 95% 💪"
             notifications.send_notification(cred.registration, title, body, "slcm")
     
         } else {
@@ -158,7 +158,7 @@ module.exports.attendance_awesome = (object, cred) => {
             for(var i = 0; i < names.length; i += 1) {
 
                 if(percents[i]) {
-                    let body = "Your attendance in " + names[i] + " is now at " + Math.round(percents[i]) + "% 💪"
+                    let body = "Your attendance in " + names[i] + " is at " + Math.round(percents[i]) + "% 💪"
                     notifications.send_notification(cred.registration, title, body, "slcm")
 
                 } 

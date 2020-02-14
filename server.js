@@ -8,6 +8,7 @@ const http = require('http');
 const crypto = require('crypto');
 const deasync = require('deasync');
 const yargs = require('yargs');
+const url = require('url')
 
 
 
@@ -102,7 +103,16 @@ app.post('/save/raw', (request, response) => {
 //Referesh articles 
 app.get('/articles/refresh', async (request, response) => {
 
-  if(await update_articles.update(10, true)) {
+  let url_parts = url.parse(request.url, true)
+  let count = 10
+
+  if(url_parts.count) {
+    count = parseInt(url_parts.count)
+  } 
+
+  console.log("Refreshing %d articles", count)
+
+  if(await update_articles.update(count, true)) {
     console.log("Updated 10 articles")
     response.send("Successfully refreshed articles database")
 
@@ -110,7 +120,7 @@ app.get('/articles/refresh', async (request, response) => {
     console.log("Error")
     response.send("Motichoor Chaknachoor. No homo")
   }
-  
+
 })
 
 //Calling artile web view get request

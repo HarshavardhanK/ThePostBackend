@@ -45,6 +45,7 @@ const get_article = async(_API) => {
 
       '_id': response.data[i].id,
       'category': category,
+      'timestamp': response.data[i].date,
       'date': utilities.get_date(response.data[i].date),
       'title': response.data[i].title.rendered,
       'content': response.data[i].content.rendered,

@@ -106,8 +106,8 @@ app.get('/articles/refresh', async (request, response) => {
   let url_parts = url.parse(request.url, true)
   let count = 10
 
-  if(url_parts.count) {
-    count = parseInt(url_parts.count)
+  if(url_parts.query.count) {
+    count = parseInt(url_parts.query.count)
   } 
 
   console.log("Refreshing %d articles", count)
@@ -120,6 +120,10 @@ app.get('/articles/refresh', async (request, response) => {
     console.log("Error")
     response.send("Motichoor Chaknachoor. No homo")
   }
+
+})
+
+app.get('/articles/delete_all', async (request, response) => {
 
 })
 

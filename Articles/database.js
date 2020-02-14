@@ -22,6 +22,17 @@ const insert_article = function(article, collection) {
   });
 };
 
+module.exports.refresh_articles = async (article, collection) => {
+  let client = MongoClient.connect(url, {useUnifiedTopology: true}).catch((error) => console.log(error))
+
+  try {
+
+    let collection = client.db(DB).collection(collection)
+
+    let update = { $set: {}}
+  }
+}
+
 const query_skeleton_article = function(query, callback) {
 
   MongoClient.connect(url, (error, database) => {

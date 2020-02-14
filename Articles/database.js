@@ -22,14 +22,22 @@ const insert_article = function(article, collection) {
   });
 };
 
-module.exports.refresh_articles = async (article, collection) => {
-  let client = MongoClient.connect(url, {useUnifiedTopology: true}).catch((error) => console.log(error))
+module.exports.bulk_insert_articles = async (articles) => {
+  let client = await MongoClient.connect(url, {useUnifiedTopology: true}).catch((error) => console.log(error))
 
   try {
 
-    let collection = client.db(DB).collection(collection)
+    let collection = client.db(DB).collection('unfiltered')
 
-    let update = { $set: {}}
+    await collection.insertMany(articles)
+
+    console.log("Succesfully inserted all articles")
+    
+  } catch(error) {
+    console.log(error)
+
+  } finally {
+    client.close()
   }
 }
 

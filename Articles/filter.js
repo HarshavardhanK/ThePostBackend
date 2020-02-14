@@ -73,7 +73,7 @@ const get_article = async(_API) => {
 
 };
 
-const update = async function(number, command) {
+const update = async function(number, refresh) {
 
   const API2='https://themitpost.com/wp-json/wp/v2/posts?per_page=' + number;
   const RAW_API = 'https://api.themitpost.com/posts/raw/';
@@ -84,8 +84,15 @@ const update = async function(number, command) {
 
     if(response != undefined) {
 
-      for(var i = 0; i < response.length; i += 1) {
-        database.insert_article(response[i], 'unfiltered');
+      if(refresh != true) {
+        database.bulk_insert_articles(response)
+
+      } else {
+
+        for(var i = 0; i < response.length; i += 1) {
+          database.insert_article(response[i], 'unfiltered')
+        }
+
       }
 
       return true;
@@ -123,6 +130,6 @@ const main = function() {
 
 };
 
-main();
+//main();
 
 module.exports.update = update;

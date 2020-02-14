@@ -14,6 +14,7 @@ const yargs = require('yargs');
 const database = require('./Articles/database.js');
 const articleWebView = require('./Articles/ArticleWebview/index');
 const newSlcm = require('./SupermanSLCM/index');
+const update_articles = require('./Articles/filter')
 
 var app = express();
 
@@ -98,6 +99,20 @@ app.post('/save/raw', (request, response) => {
   database.insert_article(response.data, 'unfiltered');
 
 });
+
+//Referesh articles 
+app.get('/articles/refresh', async (request, response) => {
+
+  if(await update_articles.update(10, true)) {
+    console.log("Updated 10 articles")
+    response.send("Successfully refreshed articles database")
+
+  } else {
+    console.log("Error")
+    response.send("Motichoor Chaknachoor. No homo")
+  }
+  
+})
 
 //Calling artile web view get request
 

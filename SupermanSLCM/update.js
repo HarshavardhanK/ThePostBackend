@@ -142,7 +142,7 @@ const update_all = async (test, sleep_interval=30) => {
     let password2 = encrypt.decrypt(results[i + 1].password, results[i + 1].registration)
 
     console.log('Update all %s %s', results[i].registration, password)
-    console.log('Update all %s %s', results[i + 1].registration, password)
+    console.log('Update all %s %s', results[i + 1].registration, password2)
 
     if(fetch(results[i], password, false)) {
 

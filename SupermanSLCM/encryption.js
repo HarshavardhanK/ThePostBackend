@@ -14,10 +14,17 @@ module.exports.encrypt = (data, password) => {
 
 }
 
+
 module.exports.decrypt = (data, password) => {
 
   var myKey = crypto.createDecipher('aes-128-cbc', password);
   return myKey.update(data, 'binary', 'binary') + myKey.final('binary');
+
+}
+
+module.exports.decrypt_store = (document) => {
+
+  return this.decrypt(document.data, document.password) 
 
 }
 

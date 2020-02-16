@@ -136,13 +136,11 @@ const update_all = async (test, sleep_interval=30) => {
 
   let results = await database.get_all_credentials();
 
-  for(var i = 0; i < results.length - 1; i += 2) {
+  for(var i = 0; i < results.length; i += 2) {
 
     let password = encrypt.decrypt(results[i].password, results[i].registration)
-    let password2 = encrypt.decrypt(results[i + 1].password, results[i + 1].registration)
-
     console.log('Update all %s %s', results[i].registration, password)
-    console.log('Update all %s %s', results[i + 1].registration, password2)
+    
 
     if(fetch(results[i], password, false)) {
 
@@ -154,14 +152,21 @@ const update_all = async (test, sleep_interval=30) => {
       console.log('Error in fetching SLCM data')
     }
 
-    if(await fetch(results[i + 1], password2, false)) {
+    if(i + 1 < results.length) {
 
-      console.log('Successfully fetched')
-      //console.log('Waiting for 5s')
-      //deasync.sleep(utilities.seconds(5))
+      let password2 = encrypt.decrypt(results[i + 1].password, results[i + 1].registration)
+      console.log('Update all %s %s', results[i + 1].registration, password2)
 
-    } else {
-      console.log('Error in fetching SLCM data')
+      if(await fetch(results[i + 1], password2, false)) {
+
+        console.log('Successfully fetched')
+        //console.log('Waiting for 5s')
+        //deasync.sleep(utilities.seconds(5))
+  
+      } else {
+        console.log('Error in fetching SLCM data')
+      }
+
     }
 
   }

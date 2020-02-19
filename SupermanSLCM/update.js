@@ -217,8 +217,8 @@ const main = async () => {
 
     while(1) {
       await update_all(test_);
-      console.log("Sleeping for 15min")
-      deasync.sleep(utilities.minutes(15))
+      console.log("Sleeping for 150min")
+      deasync.sleep(utilities.minutes(150))
     }
     
   }
@@ -228,6 +228,3 @@ const main = async () => {
 main();
 
 //update_all_the_time();
-
-
-

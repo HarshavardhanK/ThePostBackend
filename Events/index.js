@@ -95,16 +95,18 @@ module.exports.get_events = (app) => {
     database.get_event_all()
     .then(result => {
 
-      sortEvents(result)
-      .then(events => {
+      let value = {}
+      value.data = result
+      value.status = "OK"
 
-        let value = {}
-        value.data = events
-        value.status = "OK"
+      response.json(value)
 
-        response.json(value)
+      // sortEvents(result)
+      // .then(events => {
 
-      })
+        
+
+      // })
 
     })
     .catch(err => {

@@ -101,7 +101,7 @@ app.post('/save/raw', (request, response) => {
 });
 
 //Referesh articles 
-app.get('/articles/refresh', async (request, response) => {
+/*app.get('/articles/refresh', async (request, response) => {
 
   let url_parts = url.parse(request.url, true)
   let count = 10
@@ -121,7 +121,7 @@ app.get('/articles/refresh', async (request, response) => {
     response.send("Motichoor Chaknachoor. No homo")
   }
 
-})
+})*/
 
 app.get('/articles/delete_all', async (request, response) => {
 

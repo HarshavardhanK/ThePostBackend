@@ -100,7 +100,7 @@ app.post('/save/raw', (request, response) => {
 
 });
 
-//Referesh articles 
+//Referesh articles
 /*app.get('/articles/refresh', async (request, response) => {
 
   let url_parts = url.parse(request.url, true)
@@ -108,7 +108,7 @@ app.post('/save/raw', (request, response) => {
 
   if(url_parts.query.count) {
     count = parseInt(url_parts.query.count)
-  } 
+  }
 
   console.log("Refreshing %d articles", count)
 
@@ -183,6 +183,32 @@ notices.notices_post(app);
 app.get('/notices', function(request, response) {
 
   notices_database.get_notices_all(result => {
+
+    if(result) {
+      //console.log(result);
+      result = {status: "OK", data: result};
+
+      response.json(result);
+    }
+
+  });
+
+});
+
+
+//////////// MAGAZINES PORTAL ////////////////////////////
+const magazines_database = require('./Magazines/database.js');
+
+app.get('/portal/magazine',function(req,res){
+  res.sendFile(path.join(__dirname+'/Magazines/static/initial.html'));
+});
+
+const magazines = require('./Magazines/index.js')
+magazines.magazines_post(app);
+
+app.get('/magazines', function(request, response) {
+
+  magazines_database.get_magazines_all(result => {
 
     if(result) {
       //console.log(result);

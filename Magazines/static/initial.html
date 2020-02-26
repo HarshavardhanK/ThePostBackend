@@ -1,0 +1,243 @@
+<html>
+  <head>
+    <title>Magazines Portal</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <style>
+
+      .centered{
+        top:10%;
+        left: 35%;
+        position:absolute;
+      }
+      form{
+        margin: 0 auto;
+        display: table;
+      }
+      input[type="text"]{
+        border-radius:5px;
+        padding:10px;
+        outline:none;
+        width:100%;
+      }
+      textarea{
+        border-radius:5px;
+        padding:10px;
+        outline:none;
+        width:100%;
+      }
+      input[type="submit"]{
+        border-radius:5px;
+        padding:10px;
+        outline:none;
+        width:100%;
+        margin:10px 0px 0px 0px;
+      }
+      input[type="date"],input[type="time"]{
+        border-radius:5px;
+        padding:10px;
+        outline:none;
+        width:100%;
+      }
+
+      #addImage{
+        cursor: pointer;
+      }
+
+      .container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+      @media (max-width:730px){
+        .centered{
+          top:0%;
+          left:0%;
+          position:absolute;
+        }
+      }
+
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type='text/javascript'>
+
+      function getDate() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1;
+        var yyyy = today.getFullYear();
+        var time = today.getHours() + ":" + today.getMinutes();
+
+        if(dd<10) {
+            dd = '0'+dd
+        }
+
+        if(mm<10) {
+            mm = '0'+mm
+        }
+
+        today = yyyy + '-' + mm + '-' + dd;
+        console.log(today);
+        document.getElementById("dt").value = today;
+        document.getElementById("time").value = time;
+      }
+
+
+      window.onload = function(){
+        document.getElementById("numImages").value = 0;
+        getDate();
+      }
+
+      $(document).on('click', '#addImage', function(){
+
+        var idNum = parseInt(document.getElementById('numImages').value) + 1;
+
+        $('#rowImage' + document.getElementById('numImages').value).after('<tr id="rowImage' + idNum + '"><td colspan="2"><input type="text" name="imageURL" hint="Link for the Image"/></td></tr>');
+
+        document.getElementById('numImages').value = parseInt(document.getElementById('numImages').value) + 1;
+      });
+
+      $(document).on("submit", "form", function(e) {
+
+         if($('#verified').prop('checked')){
+           return true;
+         }
+         else{
+           alert("Please check that you have verified this notice before submitting.");
+           return false;
+         }
+      });
+        function mydate1() {
+          d = new Date(document.getElementById("dt").value);
+          dt = d.getDate();
+          mn = d.getMonth();
+          mn++;
+          yy = d.getFullYear();
+          document.getElementById("ndt").value = yy + "-" + mn + "-" + dt;
+        }
+
+    </script>
+  </head>
+  <body>
+    <div class="centered">
+      <h1 align="center" style='padding:0px 8px 0px 0px'>Magazines Portal</h1>
+      <p align="center" style='padding:0px 8px 0px 0px'>
+        Please ensure right magazines are entered. Fields marked * are necessary.
+      </p>
+      <br/>
+      <form method="post" id="noticesForm" action="/portal/notices/submitted">
+        <table cellspacing="10" id="parentTable">
+          <tr>
+            <td>Title *</td>
+            <td><input type="text" name="title" hint="Enter Title" required/></td>
+          </tr>
+          <tr>
+            <td>Content: </td>
+            <td><textarea name="content" rows="8"></textarea></td>
+          </tr>
+          <tr>
+            <td>PDF Link</td>
+            <td><input type="text" name="pdfLink" hint="Enter any PDF links"/></td>
+          </tr>
+          <tr>
+            <td colspan="2">Image Link: </td>
+          </tr>
+          <tr id="rowImage0">
+            <td colspan="2"><input type="text" name="imageURL" hint="Link for the Image"/></td>
+          </tr>
+          <tr>
+            <td>
+              Date:
+            </td>
+              <td>
+                <input type="date" id="dt" onchange="mydate1();"/>
+                <input type="text" id="ndt" name="date" hidden />
+              </td>
+          </tr>
+          <tr>
+            <td colspan="2"><br>Please note that the above date and time can be changed.<br><br></td>
+          </tr>
+
+          <tr>
+            <td>Passcode*</td>
+            <td><input type="text" name="pass" hint="Enter Passcode" required/></td>
+          </tr>
+
+          <tr>
+            <td colspan="2"><input type="checkbox" name="notify" id="notified"> <b>Notify users of this notice?</b></td>
+          </tr>
+          <tr>
+            <td colspan="2"><input type="checkbox" name="accept" id="verified"> <b>I have verified that this notice is valid</b></td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <input type="submit" name="submit" value="Add Notice"/>
+            </td>
+          </tr>
+          <input type="number" name="numImages" id="numImages" hidden/>
+        </table>
+      </form>
+    </div>
+  </body>
+</html>

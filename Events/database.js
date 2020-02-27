@@ -90,7 +90,7 @@ module.exports.get_events_sorted = () => {
 
     return databaseObject.collection(COLLECTION).find().toArray().then(result => {
 
-      let sorted = result.map(sort_events)
+      let sorted = sort_events(result)
       console.log(sorted)
       database.close();
 

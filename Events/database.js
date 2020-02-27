@@ -63,6 +63,51 @@ module.exports.insert_event = (event) => {
 
 }
 
+const sort_events = (events) => {
+
+  let past = []
+  let present = []
+
+  for(var i = 0; i < events.length; i += 1) {
+
+    if(events[i].timestamp > Date.now() + 24 * 60 * 60 * 1000) {
+      present.append(events[i])
+
+    } else {
+      past.append(events[i]);
+    }
+  }
+
+  return {past: past, present: present};
+
+}
+
+module.exports.get_events_sorted = () => {
+
+  return Mongo.connect(url).then(database => {
+
+    const databaseObject = database.db('themitpost');
+
+    return databaseObject.collection(COLLECTION).find().toArray().then(result => {
+
+      let sorted = result.map(sort_events)
+      database.close();
+
+      return sorted;
+
+    })
+    .catch(err => {
+      console.log(err);
+    })
+
+  })
+
+  .catch(error => {
+    console.log(error);
+  }) 
+  
+}
+
  module.exports.get_event_all = () => {
 
   return Mongo.connect(url) .then(database => {

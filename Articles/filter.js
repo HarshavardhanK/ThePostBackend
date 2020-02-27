@@ -53,7 +53,6 @@ const get_article = async(_API) => {
       'link': response.data[i].link,
       'author': author,
       'message': response.data[i].excerpt.rendered
-
     };
 
       articles.push(article);

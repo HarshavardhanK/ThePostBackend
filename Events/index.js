@@ -1,4 +1,4 @@
-
+const url = require('url')
 
 const database = require('./database.js');
 
@@ -92,6 +92,26 @@ module.exports.get_events = (app) => {
 
   app.get('/events', function(request, response) {
 
+    let url_parts = url.parse(request.url, true)
+    let sorted = url_parts.sorted
+
+    if(sorted === 'yes') {
+
+      database.get_events_sorted().then(result => {
+
+        let value = {}
+        value.data = result
+        value.status = 'OK'
+
+        response.json(value);
+
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
+    }
+
     database.get_event_all()
     .then(result => {
 
@@ -101,13 +121,6 @@ module.exports.get_events = (app) => {
 
       response.json(value)
 
-      // sortEvents(result)
-      // .then(events => {
-
-        
-
-      // })
-
     })
     .catch(err => {
       response.json({"status" : "BAD"})
@@ -116,6 +129,9 @@ module.exports.get_events = (app) => {
   });
 
 }
+
+
+
 
 const testSorting = () => {
 

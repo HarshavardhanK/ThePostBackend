@@ -93,7 +93,7 @@ module.exports.get_events = (app) => {
   app.get('/events', function(request, response) {
 
     let url_parts = url.parse(request.url, true)
-    let sorted = url_parts.sorted
+    let sorted = url_parts.query.sorted
 
     if(sorted === 'yes') {
 

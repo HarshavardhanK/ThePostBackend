@@ -110,21 +110,23 @@ module.exports.get_events = (app) => {
         console.log(err);
       })
 
-    }
+    } else {
 
-    database.get_event_all()
-    .then(result => {
+      database.get_event_all()
+      .then(result => {
+  
+        let value = {}
+        value.data = result
+        value.status = "OK"
+  
+        response.json(value)
+  
+      })
+      .catch(err => {
+        response.json({"status" : "BAD"})
+      })
 
-      let value = {}
-      value.data = result
-      value.status = "OK"
-
-      response.json(value)
-
-    })
-    .catch(err => {
-      response.json({"status" : "BAD"})
-    })
+    }   
 
   });
 

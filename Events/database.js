@@ -91,6 +91,7 @@ module.exports.get_events_sorted = () => {
     return databaseObject.collection(COLLECTION).find().toArray().then(result => {
 
       let sorted = result.map(sort_events)
+      console.log(sorted)
       database.close();
 
       return sorted;
@@ -105,7 +106,7 @@ module.exports.get_events_sorted = () => {
   .catch(error => {
     console.log(error);
   }) 
-  
+
 }
 
  module.exports.get_event_all = () => {

@@ -52,7 +52,7 @@ const get_article = async(_API) => {
       'featured_media': response.data[i].jetpack_featured_media_url,
       'link': response.data[i].link,
       'author': author,
-      'message': response.data[i].meta.jetpack_publicize_message
+      'message': response.data[i].excerpt.rendered
 
     };
 

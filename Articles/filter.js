@@ -1,6 +1,7 @@
 
 const axios = require('axios');
 const yargs = require('yargs');
+const striptags = require('striptags');
 
 const utilities = require('./utilities.js');
 const webView = require('./ArticleWebview/index.js');
@@ -52,7 +53,7 @@ const get_article = async(_API) => {
       'featured_media': response.data[i].jetpack_featured_media_url,
       'link': response.data[i].link,
       'author': author,
-      'message': response.data[i].excerpt.rendered
+      'message': striptags(response.data[i].excerpt.rendered)
     };
 
       articles.push(article);

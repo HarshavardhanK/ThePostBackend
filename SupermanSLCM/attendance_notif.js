@@ -153,7 +153,7 @@ module.exports.attendance_awesome = (object, cred) => {
 
             let title = "Streak 🔥"
 
-            let body = "Attendance of " + names.length + " subjects is above 95% 💪"
+            let body = "Attendance of " + names.length + " subjects is above 90% 💪"
             //let body = "Need some more?"
             notifications.send_notification(cred.registration, title, body, "slcm")
     

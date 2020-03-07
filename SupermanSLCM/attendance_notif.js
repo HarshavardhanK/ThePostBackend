@@ -131,7 +131,7 @@ module.exports.attendance_awesome = (object, cred) => {
 
                 let percent = (attended / total) * 100.0
 
-                if(percent >= 95.0 && total >= 10){// && (total % 3 == 0) || (total % 4 == 0)) {
+                if((percent >= 90.0 && total >= 10) && ((total % 3 == 0) || (total % 4 == 0))) {
                     percents[i] = percent
 
                     names.push(utils.sanitize_subject_name(attendance[i].subjectName))
@@ -151,10 +151,9 @@ module.exports.attendance_awesome = (object, cred) => {
 
         if(names.length > 2) {
 
-            let title_index = titles % names.length
-            let title = "Streak 🔥"//"Fancy notifications alert" //= titles[title_index]
+            let title = "Streak 🔥"
 
-            let body = "Attendance of " + names.length + " subjects is above 95% 💪"
+            let body = "Attendance of " + names.length + " subjects is above 90% 💪"
             //let body = "Need some more?"
             notifications.send_notification(cred.registration, title, body, "slcm")
     
@@ -165,7 +164,7 @@ module.exports.attendance_awesome = (object, cred) => {
                 if(percents[i]) {
 
                     let title_index = titles % names.length
-                    let title = "Streak 🔥"//titles[title_index]
+                    let title = "Streak 🔥"
 
                     let body = "Your attendance in " + names[i] + " is at " + Math.round(percents[i]) + "% 💪"
                     notifications.send_notification(cred.registration, title, body, "slcm")

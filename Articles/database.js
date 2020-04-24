@@ -41,6 +41,26 @@ module.exports.bulk_insert_articles = async (articles) => {
   }
 }
 
+module.exports.posts = async () => {
+
+  let client = await MongoClient.connect(url, {useUnifiedTopology: true}).catch((error) => console.log(error))
+
+  try {
+
+    let collection = client.db(DB).collection('unfiltered')
+
+    return await collection.find({}).project({content: 0}).sort({timestamp: -1}).toArray()
+
+  } catch(error) {
+    console.log(error)
+
+  } finally {
+    client.close()
+  }
+
+}
+
+
 const query_skeleton_article = function(query, callback) {
 
   MongoClient.connect(url, {useUnifiedTopology: true}, (error, database) => {
@@ -72,15 +92,15 @@ const query_skeleton_article = function(query, callback) {
 
 };
 
-const query_skeleton_article_all = function(callback) {
+/**const query_skeleton_article_all = async function(callback) {
 
-  MongoClient.connect(url, {useUnifiedTopology: true}, (error, database) => {
+   MongoClient.connect(url, {useUnifiedTopology: true},  (error, database) => {
 
     if(error) throw error;
 
     var database_object = database.db('themitpost');
 
-    database_object.collection("unfiltered").find({}).sort({timestamp: -1}).toArray((error, result) => {
+     database_object.collection("unfiltered").find({}).sort({timestamp: -1}).toArray((error, result) => {
 
       if(error) return callback(new Error(error));
 
@@ -111,7 +131,8 @@ const query_skeleton_article_all = function(callback) {
 
   });
 
-};
+};**/
+
 
 const query_full_article = function(query, collection, callback) {
 
@@ -137,4 +158,3 @@ const query_full_article = function(query, collection, callback) {
 module.exports.query_full_article = query_full_article;
 module.exports.query_skeleton_article = query_skeleton_article;
 module.exports.insert_article = insert_article;
-module.exports.query_skeleton_article_all = query_skeleton_article_all;

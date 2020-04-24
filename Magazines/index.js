@@ -21,6 +21,7 @@ module.exports.magazines_post = (app) => {
     const title = request.body.title;
     const content = request.body.content;
     const date = request.body.date;
+    const time = null;
     const pdfLink = request.body.pdfLink;
     const imageLink = request.body.imageURL;
     const passcode = request.body.pass;
@@ -37,6 +38,7 @@ module.exports.magazines_post = (app) => {
         title: title,
         content: content,
         date: date,
+        time: null,
         imageLink:imageLink,
         pdfLink: pdfLink
       };
@@ -47,6 +49,7 @@ module.exports.magazines_post = (app) => {
           title: title,
           body:content,
           image: imageLink,
+          time:null,
           //type of message should not be mixed with its data contents
           type: topic
         },

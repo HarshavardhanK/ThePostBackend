@@ -54,6 +54,8 @@ app.get('/posts', (request, response) => {
 
   database.query_skeleton_article_all((data) => {
 
+    console.log(data)
+
     if(data.length > 0) {
 
       console.log('Query successful');

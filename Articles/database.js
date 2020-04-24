@@ -43,7 +43,7 @@ module.exports.bulk_insert_articles = async (articles) => {
 
 const query_skeleton_article = function(query, callback) {
 
-  MongoClient.connect(url, (error, database) => {
+  MongoClient.connect(url, {useUnifiedTopology: true}, (error, database) => {
 
     if(error) throw error;
 
@@ -74,7 +74,7 @@ const query_skeleton_article = function(query, callback) {
 
 const query_skeleton_article_all = function(callback) {
 
-  MongoClient.connect(url, (error, database) => {
+  MongoClient.connect(url, {useUnifiedTopology: true}, (error, database) => {
 
     if(error) throw error;
 
@@ -115,7 +115,7 @@ const query_skeleton_article_all = function(callback) {
 
 const query_full_article = function(query, collection, callback) {
 
-  MongoClient.connect(url, (error, database) => {
+  MongoClient.connect(url, {useUnifiedTopology: true}, (error, database) => {
 
     if(error) callback(new Error(error));
 

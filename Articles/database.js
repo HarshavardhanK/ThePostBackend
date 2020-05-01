@@ -70,7 +70,27 @@ const query_skeleton_article = function(query, callback) {
 
   });
 
-};
+}
+
+module.exports.posts = async () => {
+
+  let client = await MongoClient.connect(url, {useUnifiedTopology: true}).catch((error) => console.log(error))
+
+  try {
+
+    let collection = client.db(DB).collection('unfiltered')
+
+    return await collection.find({}).project({content: 0}).sort({timestamp: -1}).toArray()
+
+  } catch(error) {
+    console.log(error)
+
+  } finally {
+    client.close()
+  }
+
+}
+
 
 const query_full_article = function(query, collection, callback) {
 
@@ -96,4 +116,3 @@ const query_full_article = function(query, collection, callback) {
 module.exports.query_full_article = query_full_article;
 module.exports.query_skeleton_article = query_skeleton_article;
 module.exports.insert_article = insert_article;
-module.exports.query_skeleton_article_all = query_skeleton_article_all;

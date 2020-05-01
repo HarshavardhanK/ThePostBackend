@@ -48,25 +48,20 @@ app.get('/', (request, response) => {
 
 });
 
-app.get('/posts', (request, response) => {
+app.get('/posts', async (request, response) => {
 
   console.log("/posts")
 
-  database.query_skeleton_article_all((data) => {
+  let data = await database.posts()
 
-    console.log(data)
+  if(data.length > 0) {
 
-    if(data.length > 0) {
+    console.log('Query successful');
+    response.json(data);
 
-      console.log('Query successful');
-      response.json(data);
-
-    } else {
-      response.json({"status": "BAD"});
-    }
-
-  });
-
+  } else {
+    response.json({"status": "BAD"});
+  }
 
 });
 

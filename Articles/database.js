@@ -73,9 +73,15 @@ const query_skeleton_article = function(query, callback) {
 };
 
 <<<<<<< HEAD:Articles/database.js
+<<<<<<< HEAD:Articles/database.js
 const query_skeleton_article_all = function(callback) {
 
   MongoClient.connect(url, {useUnifiedTopology: true}, (error, database) => {
+=======
+/**const query_skeleton_article_all = async function(callback) {
+
+   MongoClient.connect(url, {useUnifiedTopology: true},  (error, database) => {
+>>>>>>> parent of 24e1bf3... basic relocation:Articles/database.js
 =======
 /**const query_skeleton_article_all = async function(callback) {
 
@@ -87,7 +93,11 @@ const query_skeleton_article_all = function(callback) {
     var database_object = database.db('themitpost');
 
 <<<<<<< HEAD:Articles/database.js
+<<<<<<< HEAD:Articles/database.js
     database_object.collection("unfiltered").find({}).sort({timestamp: -1}).toArray((error, result) => {
+=======
+     database_object.collection("unfiltered").find({}).sort({timestamp: -1}).toArray((error, result) => {
+>>>>>>> parent of 24e1bf3... basic relocation:Articles/database.js
 =======
      database_object.collection("unfiltered").find({}).sort({timestamp: -1}).toArray((error, result) => {
 >>>>>>> parent of 24e1bf3... basic relocation:Articles/database.js
@@ -122,7 +132,12 @@ const query_skeleton_article_all = function(callback) {
   });
 
 <<<<<<< HEAD:Articles/database.js
+<<<<<<< HEAD:Articles/database.js
 };
+=======
+};**/
+
+>>>>>>> parent of 24e1bf3... basic relocation:Articles/database.js
 =======
 };**/
 

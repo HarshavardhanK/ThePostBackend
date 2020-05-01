@@ -5,7 +5,7 @@ const url = "mongodb://localhost:27017/themitpost";
 
 const DB = 'themitpost';
 
-const insert_article = function(article, collection) {
+exports.insert_article = function(article, collection) {
 
   console.log("Saving in %s collection", collection);
 
@@ -61,39 +61,7 @@ module.exports.posts = async () => {
 }
 
 
-const query_skeleton_article = function(query, callback) {
-
-  MongoClient.connect(url, {useUnifiedTopology: true}, (error, database) => {
-
-    if(error) throw error;
-
-    var database_object = database.db('themitpost');
-
-    database_object.collection(COLLECTION).findOne(query, (error, result) => {
-
-      if(error) return callback(new Error(error));
-
-      let _article = {
-                        _id: result._id,
-                        title: result.title,
-                        featured_media: result.featured_media,
-                        author: result.author,
-                        date: result.date,
-                        message: result.message
-                      };
-
-      callback(_article);
-
-    });
-
-    database.close();
-
-  });
-
-};
-
-
-const query_full_article = function(query, collection, callback) {
+exports.query_full_article = function(query, collection, callback) {
 
   MongoClient.connect(url, {useUnifiedTopology: true}, (error, database) => {
 
@@ -114,6 +82,3 @@ const query_full_article = function(query, collection, callback) {
 
 };
 
-module.exports.query_full_article = query_full_article;
-module.exports.query_skeleton_article = query_skeleton_article;
-module.exports.insert_article = insert_article;

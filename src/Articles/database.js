@@ -92,47 +92,6 @@ const query_skeleton_article = function(query, callback) {
 
 };
 
-/**const query_skeleton_article_all = async function(callback) {
-
-   MongoClient.connect(url, {useUnifiedTopology: true},  (error, database) => {
-
-    if(error) throw error;
-
-    var database_object = database.db('themitpost');
-
-     database_object.collection("unfiltered").find({}).sort({timestamp: -1}).toArray((error, result) => {
-
-      if(error) return callback(new Error(error));
-
-      var _articles = [];
-
-      for(var i = 0; i < result.length; i += 1) {
-
-        let _article = {
-                          _id: result[i]._id,
-                          category: result[i].category,
-                          title: result[i].title,
-                          link: result[i].link,
-                          featured_media: result[i].featured_media,
-                          author: result[i].author,
-                          date: result[i].date,
-                          message: result[i].message
-                        };
-
-        _articles.push(_article);
-
-      }
-
-      callback(_articles);
-
-    });
-
-    database.close();
-
-  });
-
-};**/
-
 
 const query_full_article = function(query, collection, callback) {
 
